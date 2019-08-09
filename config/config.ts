@@ -102,6 +102,19 @@ export default {
           component: './Welcome',
         },
         {
+          path: '/module1',
+          name: 'module1',
+          icon: 'table',
+          routes: [
+            {
+              path: '/module1/similarTable',
+              name: 'similarTable',
+              hideInMenu: false,
+              component: './Module1/SimilarTable/index.tsx',
+            },
+          ],
+        },
+        {
           component: './404',
         },
       ],
