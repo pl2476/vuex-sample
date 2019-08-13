@@ -61,7 +61,15 @@ class SimilarTable extends PureComponent {
             </div>
             <div className={style.body}>{body}</div>
           </div>
-          <div className={style.bottom}>bottom</div>
+          <div className={style.bottom}>
+            <div>
+              <span style={{ background: '#FF9A74' }}>Booked</span>
+              <span style={{ background: '#A3A1CE' }}>Confirmed</span>
+              <span style={{ background: '#FFC857' }}>Arrived</span>
+              <span style={{ background: '#A679C7' }}>Completed</span>
+              <span style={{ background: '#BFC0C0' }}>Blocked</span>
+            </div>
+          </div>
         </div>
         <div className={style.right}>
           <div className={style.top}>top</div>
