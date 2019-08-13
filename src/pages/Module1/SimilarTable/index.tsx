@@ -1,5 +1,8 @@
 import React, { PureComponent } from 'react';
+import { Select, Button, Icon } from 'antd';
 import style from './index.less';
+
+const { Option } = Select;
 
 class SimilarTable extends PureComponent {
   render() {
@@ -22,10 +25,36 @@ class SimilarTable extends PureComponent {
         ))}
       </div>
     ));
+    const leftTop = (
+      <div className={style.topHead}>
+        <div>
+          <Select defaultValue="lucy" style={{ width: 120 }}>
+            <Option value="jack">Jack</Option>
+            <Option value="lucy">Lucy</Option>
+            <Option value="Yiminghe">yiminghe</Option>
+          </Select>
+        </div>
+        <div>
+          <Button>
+            <Icon type="left" />
+          </Button>
+          <time>2019-07-06</time>
+          <Button>
+            <Icon type="right" />
+          </Button>
+          <Button>Today</Button>
+        </div>
+        <div>
+          <Button>
+            <Icon type="arrows-alt" />
+          </Button>
+        </div>
+      </div>
+    );
     return (
       <div className={style.grid}>
         <div className={style.left}>
-          <div className={style.top}>top</div>
+          <div className={style.top}>{leftTop}</div>
           <div className={style.middle}>
             <div className={style.head}>
               <div className={style.row}>{colTitle}</div>
