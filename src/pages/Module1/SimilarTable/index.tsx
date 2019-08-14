@@ -1,13 +1,41 @@
 import React, { PureComponent } from 'react';
 import { Select, Button, Icon } from 'antd';
+import moment from 'moment';
 import style from './index.less';
+import CustomizeCalendar from '../../../components/CustomizeCalendar';
 
 const { Option } = Select;
 
-class SimilarTable extends PureComponent {
+interface MyState {
+  time: number;
+}
+
+class SimilarTable extends PureComponent<{}, MyState> {
+  constructor(props: object) {
+    super(props);
+    this.state = {
+      time: new Date().getTime(),
+    };
+  }
+
+  afterwardDay = () => {
+    let { time } = this.state;
+    this.setState({
+      time: time += 60 * 60 * 24 * 1000,
+    });
+  };
+
+  forwardDay = () => {
+    let { time } = this.state;
+    this.setState({
+      time: time -= 60 * 60 * 24 * 1000,
+    });
+  };
+
   render() {
-    const tableHeadList = [1, 2, 3, 4, 5, 6, 7];
+    const tableHeadList = [1, 2, 3, 4, 5, 6];
     const tableBodyList = [];
+    const { time } = this.state;
     for (let i = 0; i < 30; i += 1) {
       tableBodyList.push(i);
     }
@@ -35,11 +63,11 @@ class SimilarTable extends PureComponent {
           </Select>
         </div>
         <div>
-          <Button>
+          <Button onClick={this.forwardDay}>
             <Icon type="left" />
           </Button>
-          <time>2019-07-06</time>
-          <Button>
+          <time>{moment(time).format('YYYY-MM-DD')}</time>
+          <Button onClick={this.afterwardDay}>
             <Icon type="right" />
           </Button>
           <Button>Today</Button>
@@ -72,7 +100,9 @@ class SimilarTable extends PureComponent {
           </div>
         </div>
         <div className={style.right}>
-          <div className={style.top}>top</div>
+          <div className={style.top}>
+            <CustomizeCalendar time={time} mode="month" />
+          </div>
           <div className={style.bottom}>bottom</div>
         </div>
       </div>
