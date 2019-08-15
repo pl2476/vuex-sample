@@ -1,15 +1,14 @@
 import { Calendar, Icon, Col, Row } from 'antd';
 import React, { Component } from 'react';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import style from './index.less';
-
-moment.locale();
 
 export interface CustomizeCalendarProps {
   time: number;
   mode?: 'month' | 'year' | undefined;
   nextMonth?: () => void;
   lastMonth?: () => void;
+  onSelect?: (value: Moment | undefined) => void;
 }
 
 // const CustomizeCalendar: React.SFC<CustomizeCalendarProps> = (props) => {
@@ -20,7 +19,7 @@ export default class HeaderSearch extends Component<CustomizeCalendarProps> {
   }
 
   render() {
-    const { time, mode, nextMonth, lastMonth } = this.props;
+    const { time, mode, nextMonth, lastMonth, onSelect } = this.props;
     return (
       <div style={{ width: 280 }}>
         <Calendar
@@ -46,6 +45,7 @@ export default class HeaderSearch extends Component<CustomizeCalendarProps> {
               </Row>
             </div>
           )}
+          onSelect={onSelect}
           value={moment(time)}
           mode={mode}
           className={style['customize-calendar']}

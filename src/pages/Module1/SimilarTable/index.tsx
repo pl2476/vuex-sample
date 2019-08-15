@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Select, Button, Icon } from 'antd';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import style from './index.less';
 import CustomizeCalendar from '../../../components/CustomizeCalendar';
 
@@ -49,6 +49,12 @@ class SimilarTable extends PureComponent<{}, MyState> {
     let { time } = this.state;
     this.setState({
       time: time -= 60 * 60 * 24 * 1000 * 30,
+    });
+  };
+
+  onSelect = (value: Moment | undefined) => {
+    this.setState({
+      time: value ? value.valueOf() : new Date().getTime(),
     });
   };
 
@@ -126,6 +132,7 @@ class SimilarTable extends PureComponent<{}, MyState> {
               mode="month"
               lastMonth={this.lastMonth}
               nextMonth={this.nextMonth}
+              onSelect={this.onSelect}
             />
           </div>
           <div className={style.bottom}>bottom</div>
