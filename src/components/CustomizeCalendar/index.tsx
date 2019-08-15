@@ -8,7 +8,8 @@ moment.locale();
 export interface CustomizeCalendarProps {
   time: number;
   mode?: 'month' | 'year' | undefined;
-  // onNextDay?: (value: any) => void;
+  nextMonth?: () => void;
+  lastMonth?: () => void;
 }
 
 // const CustomizeCalendar: React.SFC<CustomizeCalendarProps> = (props) => {
@@ -18,18 +19,8 @@ export default class HeaderSearch extends Component<CustomizeCalendarProps> {
     this.state = {};
   }
 
-  // conNextDay = (value: any) => {
-  //   const { onNextDay } = this.props;
-  //   // props.value += 60*60*24*1000;
-  //   if (onNextDay) {
-  //     onNextDay(value);
-  //   }
-  // }
-
-  // componentWillReceiveProps(nextProps: any): void {}
-
   render() {
-    const { time, mode } = this.props;
+    const { time, mode, nextMonth, lastMonth } = this.props;
     return (
       <div style={{ width: 280 }}>
         <Calendar
@@ -37,7 +28,10 @@ export default class HeaderSearch extends Component<CustomizeCalendarProps> {
           headerRender={() => (
             <div style={{ padding: 10 }}>
               <Row type="flex" justify="space-between">
-                <Col style={{ paddingRight: '6px', paddingLeft: '6px', cursor: 'pointer' }}>
+                <Col
+                  style={{ paddingRight: '6px', paddingLeft: '6px', cursor: 'pointer' }}
+                  onClick={lastMonth}
+                >
                   <Icon type="double-left" />
                 </Col>
                 <Col>
@@ -45,11 +39,7 @@ export default class HeaderSearch extends Component<CustomizeCalendarProps> {
                 </Col>
                 <Col
                   style={{ paddingRight: '6px', paddingLeft: '6px', cursor: 'pointer' }}
-                  // onClick={(time) => {
-                  //   if(onChange) {
-                  //     onChange(value.clone().year(2020));
-                  //   }
-                  // }}
+                  onClick={nextMonth}
                 >
                   <Icon type="double-right" />
                 </Col>

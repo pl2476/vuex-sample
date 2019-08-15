@@ -32,6 +32,26 @@ class SimilarTable extends PureComponent<{}, MyState> {
     });
   };
 
+  today = () => {
+    this.setState({
+      time: new Date().getTime(),
+    });
+  };
+
+  nextMonth = () => {
+    let { time } = this.state;
+    this.setState({
+      time: time += 60 * 60 * 24 * 1000 * 30,
+    });
+  };
+
+  lastMonth = () => {
+    let { time } = this.state;
+    this.setState({
+      time: time -= 60 * 60 * 24 * 1000 * 30,
+    });
+  };
+
   render() {
     const tableHeadList = [1, 2, 3, 4, 5, 6];
     const tableBodyList = [];
@@ -70,7 +90,7 @@ class SimilarTable extends PureComponent<{}, MyState> {
           <Button onClick={this.afterwardDay}>
             <Icon type="right" />
           </Button>
-          <Button>Today</Button>
+          <Button onClick={this.today}>Today</Button>
         </div>
         <div>
           <Button>
@@ -101,7 +121,12 @@ class SimilarTable extends PureComponent<{}, MyState> {
         </div>
         <div className={style.right}>
           <div className={style.top}>
-            <CustomizeCalendar time={time} mode="month" />
+            <CustomizeCalendar
+              time={time}
+              mode="month"
+              lastMonth={this.lastMonth}
+              nextMonth={this.nextMonth}
+            />
           </div>
           <div className={style.bottom}>bottom</div>
         </div>
