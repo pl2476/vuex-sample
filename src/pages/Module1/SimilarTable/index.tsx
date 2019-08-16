@@ -82,17 +82,17 @@ class SimilarTable extends PureComponent<{}, MyState> {
     const leftTop = (
       <div className={style.topHead}>
         <div>
-          <Select defaultValue="lucy" style={{ width: 120 }}>
-            <Option value="jack">Jack</Option>
-            <Option value="lucy">Lucy</Option>
-            <Option value="Yiminghe">yiminghe</Option>
+          <Select defaultValue="default" style={{ width: 120 }}>
+            <Option value="default">default</Option>
           </Select>
         </div>
         <div>
           <Button onClick={this.forwardDay}>
             <Icon type="left" />
           </Button>
-          <time>{moment(time).format('YYYY-MM-DD')}</time>
+          <time style={{ color: '#000', fontWeight: 400 }}>
+            {moment(time).format('YYYY-MM-DD')}
+          </time>
           <Button onClick={this.afterwardDay}>
             <Icon type="right" />
           </Button>
@@ -135,7 +135,10 @@ class SimilarTable extends PureComponent<{}, MyState> {
               onSelect={this.onSelect}
             />
           </div>
-          <div className={style.bottom}>bottom</div>
+          <div className={style.bottom}>
+            <div className={style['bottom-title']}>WAITING BOOKINGS</div>
+            <div className={style['bottom-content']} />
+          </div>
         </div>
       </div>
     );
