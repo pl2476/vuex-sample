@@ -123,7 +123,7 @@ class SimilarTable extends PureComponent<{}, MyState> {
             <Menu.Item key="2">Cancel</Menu.Item>
           </Menu>
         }
-        getPopupContainer={trigger => trigger.parentNode}
+        getPopupContainer={trigger => trigger.parentNode as HTMLElement}
         trigger={['contextMenu', 'click']}
       >
         <div
