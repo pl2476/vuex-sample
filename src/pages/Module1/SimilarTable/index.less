@@ -41,10 +41,15 @@
       }
     }
     .middle {
-      // width: 100%;
+      position: relative;
       flex-grow: 1;
       flex-shrink: 1;
       overflow: auto;
+      .contentItem {
+        position: absolute;
+        width: 150px;
+        text-align: center;
+      }
       .head {
         position: sticky;
         top: 0;

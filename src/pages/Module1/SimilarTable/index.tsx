@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Select, Button, Icon } from 'antd';
+import { Select, Button, Icon, Dropdown, Menu } from 'antd';
 import moment, { Moment } from 'moment';
 import style from './index.less';
 import CustomizeCalendar from '../../../components/CustomizeCalendar';
@@ -8,6 +8,7 @@ const { Option } = Select;
 
 interface MyState {
   time: number;
+  items: string[];
 }
 
 class SimilarTable extends PureComponent<{}, MyState> {
@@ -15,6 +16,7 @@ class SimilarTable extends PureComponent<{}, MyState> {
     super(props);
     this.state = {
       time: new Date().getTime(),
+      items: ['a'],
     };
   }
 
@@ -61,7 +63,7 @@ class SimilarTable extends PureComponent<{}, MyState> {
   render() {
     const tableHeadList = [1, 2, 3, 4, 5, 6];
     const tableBodyList = [];
-    const { time } = this.state;
+    const { time, items } = this.state;
     for (let i = 0; i < 30; i += 1) {
       tableBodyList.push(i);
     }
@@ -73,7 +75,7 @@ class SimilarTable extends PureComponent<{}, MyState> {
     const body = tableBodyList.map((rowItem, i) => (
       <div key={rowItem} className={style.row}>
         {['', ...tableHeadList].map((colItem, j) => (
-          <div key={colItem} className={style.cell}>
+          <div key={colItem} className={style.cell} draggable={j === 0}>
             {j === 0 ? i + 1 : ''}
           </div>
         ))}
@@ -105,6 +107,37 @@ class SimilarTable extends PureComponent<{}, MyState> {
         </div>
       </div>
     );
+    const contentItems = items.map((item, index) => (
+      <Dropdown
+        key={item.toString()}
+        overlay={
+          <Menu>
+            <Menu.Item key="1">Edit</Menu.Item>
+            <Menu.Item key="2">Cancel</Menu.Item>
+          </Menu>
+        }
+        // getPopupContainer={trigger => trigger.parentNode}
+        trigger={['contextMenu', 'click']}
+      >
+        <div
+          key={item}
+          className={`${style.contentItem}  ${index === items.length - 1 ? style.last : ''}`}
+          style={{
+            // eslint-disable-next-line no-bitwise
+            backgroundColor: '#FF9A74',
+            opacity: 0.8,
+            height: '30px',
+            lineHeight: '30px',
+            top: 60,
+            left: 88,
+          }}
+          draggable
+          // onDragStart={this.dragStart.bind(this, item)}
+        >
+          {item}
+        </div>
+      </Dropdown>
+    ));
     return (
       <div className={style.grid}>
         <div className={style.left}>
@@ -114,6 +147,7 @@ class SimilarTable extends PureComponent<{}, MyState> {
               <div className={style.row}>{colTitle}</div>
             </div>
             <div className={style.body}>{body}</div>
+            {contentItems}
           </div>
           <div className={style.bottom}>
             <div>
