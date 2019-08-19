@@ -9,6 +9,7 @@ const { Option } = Select;
 interface MyState {
   time: number;
   items: string[];
+  isExpand: boolean;
 }
 
 class SimilarTable extends PureComponent<{}, MyState> {
@@ -17,6 +18,7 @@ class SimilarTable extends PureComponent<{}, MyState> {
     this.state = {
       time: new Date().getTime(),
       items: ['a'],
+      isExpand: false,
     };
   }
 
@@ -60,10 +62,15 @@ class SimilarTable extends PureComponent<{}, MyState> {
     });
   };
 
+  changeExpand = () => {
+    const { isExpand } = this.state;
+    this.setState({ isExpand: !isExpand });
+  };
+
   render() {
     const tableHeadList = [1, 2, 3, 4, 5, 6];
     const tableBodyList = [];
-    const { time, items } = this.state;
+    const { time, items, isExpand } = this.state;
     for (let i = 0; i < 30; i += 1) {
       tableBodyList.push(i);
     }
@@ -101,8 +108,8 @@ class SimilarTable extends PureComponent<{}, MyState> {
           <Button onClick={this.today}>Today</Button>
         </div>
         <div>
-          <Button>
-            <Icon type="arrows-alt" />
+          <Button onClick={this.changeExpand}>
+            {isExpand ? <Icon type="shrink" /> : <Icon type="arrows-alt" />}
           </Button>
         </div>
       </div>
@@ -159,7 +166,7 @@ class SimilarTable extends PureComponent<{}, MyState> {
             </div>
           </div>
         </div>
-        <div className={style.right}>
+        <div className={style.right} style={{ display: isExpand ? 'none' : '' }}>
           <div className={style.top}>
             <CustomizeCalendar
               time={time}
