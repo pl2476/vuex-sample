@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Select, Button, Icon, Dropdown, Menu } from 'antd';
 import moment, { Moment } from 'moment';
 import style from './index.less';
-import CustomizeCalendar from '../../../components/CustomizeCalendar';
+import CustomizeCalendar from '@/components/CustomizeCalendar';
 
 const { Option } = Select;
 
@@ -123,7 +123,7 @@ class SimilarTable extends PureComponent<{}, MyState> {
             <Menu.Item key="2">Cancel</Menu.Item>
           </Menu>
         }
-        // getPopupContainer={trigger => trigger.parentNode}
+        getPopupContainer={trigger => trigger.parentNode}
         trigger={['contextMenu', 'click']}
       >
         <div
