@@ -66,7 +66,6 @@ export default (config: any) => {
           test: (module: { context: string }) => {
             const packageName = getModulePackageName(module) || '';
             if (packageName) {
-              return ['bizcharts', '@antv_data-set'].indexOf(packageName) >= 0;
               return [
                 'bizcharts',
                 'gg-editor',
