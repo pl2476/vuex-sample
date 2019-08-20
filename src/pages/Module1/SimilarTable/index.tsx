@@ -203,13 +203,13 @@ class SimilarTable extends PureComponent<{}, MyState> {
             opacity: 0.8,
             height: `${item.h * 30}px`,
             lineHeight: `${item.h * 30}px`,
-            top: `${(item.y + 1) * 30}`,
-            left: `${(item.x - 1) * 150 + 88}`,
+            top: (item.y + 1) * 30,
+            left: (item.x - 1) * 150 + 88,
           }}
           draggable
           onDragStart={this.dragStart.bind(this, item)}
         >
-          {item.id}
+          {`${item.id}(${item.x}, ${item.y})`}
         </div>
       </Dropdown>
     ));
