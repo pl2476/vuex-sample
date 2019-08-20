@@ -3,6 +3,7 @@ import { Select, Button, Icon, Dropdown, Menu } from 'antd';
 import moment, { Moment } from 'moment';
 import style from './index.less';
 import CustomizeCalendar from '@/components/CustomizeCalendar';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
 
 const { Option } = Select;
 
@@ -214,42 +215,44 @@ class SimilarTable extends PureComponent<{}, MyState> {
       </Dropdown>
     ));
     return (
-      <div className={style.grid}>
-        <div className={style.left}>
-          <div className={style.top}>{leftTop}</div>
-          <div className={style.middle}>
-            <div className={style.head}>
-              <div className={style.row}>{colTitle}</div>
+      <PageHeaderWrapper title={false}>
+        <div className={style.grid}>
+          <div className={style.left}>
+            <div className={style.top}>{leftTop}</div>
+            <div className={style.middle}>
+              <div className={style.head}>
+                <div className={style.row}>{colTitle}</div>
+              </div>
+              <div className={style.body}>{body}</div>
+              {contentItems}
             </div>
-            <div className={style.body}>{body}</div>
-            {contentItems}
+            <div className={style.bottom}>
+              <div>
+                <span style={{ background: '#FF9A74' }}>Booked</span>
+                <span style={{ background: '#A3A1CE' }}>Confirmed</span>
+                <span style={{ background: '#FFC857' }}>Arrived</span>
+                <span style={{ background: '#A679C7' }}>Completed</span>
+                <span style={{ background: '#BFC0C0' }}>Blocked</span>
+              </div>
+            </div>
           </div>
-          <div className={style.bottom}>
-            <div>
-              <span style={{ background: '#FF9A74' }}>Booked</span>
-              <span style={{ background: '#A3A1CE' }}>Confirmed</span>
-              <span style={{ background: '#FFC857' }}>Arrived</span>
-              <span style={{ background: '#A679C7' }}>Completed</span>
-              <span style={{ background: '#BFC0C0' }}>Blocked</span>
+          <div className={style.right} style={{ display: isExpand ? 'none' : '' }}>
+            <div className={style.top}>
+              <CustomizeCalendar
+                time={time}
+                mode="month"
+                lastMonth={this.lastMonth}
+                nextMonth={this.nextMonth}
+                onSelect={this.onSelect}
+              />
+            </div>
+            <div className={style.bottom}>
+              <div className={style['bottom-title']}>WAITING BOOKINGS</div>
+              <div className={style['bottom-content']} />
             </div>
           </div>
         </div>
-        <div className={style.right} style={{ display: isExpand ? 'none' : '' }}>
-          <div className={style.top}>
-            <CustomizeCalendar
-              time={time}
-              mode="month"
-              lastMonth={this.lastMonth}
-              nextMonth={this.nextMonth}
-              onSelect={this.onSelect}
-            />
-          </div>
-          <div className={style.bottom}>
-            <div className={style['bottom-title']}>WAITING BOOKINGS</div>
-            <div className={style['bottom-content']} />
-          </div>
-        </div>
-      </div>
+      </PageHeaderWrapper>
     );
   }
 }
