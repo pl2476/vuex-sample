@@ -97,14 +97,17 @@ export default {
       routes: [
         {
           path: '/',
+          name: 'homepage',
+          component: './Homepage',
+        },
+        {
+          path: '/welcome',
           name: 'welcome',
-          icon: 'smile',
           component: './Welcome',
         },
         {
           path: '/module1',
           name: 'module1',
-          icon: 'table',
           routes: [
             {
               path: '/module1/similarTable',
@@ -121,6 +124,20 @@ export default {
     },
     {
       component: './404',
+    },
+    {
+      name: 'exception',
+      icon: 'warning',
+      path: '/exception',
+      authority: ['admin', 'user'],
+      routes: [
+        // exception
+        {
+          path: '/exception/403',
+          name: 'not-permission',
+          component: './403',
+        },
+      ],
     },
   ],
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn

@@ -9,7 +9,7 @@ import ProLayout, {
   BasicLayoutProps as ProLayoutProps,
   Settings,
 } from '@ant-design/pro-layout';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'umi/link';
 import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
@@ -75,7 +75,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   /**
    * constructor
    */
-
+  const [menuData, setMenuData] = useState([]);
   useEffect(() => {
     if (dispatch) {
       dispatch({
@@ -83,6 +83,11 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       });
       dispatch({
         type: 'settings/getSetting',
+      });
+      dispatch({
+        type: 'menu/fetch',
+      }).then((data: []) => {
+        setMenuData(data || []);
       });
     }
   }, []);
@@ -101,6 +106,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
     <ProLayout
       logo={logo}
       onCollapse={handleMenuCollapse}
+      collapsed={false}
       menuItemRender={(menuItemProps, defaultDom) => {
         if (menuItemProps.isUrl) {
           return defaultDom;
@@ -126,7 +132,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         );
       }}
       footerRender={footerRender}
-      menuDataRender={menuDataRender}
+      menuDataRender={() => menuDataRender(menuData)}
       formatMessage={formatMessage}
       rightContentRender={rightProps => <RightContent {...rightProps} />}
       {...props}
