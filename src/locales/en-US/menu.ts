@@ -47,4 +47,7 @@ export default {
   'menu.editor.flow': 'Flow Editor',
   'menu.editor.mind': 'Mind Editor',
   'menu.editor.koni': 'Koni Editor',
+  'menu.homepage': 'Home',
+  'menu.module1': 'module1',
+  'menu.module1.similarTable': 'similarTable',
 };

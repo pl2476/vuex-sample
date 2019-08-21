@@ -33,6 +33,41 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
   };
 };
 
+// Conversion router to menu.
+const formatter = (
+  data: MenuDataItem[],
+  parentAuthority: MenuDataItem['authority'],
+  parentName: string | undefined,
+) =>
+  data
+    .map(item => {
+      if (!item.name || !item.path) {
+        return null;
+      }
+
+      let locale = 'menu';
+      if (parentName) {
+        locale = `${parentName}.${item.name}`;
+      } else {
+        locale = `menu.${item.name}`;
+      }
+
+      const result = {
+        ...item,
+        name: formatMessage({ id: locale, defaultMessage: item.name }),
+        locale,
+        authority: item.authority || parentAuthority,
+      };
+      if (item.children) {
+        const children = formatter(item.children, item.authority, locale);
+        // Reduce memory usage
+        result.children = children;
+      }
+      // delete result.routes;
+      return result;
+    })
+    .filter(item => item);
+
 /**
  * use Authorized check all menu item
  */
@@ -42,6 +77,10 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
       ...item,
       children: item.children ? menuDataRender(item.children) : [],
     };
+    // localItem.name = formatMessage({
+    //   id: `menu.${item.name}`,
+    //   defaultMessage: item.name
+    // })
     return Authorized.check(item.authority, localItem, null) as MenuDataItem;
   });
 
@@ -86,8 +125,9 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       });
       dispatch({
         type: 'menu/fetch',
-      }).then((data: []) => {
-        setMenuData(data || []);
+      }).then((data: MenuDataItem[]) => {
+        const fData = formatter(data, undefined, undefined);
+        setMenuData(fData);
       });
     }
   }, []);
