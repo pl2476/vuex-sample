@@ -1,6 +1,7 @@
 import { Calendar, Icon, Col, Row } from 'antd';
 import React from 'react';
 import moment, { Moment } from 'moment';
+import { formatDate } from 'umi-plugin-react/locale';
 import style from './index.less';
 
 export interface CustomizeCalendarProps {
@@ -32,7 +33,13 @@ const CustomizeCalendar: React.SFC<CustomizeCalendarProps> = props => (
               <Icon type="double-left" />
             </Col>
             <Col>
-              <span>{moment(props.time).format('MMMM YYYY')}</span>
+              {/* <span>{moment(props.time).format('MMMM YYYY')}</span> */}
+              <span>
+                {formatDate(props.time, {
+                  month: 'long',
+                  year: 'numeric',
+                })}
+              </span>
             </Col>
             <Col
               style={{ paddingRight: '6px', paddingLeft: '6px', cursor: 'pointer' }}
