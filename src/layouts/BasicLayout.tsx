@@ -61,10 +61,8 @@ const formatter = (
       };
       if (item.children) {
         const children = formatter(item.children, item.authority, locale);
-        // Reduce memory usage
         result.children = children;
       }
-      // delete result.routes;
       return result;
     })
     .filter(item => item);

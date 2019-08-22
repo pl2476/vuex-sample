@@ -103,15 +103,23 @@ export default {
         {
           path: '/',
           component: '../layouts/BasicLayout',
+          Routes: ['src/pages/Authorized'],
           authority: ['admin', 'user'],
           routes: [
             {
               path: '/',
-              redirect: '/welcome',
+              redirect: '/homepage',
+            },
+            {
+              path: '/homepage',
+              name: 'homepage',
+              icon: 'home',
+              component: './Homepage',
             },
             {
               path: '/welcome',
               name: 'welcome',
+              authority: ['user'],
               icon: 'smile',
               component: './Welcome',
             },
@@ -122,18 +130,26 @@ export default {
               component: './Module1/SimilarTable/index.tsx',
             },
             {
-              component: './404',
+              name: 'exception',
+              icon: 'warning',
+              path: '/exception',
+              routes: [
+                // exception
+                {
+                  path: '/exception/403',
+                  name: 'not-permission',
+                  component: './Exception/403',
+                },
+                {
+                  path: '/exception/404',
+                  name: 'not-find',
+                  component: './Exception/404',
+                },
+              ],
             },
           ],
         },
-        {
-          component: './404',
-        },
       ],
-    },
-
-    {
-      component: './404',
     },
   ],
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn

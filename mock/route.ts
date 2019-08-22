@@ -18,6 +18,10 @@ const menuData = [
       },
     ],
   },
+  {
+    path: '/welcome',
+    name: 'welcome',
+  },
 ];
 
 function getMenuData(req: Request, res: Response) {
