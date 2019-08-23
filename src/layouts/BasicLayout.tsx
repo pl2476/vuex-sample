@@ -57,7 +57,7 @@ const formatter = (
       authority: item.authority || parentAuthority,
     };
     if (item.children && item.children.length > 0) {
-      result.children = formatter(item.children, item.authority, locale);
+      result.children = formatter(item.children, item.authority, locale) as MenuDataItem[];
     }
     return result;
   });
@@ -66,9 +66,6 @@ const footerRender: BasicLayoutProps['footerRender'] = () => <></>;
 
 const BasicLayout: React.FC<BasicLayoutProps> = props => {
   const { dispatch, children, settings } = props;
-  /**
-   * constructor
-   */
   const [menuData, setMenuData] = useState([]);
   useEffect(() => {
     if (dispatch) {
@@ -80,9 +77,13 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       });
       dispatch({
         type: 'menu/fetch',
-      }).then((data: MenuDataItem[]) => {
-        setMenuData(formatter(data) as SetStateAction<never[]>);
+        callback: (data: MenuDataItem[]) => {
+          setMenuData(formatter(data) as SetStateAction<never[]>);
+        },
       });
+      // .then((data: MenuDataItem[]) => {
+      //   setMenuData(formatter(data) as SetStateAction<never[]>);
+      // });
     }
   }, []);
 

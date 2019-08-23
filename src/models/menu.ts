@@ -26,12 +26,15 @@ const MenuModel: MenuModelType = {
   },
 
   effects: {
-    *fetch(_, { call, put }) {
+    *fetch({ callback }, { call, put }) {
       const response = yield call(getMenuData);
       // yield put({
       //   type: 'saveMenuData',
       //   payload: response,
       // });
+      if (callback) {
+        callback(response);
+      }
       return response;
     },
   },

@@ -179,7 +179,11 @@ class SimilarTable extends PureComponent<{}, MyState> {
         </div>
         <div>
           <Button onClick={this.changeExpand}>
-            {isExpand ? <Icon type="shrink" /> : <Icon type="arrows-alt" />}
+            {isExpand ? (
+              <Icon style={{ transform: 'rotate(45deg)' }} type="shrink" />
+            ) : (
+              <Icon style={{ transform: 'rotate(45deg)' }} type="arrows-alt" />
+            )}
           </Button>
         </div>
       </div>
