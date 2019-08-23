@@ -1,7 +1,7 @@
 import { Effect } from 'dva';
 import { Reducer } from 'redux';
 
-import { getMenuData } from '@/services/route';
+import { getMenuData } from '@/services/menu';
 
 export interface MenuModelState {
   menuData: object[];
@@ -28,10 +28,10 @@ const MenuModel: MenuModelType = {
   effects: {
     *fetch(_, { call, put }) {
       const response = yield call(getMenuData);
-      yield put({
-        type: 'saveMenuData',
-        payload: response,
-      });
+      // yield put({
+      //   type: 'saveMenuData',
+      //   payload: response,
+      // });
       return response;
     },
   },

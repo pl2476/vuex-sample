@@ -9,16 +9,13 @@ import ProLayout, {
   BasicLayoutProps as ProLayoutProps,
   Settings,
 } from '@ant-design/pro-layout';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, SetStateAction } from 'react';
 import Link from 'umi/link';
 import { Dispatch } from 'redux';
 import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
-
-import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { ConnectState } from '@/models/connect';
-// import { isAntDesignPro } from '@/utils/utils';
 import logo from '../assets/logo.svg';
 
 export interface BasicLayoutProps extends ProLayoutProps {
@@ -28,6 +25,7 @@ export interface BasicLayoutProps extends ProLayoutProps {
   settings: Settings;
   dispatch: Dispatch;
 }
+
 export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
   breadcrumbNameMap: {
     [path: string]: MenuDataItem;
@@ -37,76 +35,34 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
 // Conversion router to menu.
 const formatter = (
   data: MenuDataItem[],
-  parentAuthority: MenuDataItem['authority'],
-  parentName: string | undefined,
+  parentAuthority?: MenuDataItem['authority'],
+  parentName?: MenuDataItem['name'],
 ) =>
-  data
-    .map(item => {
-      if (!item.name || !item.path) {
-        return null;
-      }
+  data.map(item => {
+    if (!item.name || !item.path) {
+      return null;
+    }
 
-      let locale = 'menu';
-      if (parentName) {
-        locale = `${parentName}.${item.name}`;
-      } else {
-        locale = `menu.${item.name}`;
-      }
+    let locale = 'menu';
+    if (parentName) {
+      locale = `${parentName}.${item.name}`;
+    } else {
+      locale = `menu.${item.name}`;
+    }
 
-      const result = {
-        ...item,
-        name: formatMessage({ id: locale, defaultMessage: item.name }),
-        locale,
-        authority: item.authority || parentAuthority,
-      };
-      if (item.children) {
-        const children = formatter(item.children, item.authority, locale);
-        result.children = children;
-      }
-      return result;
-    })
-    .filter(item => item);
-
-/**
- * use Authorized check all menu item
- */
-const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
-  menuList.map(item => {
-    const localItem = {
+    const result = {
       ...item,
-      children: item.children ? menuDataRender(item.children) : [],
+      name: formatMessage({ id: locale, defaultMessage: item.name }),
+      locale,
+      authority: item.authority || parentAuthority,
     };
-    // localItem.name = formatMessage({
-    //   id: `menu.${item.name}`,
-    //   defaultMessage: item.name
-    // })
-    return Authorized.check(item.authority, localItem, null) as MenuDataItem;
+    if (item.children && item.children.length > 0) {
+      result.children = formatter(item.children, item.authority, locale);
+    }
+    return result;
   });
 
 const footerRender: BasicLayoutProps['footerRender'] = () => <></>;
-// if (!isAntDesignPro()) {
-//   return defaultDom;
-// }
-// return (
-//   <>
-//     {defaultDom}
-//     <div
-//       style={{
-//         padding: '0px 24px 24px',
-//         textAlign: 'center',
-//       }}
-//     >
-//       <a href="https://www.netlify.com" target="_blank" rel="noopener noreferrer">
-//         <img
-//           src="https://www.netlify.com/img/global/badges/netlify-color-bg.svg"
-//           width="82px"
-//           alt="netlify logo"
-//         />
-//       </a>
-//     </div>
-//   </>
-// );
-// };
 
 const BasicLayout: React.FC<BasicLayoutProps> = props => {
   const { dispatch, children, settings } = props;
@@ -125,8 +81,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       dispatch({
         type: 'menu/fetch',
       }).then((data: MenuDataItem[]) => {
-        const fData = formatter(data, undefined, undefined);
-        setMenuData(fData);
+        setMenuData(formatter(data) as SetStateAction<never[]>);
       });
     }
   }, []);
@@ -173,7 +128,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         );
       }}
       footerRender={footerRender}
-      menuDataRender={() => menuDataRender(menuData)}
+      menuDataRender={() => menuData}
       formatMessage={formatMessage}
       rightContentRender={rightProps => <RightContent {...rightProps} />}
       {...props}
