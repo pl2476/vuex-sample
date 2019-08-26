@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Select, Button, Icon, Dropdown, Menu } from 'antd';
+import { Select, Button, Icon, Dropdown, Menu, Popover, Calendar } from 'antd';
 import moment, { Moment } from 'moment';
 import style from './index.less';
 import CustomizeCalendar from '@/components/CustomizeCalendar';
@@ -158,6 +158,24 @@ class SimilarTable extends PureComponent<{}, MyState> {
         ))}
       </div>
     ));
+    const dateCell = <div></div>;
+    const timeHoverContent = (
+      <div style={{ width: 460, height: 390 }} className={style['time-hover-content']}>
+        <Calendar
+          style={{ borderTop: 0 }}
+          headerRender={() => <></>}
+          dateCellRender={date => dateCell}
+          value={moment(time)}
+          onSelect={date => {
+            console.log(moment(time).set('date', 1), moment(time).endOf('month'));
+            this.setState({
+              time: date ? date.valueOf() : new Date().getTime(),
+            });
+          }}
+          validRange={[moment(time).set('date', 1), moment(time).endOf('month')]}
+        />
+      </div>
+    );
     const leftTop = (
       <div className={style.topHead}>
         <div>
@@ -169,9 +187,17 @@ class SimilarTable extends PureComponent<{}, MyState> {
           <Button onClick={this.forwardDay}>
             <Icon type="left" />
           </Button>
-          <time style={{ color: '#000', fontWeight: 400 }}>
-            {moment(time).format('YYYY-MM-DD')}
-          </time>
+          <Popover
+            content={timeHoverContent}
+            placement="bottom"
+            trigger="click"
+            // getPopupContainer={(node) => node}}
+            title={false}
+          >
+            <time style={{ color: '#000', fontWeight: 400 }}>
+              {moment(time).format('YYYY-MM-DD')}
+            </time>
+          </Popover>
           <Button onClick={this.afterwardDay}>
             <Icon type="right" />
           </Button>
