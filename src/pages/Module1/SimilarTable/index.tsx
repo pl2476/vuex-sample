@@ -19,6 +19,7 @@ interface MyState {
   time: number;
   items: Item[];
   isExpand: boolean;
+  timePopVisible: boolean;
 }
 
 class SimilarTable extends PureComponent<{}, MyState> {
@@ -36,6 +37,7 @@ class SimilarTable extends PureComponent<{}, MyState> {
         },
       ],
       isExpand: false,
+      timePopVisible: false,
     };
   }
 
@@ -134,7 +136,7 @@ class SimilarTable extends PureComponent<{}, MyState> {
   render() {
     const tableHeadList = [1, 2, 3, 4, 5, 6];
     const tableBodyList = [];
-    const { time, items, isExpand } = this.state;
+    const { time, items, isExpand, timePopVisible } = this.state;
     for (let i = 0; i < 30; i += 1) {
       tableBodyList.push(i);
     }
@@ -167,9 +169,9 @@ class SimilarTable extends PureComponent<{}, MyState> {
           dateCellRender={date => dateCell}
           value={moment(time)}
           onSelect={date => {
-            console.log(moment(time).set('date', 1), moment(time).endOf('month'));
             this.setState({
               time: date ? date.valueOf() : new Date().getTime(),
+              timePopVisible: false,
             });
           }}
           validRange={[moment(time).set('date', 1), moment(time).endOf('month')]}
@@ -191,10 +193,18 @@ class SimilarTable extends PureComponent<{}, MyState> {
             content={timeHoverContent}
             placement="bottom"
             trigger="click"
+            visible={timePopVisible}
             // getPopupContainer={(node) => node}}
             title={false}
           >
-            <time style={{ color: '#000', fontWeight: 400 }}>
+            <time
+              style={{ color: '#000', fontWeight: 400 }}
+              onClick={() => {
+                this.setState({
+                  timePopVisible: true,
+                });
+              }}
+            >
               {moment(time).format('YYYY-MM-DD')}
             </time>
           </Popover>
