@@ -103,8 +103,6 @@ export default {
         {
           path: '/',
           component: '../layouts/BasicLayout',
-          Routes: ['src/pages/Authorized'],
-          authority: ['admin', 'user'],
           routes: [
             {
               path: '/',
@@ -119,7 +117,6 @@ export default {
             {
               path: '/welcome',
               name: 'welcome',
-              authority: ['user'],
               icon: 'smile',
               component: './Welcome',
             },
