@@ -14,7 +14,9 @@ export interface CustomizeSelectProps {
   style?: object;
   value: string | undefined;
   option: Item[];
-  onCustomSelect: (value: object) => void;
+  onCustomSelect?: (value: object) => void;
+  getPopupContainer?: (value: HTMLElement) => HTMLElement;
+  dropdownMatchSelectWidth?: boolean;
 }
 
 const CustomizeSelect: React.SFC<CustomizeSelectProps> = props => {
@@ -28,7 +30,9 @@ const CustomizeSelect: React.SFC<CustomizeSelectProps> = props => {
       className={props.value === item.value ? style.active : ''}
       onMouseDown={e => {
         e.preventDefault();
-        props.onCustomSelect(item);
+        if (props.onCustomSelect) {
+          props.onCustomSelect(item);
+        }
       }}
       key={item.value}
     >
@@ -41,7 +45,9 @@ const CustomizeSelect: React.SFC<CustomizeSelectProps> = props => {
         style={props.style}
         value={props.value}
         placeholder="Please Select"
-        getPopupContainer={triggerNode => triggerNode as HTMLElement}
+        dropdownClassName={style['customize-dropdown-class']}
+        getPopupContainer={props.getPopupContainer}
+        dropdownMatchSelectWidth={props.dropdownMatchSelectWidth}
         dropdownRender={() => <div className={style.dropdown}>{dropdownDom}</div>}
       >
         {children}
