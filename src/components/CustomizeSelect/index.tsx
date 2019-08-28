@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Select } from 'antd';
 
 import style from './index.less';
@@ -17,9 +17,11 @@ export interface CustomizeSelectProps {
   onCustomSelect?: (value: Item) => void;
   getPopupContainer?: (value: HTMLElement) => HTMLElement;
   dropdownMatchSelectWidth?: boolean;
+  openTrigger?: 'default' | 'mouse'; // 打开下拉的方式；'mouse'：鼠标移入打开，鼠标离开关闭
 }
 
 const CustomizeSelect: React.SFC<CustomizeSelectProps> = props => {
+  const [open, setOpen] = useState(false);
   const children = props.option.map(item => (
     <Option key={item.value} value={item.value}>
       {item.text}
@@ -40,18 +42,41 @@ const CustomizeSelect: React.SFC<CustomizeSelectProps> = props => {
     </div>
   ));
   return (
-    <div className={style['customize-select']}>
-      <Select
-        style={props.style}
-        value={props.value}
-        placeholder="Please Select"
-        dropdownClassName={style['customize-dropdown-class']}
-        getPopupContainer={props.getPopupContainer}
-        dropdownMatchSelectWidth={props.dropdownMatchSelectWidth}
-        dropdownRender={() => <div className={style.dropdown}>{dropdownDom}</div>}
-      >
-        {children}
-      </Select>
+    <div
+      className={style['customize-select']}
+      onMouseEnter={() => {
+        setOpen(true);
+      }}
+      onMouseLeave={() => {
+        setOpen(false);
+      }}
+    >
+      {props.openTrigger === 'default' ? (
+        <Select
+          style={props.style}
+          value={props.value}
+          placeholder="Please Select"
+          dropdownClassName={style['customize-dropdown-class']}
+          getPopupContainer={props.getPopupContainer}
+          dropdownMatchSelectWidth={props.dropdownMatchSelectWidth}
+          dropdownRender={() => <div className={style.dropdown}>{dropdownDom}</div>}
+        >
+          {children}
+        </Select>
+      ) : (
+        <Select
+          style={props.style}
+          value={props.value}
+          open={open}
+          placeholder="Please Select"
+          dropdownClassName={style['customize-dropdown-class']}
+          getPopupContainer={props.getPopupContainer}
+          dropdownMatchSelectWidth={props.dropdownMatchSelectWidth}
+          dropdownRender={() => <div className={style.dropdown}>{dropdownDom}</div>}
+        >
+          {children}
+        </Select>
+      )}
     </div>
   );
 };

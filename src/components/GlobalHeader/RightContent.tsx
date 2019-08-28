@@ -80,6 +80,7 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
             { value: '3', text: 'third' },
             { value: '4', text: 'fourth' },
           ]}
+          openTrigger="mouse"
           getPopupContainer={triggerNode => triggerNode.parentElement as HTMLElement}
           dropdownMatchSelectWidth={false}
           onCustomSelect={onCustomSelect}
