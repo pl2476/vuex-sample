@@ -14,8 +14,7 @@ export interface CustomizeSelectProps {
   style?: object;
   value: string | undefined;
   option: Item[];
-  onCustomSelect?: (value: object) => void;
-  active?: boolean;
+  onCustomSelect: (value: object) => void;
 }
 
 const CustomizeSelect: React.SFC<CustomizeSelectProps> = props => {
@@ -26,7 +25,7 @@ const CustomizeSelect: React.SFC<CustomizeSelectProps> = props => {
   ));
   const dropdownDom = props.option.map(item => (
     <div
-      // className={props.active ? style.active : ''}
+      className={props.value === item.value ? style.active : ''}
       onMouseDown={e => {
         e.preventDefault();
         props.onCustomSelect(item);
