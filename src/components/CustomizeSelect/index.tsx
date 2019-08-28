@@ -14,7 +14,7 @@ export interface CustomizeSelectProps {
   style?: object;
   value: string | undefined;
   option: Item[];
-  onCustomSelect?: (value: object) => void;
+  onCustomSelect?: (value: Item) => void;
   getPopupContainer?: (value: HTMLElement) => HTMLElement;
   dropdownMatchSelectWidth?: boolean;
 }

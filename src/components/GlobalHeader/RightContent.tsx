@@ -1,5 +1,5 @@
 // import { Icon, Tooltip } from 'antd';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
 // import { formatMessage } from 'umi-plugin-react/locale';
 import { ConnectProps, ConnectState } from '@/models/connect';
@@ -8,6 +8,7 @@ import Avatar from './AvatarDropdown';
 // import HeaderSearch from '../HeaderSearch';
 import SelectLang from '../SelectLang';
 import styles from './index.less';
+import CustomizeSelect, { Item } from '@/components/CustomizeSelect';
 
 export type SiderTheme = 'light' | 'dark';
 export interface GlobalHeaderRightProps extends ConnectProps {
@@ -18,10 +19,16 @@ export interface GlobalHeaderRightProps extends ConnectProps {
 const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
   const { theme, layout } = props;
   let className = styles.right;
-
   if (theme === 'dark' && layout === 'topmenu') {
     className = `${styles.right}  ${styles.dark}`;
   }
+  const [selectValue, setSelectValue] = useState('default');
+  useEffect(() => {}, []);
+
+  const onCustomSelect = (item: Item): void => {
+    setSelectValue(item.value);
+    // to do realod content
+  };
 
   return (
     <div className={className}>
@@ -62,6 +69,22 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
           <Icon type="question-circle-o" />
         </a>
       </Tooltip> */}
+      <div style={{ display: 'inline-block' }}>
+        <CustomizeSelect
+          value={selectValue}
+          style={{ width: 200 }}
+          option={[
+            { value: 'default', text: 'default' },
+            { value: '1', text: 'first' },
+            { value: '2', text: 'second' },
+            { value: '3', text: 'third' },
+            { value: '4', text: 'fourth' },
+          ]}
+          getPopupContainer={triggerNode => triggerNode.parentElement as HTMLElement}
+          dropdownMatchSelectWidth={false}
+          onCustomSelect={onCustomSelect}
+        />
+      </div>
       <Avatar menu />
       <SelectLang className={styles.action} />
     </div>
