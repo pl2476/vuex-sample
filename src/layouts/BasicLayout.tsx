@@ -62,7 +62,7 @@ const formatter = (
     return result;
   });
 
-const footerRender: BasicLayoutProps['footerRender'] = () => <></>;
+// const footerRender: BasicLayoutProps['footerRender'] = () => <></>;
 
 const BasicLayout: React.FC<BasicLayoutProps> = props => {
   const { dispatch, children, settings } = props;
@@ -103,7 +103,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
     <ProLayout
       logo={logo}
       onCollapse={handleMenuCollapse}
-      collapsed={false}
       menuItemRender={(menuItemProps, defaultDom) => {
         if (menuItemProps.isUrl) {
           return defaultDom;
@@ -128,10 +127,10 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
           <span>{route.breadcrumbName}</span>
         );
       }}
-      footerRender={footerRender}
+      footerRender={false}
       menuDataRender={() => menuData}
       formatMessage={formatMessage}
-      rightContentRender={rightProps => <RightContent {...rightProps} />}
+      rightContentRender={() => <RightContent />}
       {...props}
       {...settings}
     >
