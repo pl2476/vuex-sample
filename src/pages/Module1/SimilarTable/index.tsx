@@ -1,11 +1,10 @@
 import React, { PureComponent } from 'react';
-import { Select, Button, Icon, Dropdown, Menu, Popover, Calendar } from 'antd';
+import { Button, Icon, Dropdown, Menu, Popover, Calendar, Select } from 'antd';
 import moment, { Moment } from 'moment';
-import style from './index.less';
 import CustomizeCalendar from '@/components/CustomizeCalendar';
+import CustomizeSelect, { Item as SelectItem } from '@/components/CustomizeSelect';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-
-const { Option } = Select;
+import style from './index.less';
 
 interface Item {
   id: number;
@@ -20,6 +19,7 @@ interface MyState {
   items: Item[];
   isExpand: boolean;
   timePopVisible: boolean;
+  selectValue: string | undefined;
 }
 
 class SimilarTable extends PureComponent<{}, MyState> {
@@ -38,7 +38,14 @@ class SimilarTable extends PureComponent<{}, MyState> {
       ],
       isExpand: false,
       timePopVisible: false,
+      selectValue: undefined,
     };
+  }
+
+  componentDidMount() {
+    this.setState({
+      selectValue: '1',
+    });
   }
 
   afterwardDay = () => {
@@ -133,10 +140,16 @@ class SimilarTable extends PureComponent<{}, MyState> {
     }
   };
 
+  onCustomSelect = (item: SelectItem): void => {
+    this.setState({
+      selectValue: item.value,
+    });
+  };
+
   render() {
     const tableHeadList = [1, 2, 3, 4, 5, 6];
     const tableBodyList = [];
-    const { time, items, isExpand, timePopVisible } = this.state;
+    const { time, items, isExpand, timePopVisible, selectValue } = this.state;
     for (let i = 0; i < 30; i += 1) {
       tableBodyList.push(i);
     }
@@ -181,9 +194,21 @@ class SimilarTable extends PureComponent<{}, MyState> {
     const leftTop = (
       <div className={style.topHead}>
         <div>
-          <Select defaultValue="default" style={{ width: 120 }}>
-            <Option value="default">default</Option>
-          </Select>
+          <CustomizeSelect
+            value={selectValue}
+            style={{ width: 100 }}
+            option={[
+              { value: 'default', text: 'default' },
+              { value: '1', text: 'first' },
+              { value: '2', text: 'second' },
+              { value: '3', text: 'third' },
+              { value: '4', text: 'fourth' },
+            ]}
+            openTrigger="mouse"
+            getPopupContainer={triggerNode => triggerNode.parentElement as HTMLElement}
+            dropdownMatchSelectWidth={false}
+            onCustomSelect={this.onCustomSelect}
+          />
         </div>
         <div>
           <Button onClick={this.forwardDay}>
@@ -288,7 +313,7 @@ class SimilarTable extends PureComponent<{}, MyState> {
             </div>
             <div className={style.bottom}>
               <div className={style['bottom-title']}>WAITING BOOKINGS</div>
-              <div className={style['bottom-content']} />
+              <div className={style['bottom-content']}></div>
             </div>
           </div>
         </div>
