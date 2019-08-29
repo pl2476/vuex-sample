@@ -3,6 +3,14 @@
     display: flex;
     flex-wrap: wrap;
   }
+  .dropdown::before {
+    position: absolute;
+    top: -5px;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    content: '';
+  }
   .dropdown > div {
     height: 30px;
     padding: 0 22px;
@@ -16,6 +24,7 @@
     color: #9fcc43;
   }
   .customize-dropdown-class {
+    width: fit-content;
     max-width: 276px;
   }
 }
