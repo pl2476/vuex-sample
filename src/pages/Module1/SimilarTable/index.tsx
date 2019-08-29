@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
-import { Button, Icon, Dropdown, Menu, Popover, Calendar, Select } from 'antd';
+import { Button, Icon, Dropdown, Menu, Popover, Calendar } from 'antd';
 import moment, { Moment } from 'moment';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import CustomizeCalendar from '@/components/CustomizeCalendar';
 import CustomizeSelect, { Item as SelectItem } from '@/components/CustomizeSelect';
-import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import style from './index.less';
 
 interface Item {
@@ -179,7 +179,7 @@ class SimilarTable extends PureComponent<{}, MyState> {
         <Calendar
           style={{ borderTop: 0 }}
           headerRender={() => <></>}
-          dateCellRender={date => dateCell}
+          dateCellRender={() => dateCell}
           value={moment(time)}
           onSelect={date => {
             this.setState({
