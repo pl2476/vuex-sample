@@ -93,7 +93,7 @@ class SimilarTable extends PureComponent<{}, MyState> {
     this.setState({ isExpand: !isExpand });
   };
 
-  dragStart = (item: object, event?: React.DragEvent): void => {
+  dragStart = (item: object, event: React.DragEvent): void => {
     if (event && event.dataTransfer) {
       const { dataTransfer } = event;
       dataTransfer.setData(
@@ -106,7 +106,7 @@ class SimilarTable extends PureComponent<{}, MyState> {
     }
   };
 
-  onDrop = (row: number, col: number, e?: React.DragEvent): void => {
+  onDrop = (row: number, col: number, e: React.DragEvent): void => {
     if (e && e.dataTransfer) {
       e.dataTransfer.dropEffect = 'move';
       if (typeof row !== 'number' || col < 1) {
@@ -128,16 +128,12 @@ class SimilarTable extends PureComponent<{}, MyState> {
     }
   };
 
-  dragEnter = (item: number, e?: React.DragEvent): void => {
-    if (e && e.dataTransfer) {
-      e.preventDefault();
-    }
+  dragEnter = (item: number, e: React.DragEvent): void => {
+    e.preventDefault();
   };
 
-  dragOver = (item: number, e?: React.DragEvent): void => {
-    if (e && e.dataTransfer) {
-      e.preventDefault();
-    }
+  dragOver = (item: number, e: React.DragEvent): void => {
+    e.preventDefault();
   };
 
   onCustomSelect = (item: SelectItem): void => {
@@ -192,11 +188,11 @@ class SimilarTable extends PureComponent<{}, MyState> {
       </div>
     );
     const leftTop = (
-      <div className={style.topHead}>
-        <div>
+      <div className={style.topHead} style={{ position: 'relative' }}>
+        <div style={{ display: 'inline-block' }}>
           <CustomizeSelect
             value={selectValue}
-            style={{ width: 100 }}
+            style={{ minWidth: 120 }}
             option={[
               { value: 'default', text: 'default' },
               { value: '1', text: 'first' },
@@ -205,7 +201,7 @@ class SimilarTable extends PureComponent<{}, MyState> {
               { value: '4', text: 'fourth' },
             ]}
             openTrigger="mouse"
-            getPopupContainer={triggerNode => triggerNode.parentElement as HTMLElement}
+            getPopupContainer={node => node.parentElement as HTMLElement}
             dropdownMatchSelectWidth={false}
             onCustomSelect={this.onCustomSelect}
           />
