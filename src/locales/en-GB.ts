@@ -1,9 +1,9 @@
-import component from './en-US/component';
-import globalHeader from './en-US/globalHeader';
-import menu from './en-US/menu';
-import pwa from './en-US/pwa';
-import settingDrawer from './en-US/settingDrawer';
-import settings from './en-US/settings';
+import component from './en-GB/component';
+import globalHeader from './en-GB/globalHeader';
+import menu from './en-GB/menu';
+import pwa from './en-GB/pwa';
+import settingDrawer from './en-GB/settingDrawer';
+import settings from './en-GB/settings';
 
 export default {
   'navBar.lang': 'Languages',
