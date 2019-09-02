@@ -102,7 +102,8 @@ class SimilarTable extends PureComponent<{}, MyState> {
           item,
         }),
       );
-      dataTransfer.effectAllowed = 'linkMove';
+      dataTransfer.dropEffect = 'move';
+      // dataTransfer.effectAllowed = 'linkMove';
     }
   };
 
@@ -133,6 +134,7 @@ class SimilarTable extends PureComponent<{}, MyState> {
   };
 
   dragOver = (item: number, e: React.DragEvent): void => {
+    e.dataTransfer.dropEffect = 'move';
     e.preventDefault();
   };
 
