@@ -20,7 +20,10 @@ export interface CustomizeSelectProps {
   openTrigger?: 'default' | 'mouse'; // 打开下拉的方式；'mouse'：鼠标移入打开，鼠标离开关闭
 }
 
-const CustomizeSelect: React.SFC<CustomizeSelectProps> = props => {
+const CustomizeSelect: React.SFC<CustomizeSelectProps> = ({
+  openTrigger = 'default',
+  ...props
+}) => {
   const [open, setOpen] = useState(false);
   const children = props.option.map(item => (
     <Option key={item.value} value={item.value}>
@@ -51,7 +54,7 @@ const CustomizeSelect: React.SFC<CustomizeSelectProps> = props => {
         setOpen(false);
       }}
     >
-      {props.openTrigger === 'default' ? (
+      {openTrigger === 'default' ? (
         <Select
           style={props.style}
           value={props.value}
