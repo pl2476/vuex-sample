@@ -2,9 +2,14 @@ import React, { PureComponent } from 'react';
 import { Button, Icon, Dropdown, Menu, Popover, Calendar } from 'antd';
 import moment, { Moment } from 'moment';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import { DndProvider } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import CustomizeCalendar from '@/components/CustomizeCalendar';
 import CustomizeSelect, { Item as SelectItem } from '@/components/CustomizeSelect';
 import style from './index.less';
+import DndBox from '@/components/DndBox';
+import DndItem from '@/components/DndItem';
+import { isAbsolute } from 'path';
 
 interface Item {
   id: number;
@@ -34,6 +39,13 @@ class SimilarTable extends PureComponent<{}, MyState> {
           x: 1,
           y: 2,
           h: 2,
+        },
+        {
+          id: 2,
+          desc: 'b',
+          x: 3,
+          y: 6,
+          h: 3,
         },
       ],
       isExpand: false,
@@ -107,7 +119,8 @@ class SimilarTable extends PureComponent<{}, MyState> {
     }
   };
 
-  onDrop = (row: number, col: number, e: React.DragEvent): void => {
+  onDrop = (row: number, col: number, e?: React.DragEvent): void => {
+    const { items } = this.state;
     if (e && e.dataTransfer) {
       e.dataTransfer.dropEffect = 'move';
       if (typeof row !== 'number' || col < 1) {
@@ -115,16 +128,21 @@ class SimilarTable extends PureComponent<{}, MyState> {
         return;
       }
       const data = JSON.parse(e.dataTransfer.getData('text/plain')).item;
-      this.setState({
-        items: [
-          {
+      const targetItems = items.map(item => {
+        let target = item;
+        if (item.id === data.id) {
+          target = {
             id: data.id,
             desc: data.desc,
             x: col,
             y: row,
             h: data.h,
-          },
-        ],
+          };
+        }
+        return target;
+      });
+      this.setState({
+        items: targetItems,
       });
     }
   };
@@ -158,17 +176,25 @@ class SimilarTable extends PureComponent<{}, MyState> {
     ));
     const body = tableBodyList.map((rowItem, i) => (
       <div key={rowItem} className={style.row}>
-        {[-1, ...tableHeadList].map((colItem, j) => (
-          <div
-            key={colItem}
-            className={style.cell}
-            onDrop={this.onDrop.bind(this, rowItem, colItem)}
-            onDragEnter={this.dragEnter.bind(this, rowItem)}
-            onDragOver={this.dragOver.bind(this, rowItem)}
-          >
-            {j === 0 ? i + 1 : ''}
-          </div>
-        ))}
+        {[-1, ...tableHeadList].map((colItem, j) =>
+          j === 0 ? (
+            <div key={colItem} className={style.cell}>
+              {i + 1}
+            </div>
+          ) : (
+            <DndBox
+              key={colItem}
+              content=""
+              style={{
+                height: 30,
+                width: 150,
+                // backgroundColor: '#000',
+                borderRight: '1px solid #e8e8e8',
+                borderBottom: '1px dotted #e8e8e8',
+              }}
+            />
+          ),
+        )}
       </div>
     ));
     const dateCell = <div></div>;
@@ -259,7 +285,7 @@ class SimilarTable extends PureComponent<{}, MyState> {
         getPopupContainer={trigger => trigger.parentNode as HTMLElement}
         trigger={['contextMenu', 'click']}
       >
-        <div
+        {/* <div
           key={item.id}
           className={`${style.contentItem}  ${index === items.length - 1 ? style.last : ''}`}
           style={{
@@ -274,6 +300,24 @@ class SimilarTable extends PureComponent<{}, MyState> {
           onDragStart={this.dragStart.bind(this, item)}
         >
           {`${item.id}(${item.x}, ${item.y})`}
+        </div> */}
+        <div style={{ overflow: 'hidden', clear: 'both' }}>
+          <DndItem
+            key={item.id}
+            style={{
+              position: 'absolute',
+              width: 150,
+              height: `${item.h * 30}px`,
+              lineHeight: `${item.h * 30}px`,
+              top: (item.y + 1) * 30,
+              left: (item.x - 1) * 150 + 88,
+              backgroundColor: '#FF9A74',
+              cursor: 'move',
+              textAlign: 'center',
+            }}
+            hideSourceOnDrag
+            name={item.desc}
+          />
         </div>
       </Dropdown>
     ));
@@ -286,8 +330,10 @@ class SimilarTable extends PureComponent<{}, MyState> {
               <div className={style.head}>
                 <div className={style.row}>{colTitle}</div>
               </div>
-              <div className={style.body}>{body}</div>
-              {contentItems}
+              <DndProvider backend={HTML5Backend}>
+                <div className={style.body}>{body}</div>
+                {contentItems}
+              </DndProvider>
             </div>
             <div className={style.bottom}>
               <div>
@@ -311,7 +357,25 @@ class SimilarTable extends PureComponent<{}, MyState> {
             </div>
             <div className={style.bottom}>
               <div className={style['bottom-title']}>WAITING BOOKINGS</div>
-              <div className={style['bottom-content']}></div>
+              <div className={style['bottom-content']}>
+                <DndProvider backend={HTML5Backend}>
+                  <div style={{ overflow: 'hidden', clear: 'both' }}>
+                    <DndItem
+                      style={{
+                        height: 30,
+                        width: 150,
+                        border: '1px dashed gray',
+                        backgroundColor: 'white',
+                        marginRight: '1.5rem',
+                        marginBottom: '1.5rem',
+                        cursor: 'move',
+                        textAlign: 'center',
+                      }}
+                      name="test"
+                    />
+                  </div>
+                </DndProvider>
+              </div>
             </div>
           </div>
         </div>
