@@ -8,23 +8,24 @@ import CustomizeCalendar from '@/components/CustomizeCalendar';
 import CustomizeSelect, { Item as SelectItem } from '@/components/CustomizeSelect';
 import style from './index.less';
 import DndBox from '@/components/DndBox';
-import DndItem from '@/components/DndItem';
-import { isAbsolute } from 'path';
+import DndItem, { Item as DndItemData, DndItemProps } from '@/components/DndItem';
 
-interface Item {
-  id: number;
-  desc: string;
-  x: number;
-  y: number;
-  h: number;
-}
+// interface Item {
+//   id: number;
+//   desc: string;
+//   x: number;
+//   y: number;
+//   h: number;
+// }
 
 interface MyState {
   time: number;
-  items: Item[];
+  items: DndItemData[];
   isExpand: boolean;
   timePopVisible: boolean;
   selectValue: string | undefined;
+  itemHeight: number;
+  itemWidth: number;
 }
 
 class SimilarTable extends PureComponent<{}, MyState> {
@@ -51,6 +52,8 @@ class SimilarTable extends PureComponent<{}, MyState> {
       isExpand: false,
       timePopVisible: false,
       selectValue: undefined,
+      itemHeight: 30,
+      itemWidth: 150,
     };
   }
 
@@ -147,6 +150,29 @@ class SimilarTable extends PureComponent<{}, MyState> {
     }
   };
 
+  itemDrop = (row: number, col: number, data: DndItemData) => {
+    const { items } = this.state;
+    if (typeof row !== 'number' || col < 1) {
+      return;
+    }
+    const targetItems = items.map(item => {
+      let target = item;
+      if (item.id === data.id) {
+        target = {
+          id: data.id,
+          desc: data.desc,
+          x: col,
+          y: row,
+          h: data.h,
+        };
+      }
+      return target;
+    });
+    this.setState({
+      items: targetItems,
+    });
+  };
+
   dragEnter = (item: number, e: React.DragEvent): void => {
     e.preventDefault();
   };
@@ -165,7 +191,15 @@ class SimilarTable extends PureComponent<{}, MyState> {
   render() {
     const tableHeadList = [1, 2, 3, 4, 5, 6];
     const tableBodyList = [];
-    const { time, items, isExpand, timePopVisible, selectValue } = this.state;
+    const {
+      time,
+      items,
+      isExpand,
+      timePopVisible,
+      selectValue,
+      itemHeight,
+      itemWidth,
+    } = this.state;
     for (let i = 0; i < 30; i += 1) {
       tableBodyList.push(i);
     }
@@ -176,25 +210,28 @@ class SimilarTable extends PureComponent<{}, MyState> {
     ));
     const body = tableBodyList.map((rowItem, i) => (
       <div key={rowItem} className={style.row}>
-        {[-1, ...tableHeadList].map((colItem, j) =>
-          j === 0 ? (
-            <div key={colItem} className={style.cell}>
-              {i + 1}
-            </div>
-          ) : (
+        {[-1, ...tableHeadList].map((colItem, j) => {
+          if (j === 0) {
+            return (
+              <div key={colItem} className={style.cell}>
+                {i + 1}
+              </div>
+            );
+          }
+          return (
             <DndBox
               key={colItem}
               content=""
               style={{
-                height: 30,
-                width: 150,
-                // backgroundColor: '#000',
+                height: itemHeight,
+                width: itemWidth,
                 borderRight: '1px solid #e8e8e8',
                 borderBottom: '1px dotted #e8e8e8',
               }}
+              drop={(data: DndItemProps) => this.itemDrop(rowItem, colItem, data.data)}
             />
-          ),
-        )}
+          );
+        })}
       </div>
     ));
     const dateCell = <div></div>;
@@ -273,7 +310,7 @@ class SimilarTable extends PureComponent<{}, MyState> {
         </div>
       </div>
     );
-    const contentItems = items.map((item, index) => (
+    const contentItems = items.map(item => (
       <Dropdown
         key={item.id}
         overlay={
@@ -316,7 +353,7 @@ class SimilarTable extends PureComponent<{}, MyState> {
               textAlign: 'center',
             }}
             hideSourceOnDrag
-            name={item.desc}
+            data={item}
           />
         </div>
       </Dropdown>
@@ -371,7 +408,7 @@ class SimilarTable extends PureComponent<{}, MyState> {
                         cursor: 'move',
                         textAlign: 'center',
                       }}
-                      name="test"
+                      data={items[0]}
                     />
                   </div>
                 </DndProvider>
