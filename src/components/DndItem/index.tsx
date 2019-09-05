@@ -1,19 +1,28 @@
 import React from 'react';
 import { useDrag, DragSourceMonitor } from 'react-dnd';
 
+export interface Item {
+  id: number;
+  desc: string | undefined;
+  x: number;
+  y: number;
+  h: number;
+}
+
 export interface DndItemProps {
-  name: string;
+  data: Item;
   style?: object;
   hideSourceOnDrag?: false | true;
 }
 
 const DndItem: React.FC<DndItemProps> = props => {
   const [{ isDragging }, drag] = useDrag({
-    item: { name: props.name, type: 'box' },
-    end: (item: { name: string } | undefined, monitor: DragSourceMonitor) => {
+    item: { data: props.data, type: 'box' },
+    end: (item: { data: Item } | undefined, monitor: DragSourceMonitor) => {
       const dropResult = monitor.getDropResult();
       if (item && dropResult) {
-        console.log(`You dropped ${item.name} into ${dropResult.name}!`);
+        const { data } = item;
+        console.log(`You dropped ${data.desc} into ${dropResult.name}!`);
       }
     },
     collect: monitor => ({
@@ -26,9 +35,10 @@ const DndItem: React.FC<DndItemProps> = props => {
     return <div ref={drag} />;
   }
 
+  const { data } = props;
   return (
     <div ref={drag} style={{ ...props.style, opacity }}>
-      {props.name}
+      {data.desc}
     </div>
   );
 };

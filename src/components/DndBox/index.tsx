@@ -5,12 +5,17 @@ export interface DndBoxProps {
   style?: object;
   content?: string | number;
   activeContent?: string;
+  drop?: Function;
 }
 
 const DndBox: React.FC<DndBoxProps> = props => {
   const [{ canDrop, isOver }, drop] = useDrop({
     accept: 'box',
-    drop: item => item,
+    drop: item => {
+      if (props.drop) {
+        props.drop(item);
+      }
+    },
     collect: monitor => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),
