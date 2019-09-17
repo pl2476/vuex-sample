@@ -123,7 +123,7 @@ class Login extends Component<LoginProps, LoginState> {
   };
 
   render() {
-    const { className, children } = this.props;
+    const { className, children, style } = this.props;
     const { type, tabs = [] } = this.state;
     const TabChildren: React.ReactComponentElement<LoginTab>[] = [];
     const otherChildren: React.ReactElement<unknown>[] = [];
@@ -142,7 +142,7 @@ class Login extends Component<LoginProps, LoginState> {
     );
     return (
       <LoginContext.Provider value={this.getContext()}>
-        <div className={classNames(className, styles.login)}>
+        <div className={classNames(className, styles.login)} style={style}>
           <Form onSubmit={this.handleSubmit}>
             {tabs.length ? (
               <React.Fragment>
