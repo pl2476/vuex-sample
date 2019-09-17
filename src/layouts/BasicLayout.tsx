@@ -16,7 +16,7 @@ import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { ConnectState } from '@/models/connect';
-import logo from '../assets/logo.svg';
+import styles from './BasicLayout.less';
 
 export interface BasicLayoutProps extends ProLayoutProps {
   breadcrumbNameMap: {
@@ -100,42 +100,44 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   };
 
   return (
-    <ProLayout
-      logo={logo}
-      onCollapse={handleMenuCollapse}
-      menuItemRender={(menuItemProps, defaultDom) => {
-        if (menuItemProps.isUrl) {
-          return defaultDom;
-        }
-        return <Link to={menuItemProps.path}>{defaultDom}</Link>;
-      }}
-      breadcrumbRender={(routers = []) => [
-        {
-          path: '/',
-          breadcrumbName: formatMessage({
-            id: 'menu.home',
-            defaultMessage: 'Home',
-          }),
-        },
-        ...routers,
-      ]}
-      itemRender={(route, params, routes, paths) => {
-        const first = routes.indexOf(route) === 0;
-        return first ? (
-          <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
-        ) : (
-          <span>{route.breadcrumbName}</span>
-        );
-      }}
-      footerRender={false}
-      menuDataRender={() => menuData}
-      formatMessage={formatMessage}
-      rightContentRender={() => <RightContent />}
-      {...props}
-      {...settings}
-    >
-      {children}
-    </ProLayout>
+    <div className={styles.prolayout}>
+      <ProLayout
+        logo="https://lanhu.oss-cn-beijing.aliyuncs.com/xdecdd118f-9b63-4101-9cb1-1ef68d295576"
+        onCollapse={handleMenuCollapse}
+        menuItemRender={(menuItemProps, defaultDom) => {
+          if (menuItemProps.isUrl) {
+            return defaultDom;
+          }
+          return <Link to={menuItemProps.path}>{defaultDom}</Link>;
+        }}
+        breadcrumbRender={(routers = []) => [
+          {
+            path: '/',
+            breadcrumbName: formatMessage({
+              id: 'menu.home',
+              defaultMessage: 'Home',
+            }),
+          },
+          ...routers,
+        ]}
+        itemRender={(route, params, routes, paths) => {
+          const first = routes.indexOf(route) === 0;
+          return first ? (
+            <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
+          ) : (
+            <span>{route.breadcrumbName}</span>
+          );
+        }}
+        footerRender={false}
+        menuDataRender={() => menuData}
+        formatMessage={formatMessage}
+        rightContentRender={() => <RightContent />}
+        {...props}
+        {...settings}
+      >
+        {children}
+      </ProLayout>
+    </div>
   );
 };
 
