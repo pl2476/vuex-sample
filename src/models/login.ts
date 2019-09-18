@@ -3,8 +3,8 @@ import { routerRedux } from 'dva/router';
 import { Effect } from 'dva';
 import { stringify } from 'querystring';
 
-import { fakeAccountLogin, getFakeCaptcha } from '@/services/login';
-import { setAuthority } from '@/utils/authority';
+import { login, getFakeCaptcha } from '@/services/login';
+import { setAuth } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 
 export interface StateType {
@@ -35,13 +35,13 @@ const Model: LoginModelType = {
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response,
-      });
+      const response = yield call(login, payload);
       // Login successfully
-      if (response.status === 'ok') {
+      if (response.code === '100') {
+        // yield put({
+        //   type: 'changeLoginStatus',
+        //   payload: response,
+        // });
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
@@ -64,6 +64,7 @@ const Model: LoginModelType = {
     *getCaptcha({ payload }, { call }) {
       yield call(getFakeCaptcha, payload);
     },
+
     *logout(_, { put }) {
       const { redirect } = getPageQuery();
       // redirect
@@ -82,7 +83,7 @@ const Model: LoginModelType = {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority);
+      setAuth(payload.currentAuthority);
       return {
         ...state,
         status: payload.status,

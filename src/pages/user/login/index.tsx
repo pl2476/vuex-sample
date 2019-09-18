@@ -1,11 +1,10 @@
-import { Alert, Checkbox, Icon } from 'antd';
+import { Alert, Checkbox } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 import React, { Component } from 'react';
 
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { Dispatch, AnyAction } from 'redux';
 import { FormComponentProps } from 'antd/es/form';
-import Link from 'umi/link';
 import { connect } from 'dva';
 import { StateType } from '@/models/login';
 import LoginComponents from './components/Login';
@@ -13,7 +12,7 @@ import styles from './style.less';
 import { LoginParamsType } from '@/services/login';
 import { ConnectState } from '@/models/connect';
 
-const { Tab, UserName, Password, Mobile, Captcha, Submit } = LoginComponents;
+const { UserName, Password, Submit } = LoginComponents;
 
 interface LoginProps {
   dispatch: Dispatch<AnyAction>;
@@ -34,7 +33,7 @@ class Login extends Component<LoginProps, LoginState> {
 
   state: LoginState = {
     type: 'account',
-    autoLogin: true,
+    autoLogin: false,
   };
 
   changeAutoLogin = (e: CheckboxChangeEvent) => {
@@ -44,14 +43,14 @@ class Login extends Component<LoginProps, LoginState> {
   };
 
   handleSubmit = (err: unknown, values: LoginParamsType) => {
-    const { type } = this.state;
+    // const { type } = this.state;
     if (!err) {
       const { dispatch } = this.props;
       dispatch({
         type: 'login/login',
         payload: {
           ...values,
-          type,
+          // type,
         },
       });
     }
@@ -93,8 +92,7 @@ class Login extends Component<LoginProps, LoginState> {
   );
 
   render() {
-    const { userLogin, submitting } = this.props;
-    // const { status, type: loginType } = userLogin;
+    const { submitting } = this.props;
     const { type, autoLogin } = this.state;
     return (
       <div className={styles.main}>
@@ -116,8 +114,8 @@ class Login extends Component<LoginProps, LoginState> {
             />
           </div>
           <UserName
-            name="userName"
-            placeholder={`${formatMessage({ id: 'user-login.login.userName' })}: admin or user`}
+            name="username"
+            placeholder={`${formatMessage({ id: 'user-login.login.userName' })}`}
             rules={[
               {
                 required: true,
@@ -127,7 +125,7 @@ class Login extends Component<LoginProps, LoginState> {
           />
           <Password
             name="password"
-            placeholder={`${formatMessage({ id: 'user-login.login.password' })}: ant.design`}
+            placeholder={`${formatMessage({ id: 'user-login.login.password' })}`}
             rules={[
               {
                 required: true,
