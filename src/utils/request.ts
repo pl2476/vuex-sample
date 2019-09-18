@@ -77,8 +77,12 @@ request.interceptors.request.use((url, options) => {
 // response拦截器, 处理response
 request.interceptors.response.use((response, options) => {
   const token = response.headers.get('authorization');
+  const { data } = options;
   if (token) {
     localStorage.setItem('auth', token);
+  }
+  if (data && data.isLogout) {
+    localStorage.removeItem('auth');
   }
   return response;
 });
