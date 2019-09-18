@@ -53,4 +53,34 @@ const request = extend({
   credentials: 'include', // 默认请求是否带上cookie
 });
 
+// request拦截器, 改变url 或 options.
+request.interceptors.request.use((url, options) => {
+  const token = localStorage.getItem('auth');
+  const headers = {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    Authorization: '',
+  };
+  if (token) {
+    headers.Authorization = token;
+    return {
+      url: `${url}`,
+      options: { ...options, interceptors: true, headers },
+    };
+  }
+  return {
+    url: `${url}`,
+    options: { ...options, interceptors: true },
+  };
+});
+
+// response拦截器, 处理response
+request.interceptors.response.use((response, options) => {
+  const token = response.headers.get('authorization');
+  if (token) {
+    localStorage.setItem('auth', token);
+  }
+  return response;
+});
+
 export default request;
