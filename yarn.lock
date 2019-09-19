@@ -16102,13 +16102,13 @@ umi-plugin-ui@1.0.2:
     fuse.js "^3.4.5"
     umi-ui-tasks "1.0.2"
 
-umi-request@^1.0.8:
-  version "1.2.2"
-  resolved "https://registry.npm.taobao.org/umi-request/download/umi-request-1.2.2.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fumi-request%2Fdownload%2Fumi-request-1.2.2.tgz#102e59005f84aee3a515fd9c62ab34ec6cec0889"
-  integrity sha1-EC5ZAF+EruOlFf2cYqs07GzsCIk=
+umi-request@1.2.5:
+  version "1.2.5"
+  resolved "https://registry.npm.taobao.org/umi-request/download/umi-request-1.2.5.tgz#368e3b8d7d30d231f899c59d374b043d4219f17a"
+  integrity sha1-No47jX0w0jH4mcWdN0sEPUIZ8Xo=
   dependencies:
+    isomorphic-fetch "^2.2.1"
     query-string "^6.0.0"
-    whatwg-fetch "^2.0.0"
 
 umi-test@1.7.0-beta.2:
   version "1.7.0-beta.2"
@@ -17000,11 +17000,6 @@ whatwg-fetch@3.0.0, whatwg-fetch@>=0.10.0:
   version "3.0.0"
   resolved "https://registry.npm.taobao.org/whatwg-fetch/download/whatwg-fetch-3.0.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fwhatwg-fetch%2Fdownload%2Fwhatwg-fetch-3.0.0.tgz#fc804e458cc460009b1a2b966bc8817d2578aefb"
   integrity sha1-/IBORYzEYACbGiuWa8iBfSV4rvs=
-
-whatwg-fetch@^2.0.0:
-  version "2.0.4"
-  resolved "https://registry.npm.taobao.org/whatwg-fetch/download/whatwg-fetch-2.0.4.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fwhatwg-fetch%2Fdownload%2Fwhatwg-fetch-2.0.4.tgz#dde6a5df315f9d39991aa17621853d720b85566f"
-  integrity sha1-3eal3zFfnTmZGqF2IYU9cguFVm8=
 
 whatwg-mimetype@^2.1.0, whatwg-mimetype@^2.2.0, whatwg-mimetype@^2.3.0:
   version "2.3.0"
