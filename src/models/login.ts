@@ -3,7 +3,7 @@ import { routerRedux } from 'dva/router';
 import { Effect } from 'dva';
 import { stringify } from 'querystring';
 
-import { login, getFakeCaptcha } from '@/services/login';
+import { login, logout, getFakeCaptcha } from '@/services/login';
 import { setAuth } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 
@@ -38,10 +38,6 @@ const Model: LoginModelType = {
       const response = yield call(login, payload);
       // Login successfully
       if (response.code === '100') {
-        // yield put({
-        //   type: 'changeLoginStatus',
-        //   payload: response,
-        // });
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
@@ -65,8 +61,9 @@ const Model: LoginModelType = {
       yield call(getFakeCaptcha, payload);
     },
 
-    *logout(_, { put }) {
+    *logout(_, { call, put }) {
       const { redirect } = getPageQuery();
+      yield call(logout, { isLogout: true });
       // redirect
       if (window.location.pathname !== '/user/login' && !redirect) {
         yield put(
