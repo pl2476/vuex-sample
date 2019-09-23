@@ -16110,10 +16110,10 @@ umi-plugin-ui@1.0.2:
     fuse.js "^3.4.5"
     umi-ui-tasks "1.0.2"
 
-umi-request@1.2.5:
-  version "1.2.5"
-  resolved "https://registry.npm.taobao.org/umi-request/download/umi-request-1.2.5.tgz#368e3b8d7d30d231f899c59d374b043d4219f17a"
-  integrity sha1-No47jX0w0jH4mcWdN0sEPUIZ8Xo=
+umi-request@^1.2.6:
+  version "1.2.6"
+  resolved "https://registry.npm.taobao.org/umi-request/download/umi-request-1.2.6.tgz#bf92faeaf127f7bb10b44f639d61a016cf2e8d9d"
+  integrity sha1-v5L66vEn97sQtE9jnWGgFs8ujZ0=
   dependencies:
     isomorphic-fetch "^2.2.1"
     query-string "^6.0.0"
