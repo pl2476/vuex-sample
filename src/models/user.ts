@@ -1,7 +1,7 @@
 import { Effect } from 'dva';
 import { Reducer } from 'redux';
 
-import { queryCurrent } from '@/services/user';
+// import { queryCurrent } from '@/services/user';
 
 export interface CurrentUser {
   avatar?: string;
@@ -41,8 +41,13 @@ const UserModel: UserModelType = {
   },
 
   effects: {
-    *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
+    *fetchCurrent(_, { put }) {
+      // const response = yield call(queryCurrent);
+      const response = {
+        avatar: 'https://www.easyicon.net/api/resizeApi.php?id=1190206&size=16',
+        name: 'D P',
+        userid: 'dp',
+      };
       yield put({
         type: 'saveCurrentUser',
         payload: response,
