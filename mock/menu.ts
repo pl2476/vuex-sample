@@ -29,8 +29,5 @@ function getMenuData(req: Request, res: Response) {
 }
 
 export default {
-  '/api/auth_routes': {
-    '/form/advanced-form': { authority: ['admin', 'user'] },
-  },
   'GET /api/getMenuData': getMenuData,
 };
