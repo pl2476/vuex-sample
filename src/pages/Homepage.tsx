@@ -1,7 +1,7 @@
 import React from 'react';
 import { Upload, Icon, Modal } from 'antd';
-import { UploadProps } from 'antd/lib/upload';
 import { UploadFile } from 'antd/lib/upload/interface';
+import request from '@/utils/request';
 
 interface File {
   url: string;
@@ -50,6 +50,16 @@ class PicturesWall extends React.Component {
     this.setState({ fileList });
   };
 
+  test = () => {
+    request('/proxy/system/user/list', {
+      method: 'GET',
+      params: {
+        pageIndex: 1,
+        pageSize: 10,
+      },
+    });
+  };
+
   render() {
     const { previewVisible, previewImage, fileList } = this.state;
     const uploadButton = (
@@ -65,7 +75,7 @@ class PicturesWall extends React.Component {
           listType="picture-card"
           headers={{ Authorization: localStorage.getItem('auth') || '' }}
           fileList={fileList as UploadFile[]}
-          onPreview={this.handlePreview}
+          onPreview={() => this.handlePreview}
           onChange={this.handleChange}
         >
           {fileList.length >= 8 ? null : uploadButton}
@@ -73,6 +83,7 @@ class PicturesWall extends React.Component {
         <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
           <img alt="example" style={{ width: '100%' }} src={previewImage} />
         </Modal>
+        {/* <button type="button" onClick={this.test}>test</button> */}
       </div>
     );
   }
