@@ -3,12 +3,6 @@ import { Upload, Icon, Modal } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
 import request from '@/utils/request';
 
-interface File {
-  url: string;
-  preview: unknown;
-  originFileObj: Blob;
-}
-
 const getBase64 = (file: Blob) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -33,16 +27,18 @@ class PicturesWall extends React.Component {
 
   handleCancel = () => this.setState({ previewVisible: false });
 
-  handlePreview = async (file: File) => {
-    const tempFile = file;
-    if (!tempFile.url && !tempFile.preview) {
-      tempFile.preview = await getBase64(tempFile.originFileObj);
+  handlePreview = async (file: UploadFile) => {
+    if (file.url) {
+      this.setState({
+        previewImage: file.url,
+        previewVisible: true,
+      });
+    } else if (file.originFileObj) {
+      this.setState({
+        previewImage: await getBase64(file.originFileObj),
+        previewVisible: true,
+      });
     }
-
-    this.setState({
-      previewImage: file.url || file.preview,
-      previewVisible: true,
-    });
   };
 
   handleChange = (data: { fileList: object }) => {
@@ -75,7 +71,8 @@ class PicturesWall extends React.Component {
           listType="picture-card"
           headers={{ Authorization: localStorage.getItem('auth') || '' }}
           fileList={fileList as UploadFile[]}
-          onPreview={() => this.handlePreview}
+          onPreview={this.handlePreview}
+          // customRequest={this.customRequest}
           onChange={this.handleChange}
         >
           {fileList.length >= 8 ? null : uploadButton}
