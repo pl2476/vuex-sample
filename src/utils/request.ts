@@ -57,7 +57,7 @@ const request = extend({
 request.interceptors.request.use((url, options) => {
   const token = localStorage.getItem('auth');
   const headers = {
-    'Content-Type': 'application/json',
+    // 'Content-Type': 'application/json',
     Accept: 'application/json',
     Authorization: '',
   };
