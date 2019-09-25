@@ -56,6 +56,22 @@ class PicturesWall extends React.Component {
     });
   };
 
+  customRequest = (data: UploadFile) => {
+    // if (!data.file) {
+    //   return false;
+    // }
+    const formData = new FormData();
+    formData.append('image', data.file);
+    request('/proxy/system/user/uploadPicture', {
+      method: 'POST',
+      data: formData,
+      headers: {
+        'Content-Type': ' application/x-www-form-urlencoded',
+        // Accept: 'application/json',
+      },
+    });
+  };
+
   render() {
     const { previewVisible, previewImage, fileList } = this.state;
     const uploadButton = (
@@ -72,7 +88,7 @@ class PicturesWall extends React.Component {
           headers={{ Authorization: localStorage.getItem('auth') || '' }}
           fileList={fileList as UploadFile[]}
           onPreview={this.handlePreview}
-          // customRequest={this.customRequest}
+          customRequest={this.customRequest}
           onChange={this.handleChange}
         >
           {fileList.length >= 8 ? null : uploadButton}
