@@ -4,6 +4,7 @@
  */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
+import { router } from 'umi';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -36,6 +37,15 @@ const errorHandler = (error: { response: Response }): Response => {
       message: `请求错误 ${status}: ${url}`,
       description: errorText,
     });
+    if (status === 401) {
+      router.push('/user/login');
+    }
+    if (status === 403) {
+      router.push('/exception/403');
+    }
+    if (status === 404) {
+      router.push('/exception/404');
+    }
   } else if (!response) {
     notification.error({
       description: '您的网络发生异常，无法连接服务器',
