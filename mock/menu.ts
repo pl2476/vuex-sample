@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 
 const menuData = [
   {
-    path: '/',
+    path: '/homepage',
     name: 'homepage',
     icon: 'home',
   },
