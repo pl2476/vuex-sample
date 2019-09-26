@@ -11,7 +11,7 @@ const getBase64 = (file: Blob) =>
     reader.onerror = error => reject(error);
   });
 
-class PicturesWall extends React.Component {
+class PicturesWall extends React.PureComponent {
   state = {
     previewVisible: false,
     previewImage: '',
@@ -23,6 +23,7 @@ class PicturesWall extends React.Component {
         url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
       },
     ],
+    loading: false,
   };
 
   handleCancel = () => this.setState({ previewVisible: false });
@@ -41,9 +42,10 @@ class PicturesWall extends React.Component {
     }
   };
 
-  handleChange = (data: { fileList: object }) => {
+  handleChange = (data: { fileList: UploadFile[] }) => {
     const { fileList } = data;
-    this.setState({ fileList });
+    // this.setState({ fileList });
+    this.setState({ fileList: [...fileList] });
   };
 
   test = () => {
@@ -56,24 +58,34 @@ class PicturesWall extends React.Component {
     });
   };
 
-  customRequest = (data: UploadFile) => {
+  customRequest = (option: UploadFile) => {
     // if (!data.file) {
     //   return false;
     // }
-    const formData = new FormData();
-    formData.append('image', data.file);
-    request('/proxy/system/user/uploadPicture', {
-      method: 'POST',
-      data: formData,
-      headers: {
-        'Content-Type': ' application/x-www-form-urlencoded',
-        // Accept: 'application/json',
-      },
-    });
+    if (option.file) {
+      const formData = new FormData();
+      formData.append('file', option.file);
+      this.setState({
+        loading: true,
+      });
+      request('/proxy/system/user/uploadPicture', {
+        method: 'POST',
+        data: formData,
+        headers: {
+          'Content-Type': ' application/x-www-form-urlencoded',
+          // Accept: 'application/json',
+        },
+      }).then(data => {
+        console.log(data, this.state);
+        this.setState({
+          loading: false,
+        });
+      });
+    }
   };
 
   render() {
-    const { previewVisible, previewImage, fileList } = this.state;
+    const { previewVisible, previewImage, fileList, loading } = this.state;
     const uploadButton = (
       <div>
         <Icon type="plus" />
@@ -91,7 +103,7 @@ class PicturesWall extends React.Component {
           customRequest={this.customRequest}
           onChange={this.handleChange}
         >
-          {fileList.length >= 8 ? null : uploadButton}
+          {fileList.length >= 5 ? null : uploadButton}
         </Upload>
         <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
           <img alt="example" style={{ width: '100%' }} src={previewImage} />
