@@ -76,7 +76,15 @@ class PicturesWall extends React.PureComponent {
           // Accept: 'application/json',
         },
       }).then(data => {
+        const { fileList } = this.state;
+        fileList.map(item => {
+          if (item.status !== 'done') {
+            item.status = 'done';
+          }
+          return item;
+        });
         this.setState({
+          fileList: [...fileList],
           loading: false,
         });
       });
@@ -99,7 +107,7 @@ class PicturesWall extends React.PureComponent {
           headers={{ Authorization: localStorage.getItem('auth') || '' }}
           fileList={fileList as UploadFile[]}
           onPreview={this.handlePreview}
-          // customRequest={this.customRequest}
+          customRequest={this.customRequest}
           onChange={this.handleChange}
         >
           {fileList.length >= 5 ? null : uploadButton}
