@@ -58,7 +58,7 @@ class PicturesWall extends React.PureComponent {
     });
   };
 
-  customRequest = (option: UploadFile) => {
+  customRequest = (option: { file: Blob }) => {
     // if (!data.file) {
     //   return false;
     // }
@@ -76,7 +76,6 @@ class PicturesWall extends React.PureComponent {
           // Accept: 'application/json',
         },
       }).then(data => {
-        console.log(data, this.state);
         this.setState({
           loading: false,
         });
@@ -100,7 +99,7 @@ class PicturesWall extends React.PureComponent {
           headers={{ Authorization: localStorage.getItem('auth') || '' }}
           fileList={fileList as UploadFile[]}
           onPreview={this.handlePreview}
-          customRequest={this.customRequest}
+          // customRequest={this.customRequest}
           onChange={this.handleChange}
         >
           {fileList.length >= 5 ? null : uploadButton}
