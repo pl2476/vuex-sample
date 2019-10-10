@@ -1,14 +1,14 @@
 import request from '@/utils/request';
 import { TableListParams } from '@/pages/Member/List/data';
 
-export async function queryRule(params: TableListParams) {
-  return request('/api/rule', {
+export async function queryMember(params: TableListParams) {
+  return request('/proxy/system/member/list', {
     params,
   });
 }
 
-export async function removeRule(params: TableListParams) {
-  return request('/api/rule', {
+export async function removeMember(params: TableListParams) {
+  return request('/proxy/rule', {
     method: 'POST',
     data: {
       ...params,
@@ -17,7 +17,7 @@ export async function removeRule(params: TableListParams) {
   });
 }
 
-export async function addRule(params: TableListParams) {
+export async function addMember(params: TableListParams) {
   return request('/api/rule', {
     method: 'POST',
     data: {
@@ -27,7 +27,7 @@ export async function addRule(params: TableListParams) {
   });
 }
 
-export async function updateRule(params: TableListParams) {
+export async function updateMember(params: TableListParams) {
   return request('/api/rule', {
     method: 'POST',
     data: {

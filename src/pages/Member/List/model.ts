@@ -1,6 +1,6 @@
 import { AnyAction, Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
-import { addRule, queryRule, removeRule, updateRule } from './service';
+import { addMember, queryMember, removeMember, updateMember } from './service';
 
 import { TableListData } from '@/pages/Member/List/data';
 
@@ -39,14 +39,14 @@ const Model: ModelType = {
 
   effects: {
     *fetch({ payload }, { call, put }) {
-      const response = yield call(queryRule, payload);
+      const response = yield call(queryMember, payload);
       yield put({
         type: 'save',
         payload: response,
       });
     },
     *add({ payload, callback }, { call, put }) {
-      const response = yield call(addRule, payload);
+      const response = yield call(addMember, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -54,7 +54,7 @@ const Model: ModelType = {
       if (callback) callback();
     },
     *remove({ payload, callback }, { call, put }) {
-      const response = yield call(removeRule, payload);
+      const response = yield call(removeMember, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -62,7 +62,7 @@ const Model: ModelType = {
       if (callback) callback();
     },
     *update({ payload, callback }, { call, put }) {
-      const response = yield call(updateRule, payload);
+      const response = yield call(updateMember, payload);
       yield put({
         type: 'save',
         payload: response,

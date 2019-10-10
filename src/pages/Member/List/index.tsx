@@ -1,17 +1,4 @@
-import {
-  Badge,
-  Button,
-  Card,
-  Col,
-  Divider,
-  Form,
-  Icon,
-  Input,
-  Menu,
-  Row,
-  Select,
-  message,
-} from 'antd';
+import { Button, Card, Col, Divider, Form, Icon, Input, Menu, Row, Select, message } from 'antd';
 import React, { Component, Fragment } from 'react';
 
 import { Dispatch, Action } from 'redux';
@@ -19,12 +6,12 @@ import { FormComponentProps } from 'antd/es/form';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { SorterResult } from 'antd/es/table';
 import { connect } from 'dva';
-import moment from 'moment';
+// import moment from 'moment';
 import { StateType } from './model';
 import CreateForm from '@/components/Table/CreateForm';
 import StandardTable, { StandardTableColumnProps } from '@/components/Table/StandardTable';
 import UpdateForm, { FormValueType } from '@/components/Table/UpdateForm';
-import { TableListItem, TableListPagination, TableListParams } from '@/pages/Member/List/data';
+import { TableListItem, TableListParams, TableListPagination } from '@/pages/Member/List/data';
 
 import styles from './style.less';
 
@@ -56,6 +43,7 @@ interface TableListState {
   selectedRows: TableListItem[];
   formValues: { [key: string]: string };
   stepFormValues: Partial<TableListItem>;
+  rowKey: string;
 }
 
 /* eslint react/no-multi-comp:0 */
@@ -83,38 +71,36 @@ class TableList extends Component<TableListProps, TableListState> {
     selectedRows: [],
     formValues: {},
     stepFormValues: {},
+    rowKey: 'userId',
   };
 
   columns: StandardTableColumnProps[] = [
     {
       title: 'Home Shop',
-      dataIndex: 'name',
+      dataIndex: 'homeShop',
     },
     {
       title: 'Member Code',
-      dataIndex: 'desc',
+      dataIndex: 'memberCode',
+      sorter: true,
     },
     {
       title: 'Full Name',
-      dataIndex: 'callNo',
-      sorter: true,
-      align: 'left',
-      render: (val: string) => `${val} 万`,
-      // mark to display a total number
-      needTotal: true,
+      dataIndex: 'fullName',
     },
     {
       title: 'Email',
-      dataIndex: 'status',
+      dataIndex: 'email',
     },
     {
       title: 'Phone',
-      dataIndex: 'updatedAt',
+      dataIndex: 'mobilePhone',
       sorter: true,
-      render: (val: string) => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      render: (val: string) => <span>{`Mobile: ${val}`}</span>,
     },
     {
       title: 'Gender',
+      dataIndex: 'gender',
     },
     {
       title: 'Operation',
@@ -150,8 +136,8 @@ class TableList extends Component<TableListProps, TableListState> {
     }, {});
 
     const params: Partial<TableListParams> = {
-      currentPage: pagination.current,
-      pageSize: pagination.pageSize,
+      currentPage: pagination.pageIndex || 0,
+      pageSize: pagination.pageSize || 10,
       ...formValues,
       ...filters,
     };
@@ -387,7 +373,7 @@ class TableList extends Component<TableListProps, TableListState> {
       loading,
     } = this.props;
 
-    const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
+    const { selectedRows, modalVisible, updateModalVisible, stepFormValues, rowKey } = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
         <Menu.Item key="remove">删除</Menu.Item>
@@ -427,6 +413,7 @@ class TableList extends Component<TableListProps, TableListState> {
               selectedRows={selectedRows}
               loading={loading}
               data={data}
+              rowKey={rowKey}
               columns={this.columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
