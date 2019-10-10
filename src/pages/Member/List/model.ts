@@ -1,5 +1,5 @@
-import { AnyAction, Reducer } from '@/pages/Member/List/node_modules/redux';
-import { EffectsCommandMap } from '@/pages/Member/List/node_modules/dva';
+import { AnyAction, Reducer } from 'redux';
+import { EffectsCommandMap } from 'dva';
 import { addRule, queryRule, removeRule, updateRule } from './service';
 
 import { TableListData } from '@/pages/Member/List/data';

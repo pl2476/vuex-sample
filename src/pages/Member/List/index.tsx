@@ -3,13 +3,10 @@ import {
   Button,
   Card,
   Col,
-  DatePicker,
   Divider,
-  Dropdown,
   Form,
   Icon,
   Input,
-  InputNumber,
   Menu,
   Row,
   Select,
@@ -38,9 +35,9 @@ const getValue = (obj: { [x: string]: string[] }) =>
     .map(key => obj[key])
     .join(',');
 
-type IStatusMapType = 'default' | 'processing' | 'success' | 'error';
-const statusMap = ['default', 'processing', 'success', 'error'];
-const status = ['关闭', '运行中', '已上线', '异常'];
+// type IStatusMapType = 'default' | 'processing' | 'success' | 'error';
+// const statusMap = ['default', 'processing', 'success', 'error'];
+// const status = ['关闭', '运行中', '已上线', '异常'];
 
 interface TableListProps extends FormComponentProps {
   dispatch: Dispatch<
@@ -101,7 +98,7 @@ class TableList extends Component<TableListProps, TableListState> {
       title: 'Full Name',
       dataIndex: 'callNo',
       sorter: true,
-      align: 'right',
+      align: 'left',
       render: (val: string) => `${val} 万`,
       // mark to display a total number
       needTotal: true,
@@ -109,27 +106,6 @@ class TableList extends Component<TableListProps, TableListState> {
     {
       title: 'Email',
       dataIndex: 'status',
-      filters: [
-        {
-          text: status[0],
-          value: '0',
-        },
-        {
-          text: status[1],
-          value: '1',
-        },
-        {
-          text: status[2],
-          value: '2',
-        },
-        {
-          text: status[3],
-          value: '3',
-        },
-      ],
-      render(val: IStatusMapType) {
-        return <Badge status={statusMap[val]} text={status[val]} />;
-      },
     },
     {
       title: 'Phone',
@@ -342,16 +318,26 @@ class TableList extends Component<TableListProps, TableListState> {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
+          <Col md={6} sm={24}>
             <FormItem label="Member Code/Name/Phone">
               {getFieldDecorator('name')(<Input placeholder="" />)}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
+          <Col md={6} sm={24}>
             <FormItem label="Email">{getFieldDecorator('name')(<Input placeholder="" />)}</FormItem>
           </Col>
-          <Col md={8} sm={24}>
+          <Col md={6} sm={24}>
             <FormItem label="User Groups">
+              {getFieldDecorator('status3')(
+                <Select placeholder="" style={{ width: '100%' }}>
+                  <Option value="0">0</Option>
+                  <Option value="1">1</Option>
+                </Select>,
+              )}
+            </FormItem>
+          </Col>
+          <Col md={6} sm={24}>
+            <FormItem label="Enabled">
               {getFieldDecorator('status3')(
                 <Select placeholder="" style={{ width: '100%' }}>
                   <Option value="0">0</Option>
@@ -362,17 +348,7 @@ class TableList extends Component<TableListProps, TableListState> {
           </Col>
         </Row>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem label="Enabled">
-              {getFieldDecorator('status3')(
-                <Select placeholder="" style={{ width: '100%' }}>
-                  <Option value="0">0</Option>
-                  <Option value="1">1</Option>
-                </Select>,
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
+          <Col md={6} sm={24}>
             <FormItem label="Home Shop">
               {getFieldDecorator('status3')(
                 <Select placeholder="" style={{ width: '100%' }}>
