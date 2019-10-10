@@ -50,4 +50,6 @@ export default {
   'menu.homepage': 'Home',
   'menu.module1': 'module1',
   'menu.module1.similarTable': 'similarTable',
+  'menu.member': 'Member',
+  'menu.member.list': 'Member List',
 };

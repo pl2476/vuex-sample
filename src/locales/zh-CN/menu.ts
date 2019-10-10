@@ -50,4 +50,6 @@ export default {
   'menu.homepage': '主页',
   'menu.module1': '模块1',
   'menu.module1.similarTable': '类列表',
+  'menu.member': '人员',
+  'menu.member.list': '人员列表',
 };
