@@ -6,22 +6,34 @@ const menuData = [
     name: 'homepage',
     icon: 'home',
   },
+  // {
+  //   path: '/module1',
+  //   icon: 'table',
+  //   name: 'module1',
+  //   children: [
+  //     {
+  //       path: '/module1/similarTable',
+  //       name: 'similarTable',
+  //       hideInMenu: false,
+  //     },
+  //   ],
+  // },
   {
-    path: '/module1',
+    path: '/member',
     icon: 'table',
-    name: 'module1',
+    name: 'member',
     children: [
       {
-        path: '/module1/similarTable',
-        name: 'similarTable',
+        path: '/member/list',
+        name: 'list',
         hideInMenu: false,
       },
     ],
   },
-  {
-    path: '/welcome',
-    name: 'welcome',
-  },
+  // {
+  //   path: '/welcome',
+  //   name: 'welcome',
+  // },
 ];
 
 function getMenuData(req: Request, res: Response) {
