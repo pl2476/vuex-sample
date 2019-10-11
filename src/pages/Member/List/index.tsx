@@ -136,8 +136,8 @@ class TableList extends Component<TableListProps, TableListState> {
     }, {});
 
     const params: Partial<TableListParams> = {
-      currentPage: pagination.pageIndex || 0,
-      pageSize: pagination.pageSize || 10,
+      currentPage: pagination.pageIndex,
+      pageSize: pagination.pageSize,
       ...formValues,
       ...filters,
     };
@@ -180,7 +180,7 @@ class TableList extends Component<TableListProps, TableListState> {
         dispatch({
           type: 'listTableList/remove',
           payload: {
-            key: selectedRows.map(row => row.key),
+            key: selectedRows.map(row => row.userId),
           },
           callback: () => {
             this.setState({
@@ -255,9 +255,9 @@ class TableList extends Component<TableListProps, TableListState> {
     dispatch({
       type: 'listTableList/update',
       payload: {
-        name: fields.name,
-        desc: fields.desc,
-        key: fields.key,
+        name: fields.firstName,
+        desc: fields.lastName,
+        key: fields.userId,
       },
     });
 

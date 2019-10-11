@@ -54,5 +54,5 @@ export interface TableListParams {
   status: string;
   name: string;
   pageSize: number;
-  pageIndex: number;
+  currentPage: number;
 }
