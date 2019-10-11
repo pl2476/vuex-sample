@@ -14,7 +14,7 @@ export interface StandardTableProps<T> extends Omit<TableProps<T>, 'columns'> {
     pagination: StandardTableProps<TableListItem>['pagination'];
   };
   selectedRows: TableListItem[];
-  onSelectRow: (rows: object) => void;
+  onSelectRow: (rows: TableListItem[]) => void;
 }
 
 export interface StandardTableColumnProps extends ColumnProps<TableListItem> {
@@ -123,7 +123,7 @@ class StandardTable extends Component<StandardTableProps<TableListItem>, Standar
 
     return (
       <div className={styles.standardTable}>
-        <div className={styles.tableAlert}>
+        {/* <div className={styles.tableAlert}>
           <Alert
             message={
               <Fragment>
@@ -147,7 +147,7 @@ class StandardTable extends Component<StandardTableProps<TableListItem>, Standar
             type="info"
             showIcon
           />
-        </div>
+        </div> */}
         <Table
           rowKey={rowKey || 'key'}
           rowSelection={rowSelection}
