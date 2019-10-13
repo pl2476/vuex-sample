@@ -1,0 +1,30 @@
+.customize-select {
+  .dropdown {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .dropdown::before {
+    position: absolute;
+    top: -5px;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    content: '';
+  }
+  .dropdown > div {
+    height: 30px;
+    padding: 0 22px;
+    line-height: 30px;
+  }
+  .dropdown > div:hover {
+    color: #9fcc43;
+    background: #fcfff0;
+  }
+  .dropdown > div.active {
+    color: #9fcc43;
+  }
+  .customize-dropdown-class {
+    width: fit-content;
+    max-width: 276px;
+  }
+}
