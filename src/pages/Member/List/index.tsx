@@ -8,9 +8,9 @@ import { SorterResult } from 'antd/es/table';
 import { connect } from 'dva';
 // import moment from 'moment';
 import { StateType } from './model';
-import CreateForm from '@/components/Table/CreateForm';
+import CreateForm from '@/pages/Member/List/CreateForm';
 import StandardTable, { StandardTableColumnProps } from '@/components/Table/StandardTable';
-import UpdateForm, { FormValueType } from '@/components/Table/UpdateForm';
+import UpdateForm, { FormValueType } from '@/pages/Member/List/UpdateForm';
 import { TableListItem, TableListParams, TableListPagination } from '@/pages/Member/List/data';
 
 import styles from './style.less';
@@ -29,7 +29,11 @@ const getValue = (obj: { [x: string]: string[] }) =>
 interface TableListProps extends FormComponentProps {
   dispatch: Dispatch<
     Action<
-      'listTableList/add' | 'listTableList/fetch' | 'listTableList/remove' | 'listTableList/update'
+      | 'listTableList/add'
+      | 'listTableList/fetch'
+      | 'listTableList/remove'
+      | 'listTableList/get'
+      | 'listTableList/update'
     >
   >;
   loading: boolean;
@@ -106,9 +110,23 @@ class TableList extends Component<TableListProps, TableListState> {
       title: 'Operation',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>配置</a>
+          {/* <a onClick={() => this.handleUpdateModalVisible(true, record)}>配置</a>
           <Divider type="vertical" />
-          <a href="">订阅警报</a>
+          <a href="">订阅警报</a> */}
+          <Icon
+            onClick={() => this.handleUpdateModalVisible(true, record)}
+            type="edit"
+            theme="twoTone"
+            twoToneColor="#52c41a"
+          />
+          {/* <Divider type="vertical" /> */}
+          &nbsp;
+          <Icon
+            onClick={() => this.handleDelete(record)}
+            type="delete"
+            theme="twoTone"
+            twoToneColor="#52c41a"
+          />
         </Fragment>
       ),
     },
@@ -136,7 +154,7 @@ class TableList extends Component<TableListProps, TableListState> {
     }, {});
 
     const params: Partial<TableListParams> = {
-      currentPage: pagination.pageIndex,
+      pageIndex: pagination.current,
       pageSize: pagination.pageSize,
       ...formValues,
       ...filters,
@@ -231,38 +249,125 @@ class TableList extends Component<TableListProps, TableListState> {
   };
 
   handleUpdateModalVisible = (flag?: boolean, record?: FormValueType) => {
-    this.setState({
-      updateModalVisible: !!flag,
-      stepFormValues: record || {},
-    });
+    const { dispatch } = this.props;
+    if (!flag) {
+      this.setState({
+        updateModalVisible: !!flag,
+      });
+      return;
+    }
+    if (record) {
+      dispatch({
+        type: 'listTableList/get',
+        payload: {
+          memberCode: record.memberCode,
+        },
+        callback: (e: { code: string; data: object }) => {
+          if (e.code === '200') {
+            this.setState({
+              updateModalVisible: !!flag,
+              stepFormValues: e.data || {},
+            });
+          }
+        },
+      });
+    }
   };
 
-  handleAdd = (fields: { desc: any }) => {
-    const { dispatch } = this.props;
+  handleAdd = (fields: FormValueType) => {
+    const { dispatch, form } = this.props;
     dispatch({
       type: 'listTableList/add',
-      payload: {
-        desc: fields.desc,
+      payload: fields,
+      callback: (e: { code: string; message: string }) => {
+        if (e.code === '304') {
+          message.success(e.message);
+          this.handleModalVisible();
+          form.validateFields((err, fieldsValue) => {
+            if (err) return;
+            const values = {
+              ...fieldsValue,
+              updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
+            };
+            this.setState({
+              formValues: values,
+            });
+            dispatch({
+              type: 'listTableList/fetch',
+              payload: values,
+            });
+          });
+        } else {
+          message.error(e.message);
+        }
       },
     });
-
-    message.success('添加成功');
-    this.handleModalVisible();
   };
 
   handleUpdate = (fields: FormValueType) => {
-    const { dispatch } = this.props;
+    const { dispatch, form } = this.props;
     dispatch({
       type: 'listTableList/update',
-      payload: {
-        name: fields.firstName,
-        desc: fields.lastName,
-        key: fields.userId,
+      payload: fields,
+      callback: (e: { code: string; message: string }) => {
+        if (e.code === '300') {
+          message.success(e.message);
+          this.handleUpdateModalVisible(false);
+          form.validateFields((err, fieldsValue) => {
+            if (err) return;
+            const values = {
+              ...fieldsValue,
+              updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
+            };
+            this.setState({
+              formValues: values,
+            });
+            dispatch({
+              type: 'listTableList/fetch',
+              payload: values,
+            });
+          });
+        } else {
+          message.error(e.message);
+        }
       },
     });
+  };
 
-    message.success('配置成功');
-    this.handleUpdateModalVisible();
+  handleDelete = (record: FormValueType) => {
+    const { selectedRows } = this.state;
+    const { dispatch, form } = this.props;
+
+    if (!selectedRows) return;
+    dispatch({
+      type: 'listTableList/remove',
+      payload: {
+        // memberCode: selectedRows.map(row => row.memberCode),
+        memberCode: record.memberCode,
+      },
+      callback: (e: { code: string; message: string }) => {
+        if (e.code === '301') {
+          message.success(e.message);
+          this.handleUpdateModalVisible(false);
+          form.validateFields((err, fieldsValue) => {
+            if (err) return;
+            const values = {
+              ...fieldsValue,
+              updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
+            };
+            this.setState({
+              formValues: values,
+            });
+            dispatch({
+              type: 'listTableList/fetch',
+              payload: values,
+            });
+          });
+        } else {
+          message.error(e.message);
+        }
+      },
+    });
   };
 
   renderSimpleForm() {
@@ -305,29 +410,28 @@ class TableList extends Component<TableListProps, TableListState> {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={6} sm={24}>
-            <FormItem label="Member Code/Name/Phone">
-              {getFieldDecorator('name')(<Input placeholder="" />)}
+            <FormItem label="Member Code / Name / Phone">
+              {getFieldDecorator('code_name_phone')(<Input placeholder="" />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
-            <FormItem label="Email">{getFieldDecorator('name')(<Input placeholder="" />)}</FormItem>
+            <FormItem label="Email">
+              {getFieldDecorator('email')(<Input placeholder="" />)}
+            </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="User Groups">
-              {getFieldDecorator('status3')(
-                <Select placeholder="" style={{ width: '100%' }}>
-                  <Option value="0">0</Option>
-                  <Option value="1">1</Option>
-                </Select>,
+              {getFieldDecorator('marketingGroup')(
+                <Select placeholder="" style={{ width: '100%' }}></Select>,
               )}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="Enabled">
-              {getFieldDecorator('status3')(
+              {getFieldDecorator('enabled')(
                 <Select placeholder="" style={{ width: '100%' }}>
-                  <Option value="0">0</Option>
-                  <Option value="1">1</Option>
+                  <Option value="Yes">Yes</Option>
+                  <Option value="No">No</Option>
                 </Select>,
               )}
             </FormItem>
@@ -336,11 +440,11 @@ class TableList extends Component<TableListProps, TableListState> {
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={6} sm={24}>
             <FormItem label="Home Shop">
-              {getFieldDecorator('status3')(
-                <Select placeholder="" style={{ width: '100%' }}>
-                  <Option value="0">0</Option>
-                  <Option value="1">1</Option>
-                </Select>,
+              {getFieldDecorator('homeShop')(
+                // <Select placeholder="" style={{ width: '100%' }}>
+                //   <Option value="0">0</Option>
+                // </Select>,
+                <Input placeholder="" />,
               )}
             </FormItem>
           </Col>
@@ -374,12 +478,12 @@ class TableList extends Component<TableListProps, TableListState> {
     } = this.props;
 
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues, rowKey } = this.state;
-    const menu = (
-      <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
-        <Menu.Item key="remove">删除</Menu.Item>
-        <Menu.Item key="approval">批量审批</Menu.Item>
-      </Menu>
-    );
+    // const menu = (
+    //   <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
+    //     <Menu.Item key="remove">删除</Menu.Item>
+    //     <Menu.Item key="approval">批量审批</Menu.Item>
+    //   </Menu>
+    // );
 
     const parentMethods = {
       handleAdd: this.handleAdd,
@@ -400,7 +504,7 @@ class TableList extends Component<TableListProps, TableListState> {
               </Button>
               {selectedRows.length > 0 && (
                 <span>
-                  <Button>Delete</Button>
+                  {/* <Button onClick={() => this.handleDelete()}>Delete</Button> */}
                   {/* <Dropdown overlay={menu}>
                     <Button>
                       更多操作 <Icon type="down" />
