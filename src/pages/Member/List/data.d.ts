@@ -1,17 +1,4 @@
 export interface TableListItem {
-  // key: number;
-  // disabled?: boolean;
-  // href: string;
-  // avatar: string;
-  // name: string;
-  // title: string;
-  // owner: string;
-  // desc: string;
-  // callNo: number;
-  // status: number;
-  // updatedAt: Date;
-  // createdAt: Date;
-  // progress: number;
   userId: string;
   firstName: string;
   lastName: string;
@@ -36,12 +23,13 @@ export interface TableListItem {
   dislikeRoom?: string;
   remarks?: string;
   notification?: string;
+  enabled?: string;
 }
 
 export interface TableListPagination {
-  totalRecord: number;
+  total: number;
   pageSize: number;
-  pageIndex: number;
+  current: number;
 }
 
 export interface TableListData {
@@ -54,5 +42,5 @@ export interface TableListParams {
   status: string;
   name: string;
   pageSize: number;
-  currentPage: number;
+  pageIndex: number;
 }
