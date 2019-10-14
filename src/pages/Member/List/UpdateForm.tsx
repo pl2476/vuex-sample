@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { FormComponentProps } from 'antd/es/form';
 import { TableListItem } from '@/pages/Member/List/data';
-import style from './CreateForm.less';
+import style from './style.less';
 
 export interface FormValueType extends Partial<TableListItem> {
   target?: string;
@@ -81,11 +81,12 @@ class UpdateForm extends PureComponent<UpdateFormProps, UpdateFormState> {
   };
 
   okHandle = () => {
-    const { handleUpdate, form } = this.props;
+    const { handleUpdate, form, values } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       // form.resetFields();
       const temp = fieldsValue;
+      temp.userId = values.userId;
       temp.dateOfBirth = moment(fieldsValue.dateOfBirth).format('YYYY-MM-DD');
       handleUpdate(temp);
     });

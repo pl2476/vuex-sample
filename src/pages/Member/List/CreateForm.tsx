@@ -4,7 +4,7 @@ import { FormComponentProps } from 'antd/es/form';
 import React, { useState } from 'react';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
-import style from './CreateForm.less';
+import style from './style.less';
 import { FormValueType } from './UpdateForm';
 
 const FormItem = Form.Item;
