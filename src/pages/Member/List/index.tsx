@@ -14,9 +14,15 @@ import UpdateForm, { FormValueType } from '@/pages/Member/List/UpdateForm';
 import { TableListItem, TableListParams, TableListPagination } from '@/pages/Member/List/data';
 
 import styles from './style.less';
+import { router } from 'umi';
 
 const FormItem = Form.Item;
 const { Option } = Select;
+
+const IconFont = Icon.createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/font_1457118_wdvoop3z6g.js',
+});
+
 const getValue = (obj: { [x: string]: string[] }) =>
   Object.keys(obj)
     .map(key => obj[key])
@@ -110,22 +116,26 @@ class TableList extends Component<TableListProps, TableListState> {
       title: 'Operation',
       render: (text, record) => (
         <Fragment>
-          {/* <a onClick={() => this.handleUpdateModalVisible(true, record)}>配置</a>
-          <Divider type="vertical" />
-          <a href="">订阅警报</a> */}
           <Icon
             onClick={() => this.handleUpdateModalVisible(true, record)}
             type="edit"
-            theme="twoTone"
-            twoToneColor="#52c41a"
+            theme="filled"
+            style={{ color: '#52c41a' }}
           />
           {/* <Divider type="vertical" /> */}
+          &nbsp;
+          <IconFont
+            onClick={() => router.push('/member/family?parentMemberCode=S000027')}
+            type="icon-setting-user"
+            theme="filled"
+            style={{ color: '#52c41a' }}
+          />
           &nbsp;
           <Icon
             onClick={() => this.handleDelete(record)}
             type="delete"
-            theme="twoTone"
-            twoToneColor="#52c41a"
+            theme="filled"
+            style={{ color: '#52c41a' }}
           />
         </Fragment>
       ),
