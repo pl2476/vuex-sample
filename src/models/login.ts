@@ -37,7 +37,8 @@ const Model: LoginModelType = {
     *login({ payload }, { call, put }) {
       const response = yield call(login, payload);
       // Login successfully
-      if (response.code === '100') {
+      if (response) {
+        localStorage.setItem('auth', response);
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
@@ -64,6 +65,7 @@ const Model: LoginModelType = {
     *logout(_, { call, put }) {
       const { redirect } = getPageQuery();
       yield call(logout, { isLogout: true });
+      localStorage.removeItem('auth');
       // redirect
       if (window.location.pathname !== '/user/login' && !redirect) {
         yield put(
