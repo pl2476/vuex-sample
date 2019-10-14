@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { DatePicker, Form, Input, Modal, Select, Row, Col, Divider, Checkbox } from 'antd';
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { FormComponentProps } from 'antd/es/form';
 import { TableListItem } from '@/pages/Member/List/data';
@@ -20,14 +20,13 @@ const FormItem = Form.Item;
 const { Option } = Select;
 
 export interface UpdateFormState {
-  formVals: FormValueType;
   addressStatus: boolean;
   otherStatus: boolean;
   habitStatus: boolean;
   marketStatus: boolean;
 }
 
-class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
+class UpdateForm extends PureComponent<UpdateFormProps, UpdateFormState> {
   static defaultProps = {
     handleUpdate: () => {},
     handleUpdateModalVisible: () => {},
@@ -38,31 +37,6 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
     super(props);
 
     this.state = {
-      formVals: {
-        memberCode: props.values.memberCode,
-        firstName: props.values.firstName,
-        lastName: props.values.lastName,
-        email: props.values.email,
-        mobilePhone: props.values.mobilePhone,
-        homeShop: props.values.homeShop,
-        gender: props.values.gender,
-        dateOfBirth: props.values.dateOfBirth,
-        marketingGroup: props.values.marketingGroup,
-        discountGroup: props.values.discountGroup,
-        country: props.values.country,
-        city: props.values.city,
-        district: props.values.district,
-        address: props.values.address,
-        homePhone: props.values.homePhone,
-        businessPhone: props.values.businessPhone,
-        preferredContact: props.values.preferredContact,
-        preferredShop: props.values.preferredShop,
-        preferredTherapist: props.values.preferredTherapist,
-        preferredRoom: props.values.preferredRoom,
-        dislikeRoom: props.values.dislikeRoom,
-        remarks: props.values.remarks,
-        notification: props.values.notification,
-      },
       addressStatus: false,
       otherStatus: false,
       habitStatus: false,
@@ -110,7 +84,7 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
     const { handleUpdate, form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      form.resetFields();
+      // form.resetFields();
       const temp = fieldsValue;
       temp.dateOfBirth = moment(fieldsValue.dateOfBirth).format('YYYY-MM-DD');
       handleUpdate(temp);
@@ -119,7 +93,7 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
 
   render() {
     const { updateModalVisible, handleUpdateModalVisible, values, form } = this.props;
-    const { formVals, addressStatus, otherStatus, habitStatus, marketStatus } = this.state;
+    const { addressStatus, otherStatus, habitStatus, marketStatus } = this.state;
 
     return (
       <Modal
@@ -137,7 +111,7 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
             <Col md={12} sm={24}>
               <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Member Code">
                 {form.getFieldDecorator('memberCode', {
-                  initialValue: formVals.memberCode,
+                  initialValue: values.memberCode,
                   rules: [{ required: true, message: 'required' }],
                 })(<Input disabled placeholder="Please enter" />)}
               </FormItem>
@@ -145,7 +119,7 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
             <Col md={12} sm={24}>
               <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="First Name">
                 {form.getFieldDecorator('firstName', {
-                  initialValue: formVals.firstName,
+                  initialValue: values.firstName,
                   rules: [{ required: true, message: 'required' }],
                 })(<Input placeholder="Please enter" />)}
               </FormItem>
@@ -155,7 +129,7 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
             <Col md={12} sm={24}>
               <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Last Name">
                 {form.getFieldDecorator('lastName', {
-                  initialValue: formVals.lastName,
+                  initialValue: values.lastName,
                   rules: [{ required: true, message: 'required' }],
                 })(<Input placeholder="Please enter" />)}
               </FormItem>
@@ -163,7 +137,7 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
             <Col md={12} sm={24}>
               <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Email">
                 {form.getFieldDecorator('email', {
-                  initialValue: formVals.email,
+                  initialValue: values.email,
                   rules: [{ required: true, message: 'required' }],
                 })(<Input placeholder="Please enter" />)}
               </FormItem>
@@ -173,7 +147,7 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
             <Col md={12} sm={24}>
               <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Mobile Phone">
                 {form.getFieldDecorator('mobilePhone', {
-                  initialValue: formVals.mobilePhone,
+                  initialValue: values.mobilePhone,
                   rules: [{ required: true, message: 'required' }],
                 })(<Input placeholder="Please enter" />)}
               </FormItem>
@@ -181,7 +155,7 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
             <Col md={12} sm={24}>
               <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Home Shop">
                 {form.getFieldDecorator('homeShop', {
-                  initialValue: formVals.homeShop,
+                  initialValue: values.homeShop,
                   rules: [{ required: true, message: 'required' }],
                 })(<Input placeholder="Please enter" />)}
               </FormItem>
@@ -191,7 +165,7 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
             <Col md={12} sm={24}>
               <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Gender">
                 {form.getFieldDecorator('gender', {
-                  initialValue: formVals.gender,
+                  initialValue: values.gender,
                 })(
                   <Select placeholder="Please select">
                     <Option value="FEMALE">FEMALE</Option>
@@ -204,7 +178,7 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
             <Col md={12} sm={24}>
               <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Date of Birthday">
                 {form.getFieldDecorator('dateOfBirth', {
-                  initialValue: moment(formVals.dateOfBirth || new Date()),
+                  initialValue: moment(values.dateOfBirth || new Date()),
                 })(<DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} />)}
               </FormItem>
             </Col>
@@ -213,7 +187,7 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
             <Col md={12} sm={24}>
               <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Marketing Group">
                 {form.getFieldDecorator('marketingGroup', {
-                  initialValue: formVals.marketingGroup,
+                  initialValue: values.marketingGroup,
                 })(
                   <Select placeholder="Please select">
                     <Option value="Marketing">Marketing</Option>
@@ -224,7 +198,7 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
             <Col md={12} sm={24}>
               <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Discount Group">
                 {form.getFieldDecorator('discountGroup', {
-                  initialValue: formVals.discountGroup,
+                  initialValue: values.discountGroup,
                 })(
                   <Select placeholder="Please select">
                     <Option value="Discount">Discount</Option>
@@ -252,14 +226,14 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
               <Col md={12} sm={24}>
                 <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Country">
                   {form.getFieldDecorator('country', {
-                    initialValue: formVals.country,
+                    initialValue: values.country,
                   })(<Input placeholder="Please enter" />)}
                 </FormItem>
               </Col>
               <Col md={12} sm={24}>
                 <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="City">
                   {form.getFieldDecorator('city', {
-                    initialValue: formVals.city,
+                    initialValue: values.city,
                   })(<Input placeholder="Please enter" />)}
                 </FormItem>
               </Col>
@@ -268,14 +242,14 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
               <Col md={12} sm={24}>
                 <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="District">
                   {form.getFieldDecorator('district', {
-                    initialValue: formVals.district,
+                    initialValue: values.district,
                   })(<Input placeholder="Please enter" />)}
                 </FormItem>
               </Col>
               <Col md={12} sm={24}>
                 <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Address">
                   {form.getFieldDecorator('address', {
-                    initialValue: formVals.address,
+                    initialValue: values.address,
                   })(<Input placeholder="Please enter" />)}
                 </FormItem>
               </Col>
@@ -287,14 +261,14 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
               <Col md={12} sm={24}>
                 <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Home Phone">
                   {form.getFieldDecorator('homePhone', {
-                    initialValue: formVals.homePhone,
+                    initialValue: values.homePhone,
                   })(<Input placeholder="Please enter" />)}
                 </FormItem>
               </Col>
               <Col md={12} sm={24}>
                 <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Business Phone">
                   {form.getFieldDecorator('businessPhone', {
-                    initialValue: formVals.businessPhone,
+                    initialValue: values.businessPhone,
                   })(<Input placeholder="Please enter" />)}
                 </FormItem>
               </Col>
@@ -310,14 +284,14 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
                   label="Preferred Contact"
                 >
                   {form.getFieldDecorator('preferredContact', {
-                    initialValue: formVals.preferredContact,
+                    initialValue: values.preferredContact,
                   })(<Input placeholder="Please enter" />)}
                 </FormItem>
               </Col>
               <Col md={12} sm={24}>
                 <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Preferred Shop">
                   {form.getFieldDecorator('preferredShop', {
-                    initialValue: formVals.preferredShop,
+                    initialValue: values.preferredShop,
                   })(
                     <Select placeholder="Please select">
                       <Option value="preferredShop">preferredShop</Option>
@@ -334,7 +308,7 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
                   label="Preferred Therapist"
                 >
                   {form.getFieldDecorator('preferredTherapist', {
-                    initialValue: formVals.preferredTherapist,
+                    initialValue: values.preferredTherapist,
                   })(
                     <Select mode="multiple" placeholder="Please select">
                       <Option value="Therapist1">Therapist1</Option>
@@ -347,7 +321,7 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
               <Col md={12} sm={24}>
                 <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Preferred Room">
                   {form.getFieldDecorator('preferredRoom', {
-                    initialValue: formVals.preferredRoom,
+                    initialValue: values.preferredRoom,
                   })(
                     <Select placeholder="Please select">
                       <Option value="preferredRoom">preferredRoom</Option>
@@ -360,7 +334,7 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
               <Col md={12} sm={24}>
                 <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Dislike Room">
                   {form.getFieldDecorator('dislikeRoom', {
-                    initialValue: formVals.dislikeRoom,
+                    initialValue: values.dislikeRoom,
                   })(
                     <Select placeholder="Please select">
                       <Option value="dislikeRoom">dislikeRoom</Option>
@@ -371,7 +345,7 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
               <Col md={12} sm={24}>
                 <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Remarks">
                   {form.getFieldDecorator('remarks', {
-                    initialValue: formVals.remarks,
+                    initialValue: values.remarks,
                   })(<Input placeholder="Please enter" />)}
                 </FormItem>
               </Col>
@@ -383,7 +357,7 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
               <Col md={12} sm={24}>
                 <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Notification">
                   {form.getFieldDecorator('notification', {
-                    initialValue: formVals.notification,
+                    initialValue: values.notification,
                   })(
                     <Select placeholder="Please select">
                       <Option value="Notification">Notification</Option>
@@ -394,7 +368,7 @@ class UpdateForm extends Component<UpdateFormProps, UpdateFormState> {
               <Col md={12} sm={24}>
                 <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Enabled">
                   {form.getFieldDecorator('enabled', {
-                    initialValue: formVals.enabled,
+                    initialValue: values.enabled,
                   })(
                     <Select placeholder="Please select">
                       <Option value="yes">yes</Option>
