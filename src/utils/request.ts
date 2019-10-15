@@ -5,7 +5,9 @@
 import { extend } from 'umi-request';
 import { notification } from 'antd';
 import { router } from 'umi';
+import config from '../../config/index';
 
+const basicUrl = `${config.basicHost}:${config.basicPort}`;
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -74,12 +76,12 @@ request.interceptors.request.use((url, options) => {
   if (token) {
     headers.Authorization = token;
     return {
-      url: `${url}`,
+      url: `${basicUrl}${url}`,
       options: { ...options, interceptors: true, headers },
     };
   }
   return {
-    url: `${url}`,
+    url: `${basicUrl}${url}`,
     options: { ...options, interceptors: true },
   };
 });
