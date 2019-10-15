@@ -125,7 +125,7 @@ class TableList extends Component<TableListProps, TableListState> {
           {/* <Divider type="vertical" /> */}
           &nbsp;
           <IconFont
-            onClick={() => router.push('/member/family?parentMemberCode=S000027')}
+            onClick={() => router.push(`/member/family?familyMemberCode=${record.memberCode}`)}
             type="icon-setting-user"
             theme="filled"
             style={{ color: '#52c41a' }}
