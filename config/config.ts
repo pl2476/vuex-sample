@@ -3,10 +3,9 @@ import defaultSettings from './defaultSettings'; // https://umijs.org/config/
 
 import slash from 'slash2';
 import webpackPlugin from './plugin.config';
-const { pwa, primaryColor } = defaultSettings;
-
-// preview.pro.ant.design only do not use in your production ;
+const { pwa, primaryColor } = defaultSettings; // preview.pro.ant.design only do not use in your production ;
 // preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
+
 const { ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION } = process.env;
 const isAntDesignProPreview = ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site';
 const plugins: IPlugin[] = [
@@ -57,12 +56,12 @@ const plugins: IPlugin[] = [
 ]; // 针对 preview.pro.ant.design 的 GA 统计代码
 
 if (isAntDesignProPreview) {
-  plugins.push([
-    'umi-plugin-ga',
-    {
-      code: 'UA-72788897-6',
-    },
-  ]);
+  // plugins.push([
+  // 'umi-plugin-ga',
+  // {
+  //   code: 'UA-72788897-6',
+  // },
+  // ]);
   plugins.push([
     'umi-plugin-pro',
     {
@@ -127,8 +126,17 @@ export default {
               component: './Module1/SimilarTable/index.tsx',
             },
             {
+              name: 'member',
+              path: '/member/list/',
+              component: './Member/List',
+            },
+            {
+              name: 'family',
+              path: '/member/family/',
+              component: './Member/Family',
+            },
+            {
               component: './Exception/404',
-              // redirect: '/exception/404',
             },
           ],
         },
@@ -200,13 +208,14 @@ export default {
     basePath: '/',
   },
   chainWebpack: webpackPlugin,
-  /*
-  proxy: {
-    '/server/api/': {
-      target: 'https://preview.pro.ant.design/',
-      changeOrigin: true,
-      pathRewrite: { '^/server': '' },
-    },
-  },
-  */
+  // proxy: {
+  //   '/proxy': {
+  //     target: '',
+  //     // target: 'http://192.168.31.74:8889',
+  //     changeOrigin: true,
+  //     pathRewrite: {
+  //       '^/proxy': '',
+  //     },
+  //   },
+  // },
 } as IConfig;
