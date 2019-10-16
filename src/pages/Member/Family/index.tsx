@@ -389,45 +389,22 @@ class TableList extends Component<TableListProps, TableListState> {
     });
   };
 
-  renderSimpleForm() {
-    const { form } = this.props;
-    const { getFieldDecorator } = form;
-    return (
-      <Form onSubmit={this.handleSearch} layout="horizontal">
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem label="Member Code/Name/Phone">
-              {getFieldDecorator('name')(<Input placeholder="" />)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="Email">{getFieldDecorator('name')(<Input placeholder="" />)}</FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <span className={styles.submitButtons}>
-              <Button type="primary" htmlType="submit">
-                查询
-              </Button>
-              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
-                重置
-              </Button>
-              <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-                展开 <Icon type="down" />
-              </a>
-            </span>
-          </Col>
-        </Row>
-      </Form>
-    );
-  }
-
   renderAdvancedForm() {
     const {
       form: { getFieldDecorator },
+      location,
     } = this.props;
+    const { query } = location;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+          <Col md={6} sm={24}>
+            <FormItem label="Family Member Code">
+              {getFieldDecorator('familyMemberCode', {
+                initialValue: query.familyMemberCode,
+              })(<Input placeholder="" />)}
+            </FormItem>
+          </Col>
           <Col md={6} sm={24}>
             <FormItem label="Member Code">
               {getFieldDecorator('memberCode')(<Input placeholder="" />)}
@@ -495,7 +472,13 @@ class TableList extends Component<TableListProps, TableListState> {
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
             <div className={styles.tableListOperator}>
-              <Button type="primary" onClick={() => this.handleModalVisible(true)}>
+              <Button
+                type="primary"
+                style={{
+                  display: !query.familyMemberCode ? 'none' : 'inline-block',
+                }}
+                onClick={() => this.handleModalVisible(true)}
+              >
                 Add
               </Button>
               {selectedRows.length > 0 && (
