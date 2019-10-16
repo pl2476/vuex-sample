@@ -26,16 +26,40 @@ const MenuModel: MenuModelType = {
   },
 
   effects: {
-    *fetch({ callback }, { call, put }) {
-      const response = yield call(getMenuData);
-      // yield put({
-      //   type: 'saveMenuData',
-      //   payload: response,
-      // });
+    *fetch({ callback }, { put }) {
+      const menuData = [
+        {
+          path: '/homepage',
+          name: 'homepage',
+          icon: 'home',
+        },
+        {
+          path: '/member',
+          icon: 'table',
+          name: 'member',
+          children: [
+            {
+              path: '/member/list',
+              name: 'list',
+              hideInMenu: false,
+            },
+            {
+              path: '/member/family',
+              name: 'family',
+              hideInMenu: false,
+            },
+          ],
+        },
+      ];
+      // const response = yield call(getMenuData);
+      yield put({
+        type: 'saveMenuData',
+        payload: menuData,
+      });
       if (callback) {
-        callback(response);
+        callback(menuData);
       }
-      return response;
+      return menuData;
     },
   },
 
