@@ -42,12 +42,13 @@ const plugins: IPlugin[] = [
       //   include: ['dva', 'dva/router', 'dva/saga', 'dva/fetch'],
       //   exclude: ['@babel/runtime', 'netlify-lambda'],
       // },
+      dynamicImport: true,
     },
   ],
   [
     'umi-plugin-pro-block',
     {
-      moveMock: false,
+      moveMock: true,
       moveService: false,
       modifyRequest: true,
       autoAddMenu: true,
