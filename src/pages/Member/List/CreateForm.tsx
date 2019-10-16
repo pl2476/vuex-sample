@@ -105,11 +105,12 @@ const CreateForm: React.FC<CreateFormProps> = props => {
           </Col>
           <Col md={12} sm={24}>
             <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Gender">
-              {form.getFieldDecorator('gender')(
+              {form.getFieldDecorator('gender', {
+                initialValue: 'FEMALE',
+              })(
                 <Select placeholder="Please select">
                   <Option value="FEMALE">FEMALE</Option>
                   <Option value="MALE">MALE</Option>
-                  <Option value="UNKOWN">UNKNOW</Option>
                 </Select>,
               )}
             </FormItem>
