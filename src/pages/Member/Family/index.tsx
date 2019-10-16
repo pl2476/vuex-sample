@@ -1,4 +1,4 @@
-import { Button, Card, Col, Form, Icon, Input, Row, Select, message, Modal } from 'antd';
+import { Button, Card, Col, Form, Icon, Input, Row, message, Modal } from 'antd';
 import React, { Component, Fragment } from 'react';
 
 import { Dispatch, Action } from 'redux';
@@ -6,44 +6,37 @@ import { FormComponentProps } from 'antd/es/form';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { SorterResult } from 'antd/es/table';
 import { connect } from 'dva';
-import { router } from 'umi';
 import { StateType } from './model';
-import CreateForm from '@/pages/Member/List/CreateForm';
+import CreateForm from '@/pages/Member/Family/CreateForm';
 import StandardTable, { StandardTableColumnProps } from '@/components/Table/StandardTable';
-import UpdateForm, { FormValueType } from '@/pages/Member/List/UpdateForm';
+import UpdateForm, { FormValueType } from '@/pages/Member/Family/UpdateForm';
 import { TableListItem, TableListParams, TableListPagination } from '@/pages/Member/List/data';
 
 import styles from './style.less';
 
 const FormItem = Form.Item;
-const { Option } = Select;
 const { confirm } = Modal;
-
-const IconFont = Icon.createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_1457118_wdvoop3z6g.js',
-});
 
 const getValue = (obj: { [x: string]: string[] }) =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
 
-// type IStatusMapType = 'default' | 'processing' | 'success' | 'error';
-// const statusMap = ['default', 'processing', 'success', 'error'];
-// const status = ['关闭', '运行中', '已上线', '异常'];
-
 interface TableListProps extends FormComponentProps {
   dispatch: Dispatch<
     Action<
-      | 'listTableList/add'
-      | 'listTableList/fetch'
-      | 'listTableList/remove'
-      | 'listTableList/get'
-      | 'listTableList/update'
+      | 'familyList/add'
+      | 'familyList/fetch'
+      | 'familyList/remove'
+      | 'familyList/get'
+      | 'familyList/update'
     >
   >;
   loading: boolean;
-  listTableList: StateType;
+  familyList: StateType;
+  location: {
+    query: { [key: string]: string };
+  };
 }
 
 interface TableListState {
@@ -59,18 +52,18 @@ interface TableListState {
 /* eslint react/no-multi-comp:0 */
 @connect(
   ({
-    listTableList,
+    familyList,
     loading,
   }: {
-    listTableList: StateType;
+    familyList: StateType;
     loading: {
       models: {
         [key: string]: boolean;
       };
     };
   }) => ({
-    listTableList,
-    loading: loading.models.listTableList,
+    familyList,
+    loading: loading.models.familyList,
   }),
 )
 class TableList extends Component<TableListProps, TableListState> {
@@ -81,36 +74,28 @@ class TableList extends Component<TableListProps, TableListState> {
     selectedRows: [],
     formValues: {},
     stepFormValues: {},
-    rowKey: 'userId',
+    rowKey: 'id',
   };
 
   columns: StandardTableColumnProps[] = [
-    {
-      title: 'Home Shop',
-      dataIndex: 'homeShop',
-    },
     {
       title: 'Member Code',
       dataIndex: 'memberCode',
       sorter: true,
     },
     {
-      title: 'Full Name',
-      dataIndex: 'fullName',
+      title: 'Name',
+      dataIndex: 'name',
     },
     {
       title: 'Email',
       dataIndex: 'email',
     },
     {
-      title: 'Phone',
-      dataIndex: 'mobilePhone',
+      title: 'Contact Tel.',
+      dataIndex: 'contactTel',
       sorter: true,
       render: (val: string) => <span>{`Mobile: ${val}`}</span>,
-    },
-    {
-      title: 'Gender',
-      dataIndex: 'gender',
     },
     {
       title: 'Operation',
@@ -119,27 +104,6 @@ class TableList extends Component<TableListProps, TableListState> {
           <Icon
             onClick={() => this.handleUpdateModalVisible(true, record)}
             type="edit"
-            theme="filled"
-            style={{ color: '#52c41a' }}
-          />
-          &nbsp;
-          <Icon
-            // onClick={() => this.handleUpdateModalVisible(true, record)}
-            type="lock"
-            theme="filled"
-            style={{ color: '#52c41a' }}
-          />
-          &nbsp;
-          <Icon
-            // onClick={() => this.handleUpdateModalVisible(true, record)}
-            type="eye"
-            theme="filled"
-            style={{ color: '#52c41a' }}
-          />
-          &nbsp;
-          <IconFont
-            onClick={() => router.push(`/member/family?familyMemberCode=${record.memberCode}`)}
-            type="icon-setting-user"
             theme="filled"
             style={{ color: '#52c41a' }}
           />
@@ -156,9 +120,13 @@ class TableList extends Component<TableListProps, TableListState> {
   ];
 
   componentDidMount() {
-    const { dispatch } = this.props;
+    const { dispatch, location } = this.props;
+    const { query } = location;
     dispatch({
-      type: 'listTableList/fetch',
+      type: 'familyList/fetch',
+      payload: {
+        familyMemberCode: query.familyMemberCode,
+      },
     });
   }
 
@@ -167,7 +135,8 @@ class TableList extends Component<TableListProps, TableListState> {
     filtersArg: Record<keyof TableListItem, string[]>,
     sorter: SorterResult<TableListItem>,
   ) => {
-    const { dispatch } = this.props;
+    const { dispatch, location } = this.props;
+    const { query } = location;
     const { formValues } = this.state;
 
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
@@ -186,8 +155,12 @@ class TableList extends Component<TableListProps, TableListState> {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
 
+    if (query.familyMemberCode) {
+      params.familyMemberCode = query.familyMemberCode;
+    }
+
     dispatch({
-      type: 'listTableList/fetch',
+      type: 'familyList/fetch',
       payload: params,
     });
   };
@@ -199,7 +172,7 @@ class TableList extends Component<TableListProps, TableListState> {
       formValues: {},
     });
     dispatch({
-      type: 'listTableList/fetch',
+      type: 'familyList/fetch',
       payload: {},
     });
   };
@@ -219,9 +192,9 @@ class TableList extends Component<TableListProps, TableListState> {
     switch (e.key) {
       case 'remove':
         dispatch({
-          type: 'listTableList/remove',
+          type: 'familyList/remove',
           payload: {
-            key: selectedRows.map(row => row.userId),
+            id: selectedRows.map(row => row.id),
           },
           callback: () => {
             this.setState({
@@ -244,12 +217,14 @@ class TableList extends Component<TableListProps, TableListState> {
   handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { dispatch, form } = this.props;
+    const { dispatch, form, location } = this.props;
+    const { query } = location;
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
 
       const values = {
+        familyMemberCode: query.familyMemberCode,
         ...fieldsValue,
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
       };
@@ -259,7 +234,7 @@ class TableList extends Component<TableListProps, TableListState> {
       });
 
       dispatch({
-        type: 'listTableList/fetch',
+        type: 'familyList/fetch',
         payload: values,
       });
     });
@@ -281,9 +256,9 @@ class TableList extends Component<TableListProps, TableListState> {
     }
     if (record) {
       dispatch({
-        type: 'listTableList/get',
+        type: 'familyList/get',
         payload: {
-          memberCode: record.memberCode,
+          id: record.id,
         },
         callback: (e: { code: string; data: object }) => {
           if (e.code === '200') {
@@ -298,17 +273,19 @@ class TableList extends Component<TableListProps, TableListState> {
   };
 
   handleAdd = (fields: FormValueType) => {
-    const { dispatch, form } = this.props;
+    const { dispatch, form, location } = this.props;
+    const { query } = location;
     dispatch({
-      type: 'listTableList/add',
+      type: 'familyList/add',
       payload: fields,
       callback: (e: { code: string; message: string }) => {
-        if (e.code === '304') {
+        if (e.code === '302') {
           message.success(e.message);
           this.handleModalVisible();
           form.validateFields((err, fieldsValue) => {
             if (err) return;
             const values = {
+              familyMemberCode: query.familyMemberCode,
               ...fieldsValue,
               updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
             };
@@ -316,7 +293,7 @@ class TableList extends Component<TableListProps, TableListState> {
               formValues: values,
             });
             dispatch({
-              type: 'listTableList/fetch',
+              type: 'familyList/fetch',
               payload: values,
             });
           });
@@ -328,9 +305,10 @@ class TableList extends Component<TableListProps, TableListState> {
   };
 
   handleUpdate = (fields: FormValueType) => {
-    const { dispatch, form } = this.props;
+    const { dispatch, form, location } = this.props;
+    const { query } = location;
     dispatch({
-      type: 'listTableList/update',
+      type: 'familyList/update',
       payload: fields,
       callback: (e: { code: string; message: string }) => {
         if (e.code === '300') {
@@ -339,6 +317,7 @@ class TableList extends Component<TableListProps, TableListState> {
           form.validateFields((err, fieldsValue) => {
             if (err) return;
             const values = {
+              familyMemberCode: query.familyMemberCode,
               ...fieldsValue,
               updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
             };
@@ -346,7 +325,7 @@ class TableList extends Component<TableListProps, TableListState> {
               formValues: values,
             });
             dispatch({
-              type: 'listTableList/fetch',
+              type: 'familyList/fetch',
               payload: values,
             });
           });
@@ -359,26 +338,27 @@ class TableList extends Component<TableListProps, TableListState> {
 
   handleDelete = (type: string, record?: FormValueType) => {
     const { selectedRows } = this.state;
-    const { dispatch, form } = this.props;
+    const { dispatch, form, location } = this.props;
+    const { query } = location;
     const that = this;
     if (!selectedRows) return;
-    let memberCodes: never[] | (string | undefined)[] = [];
+    let id: never[] | (string | undefined)[] = [];
     if (type === 'single' && record) {
-      memberCodes = [record.memberCode];
+      id = [record.id];
     } else {
-      memberCodes = selectedRows.map(row => row.memberCode);
+      id = selectedRows.map(row => row.id);
     }
     confirm({
       title: 'Are you sure you want to delete this information?',
       content: '',
       onOk() {
         dispatch({
-          type: 'listTableList/remove',
+          type: 'familyList/remove',
           payload: {
-            memberCodes,
+            id,
           },
           callback: (e: { code: string; message: string }) => {
-            if (e.code === '301') {
+            if (e.code === '311') {
               message.success(e.message);
               that.handleUpdateModalVisible(false);
               that.setState({
@@ -387,6 +367,7 @@ class TableList extends Component<TableListProps, TableListState> {
               form.validateFields((err, fieldsValue) => {
                 if (err) return;
                 const values = {
+                  familyMemberCode: query.familyMemberCode,
                   ...fieldsValue,
                   updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
                 };
@@ -394,7 +375,7 @@ class TableList extends Component<TableListProps, TableListState> {
                   formValues: values,
                 });
                 dispatch({
-                  type: 'listTableList/fetch',
+                  type: 'familyList/fetch',
                   payload: values,
                 });
               });
@@ -448,42 +429,16 @@ class TableList extends Component<TableListProps, TableListState> {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={6} sm={24}>
-            <FormItem label="Member Code / Name / Phone">
-              {getFieldDecorator('code_name_phone')(<Input placeholder="" />)}
+            <FormItem label="Member Code">
+              {getFieldDecorator('memberCode')(<Input placeholder="" />)}
             </FormItem>
+          </Col>
+          <Col md={6} sm={24}>
+            <FormItem label="Name">{getFieldDecorator('name')(<Input placeholder="" />)}</FormItem>
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="Email">
               {getFieldDecorator('email')(<Input placeholder="" />)}
-            </FormItem>
-          </Col>
-          <Col md={6} sm={24}>
-            <FormItem label="User Groups">
-              {getFieldDecorator('marketingGroup')(
-                <Select placeholder="" style={{ width: '100%' }}></Select>,
-              )}
-            </FormItem>
-          </Col>
-          <Col md={6} sm={24}>
-            <FormItem label="Enabled">
-              {getFieldDecorator('enabled')(
-                <Select placeholder="" style={{ width: '100%' }}>
-                  <Option value="Yes">Yes</Option>
-                  <Option value="No">No</Option>
-                </Select>,
-              )}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={6} sm={24}>
-            <FormItem label="Home Shop">
-              {getFieldDecorator('homeShop')(
-                // <Select placeholder="" style={{ width: '100%' }}>
-                //   <Option value="0">0</Option>
-                // </Select>,
-                <Input placeholder="" />,
-              )}
             </FormItem>
           </Col>
         </Row>
@@ -505,15 +460,17 @@ class TableList extends Component<TableListProps, TableListState> {
   }
 
   renderForm() {
-    const { expandForm } = this.state;
-    return expandForm ? this.renderAdvancedForm() : this.renderAdvancedForm();
+    return this.renderAdvancedForm();
   }
 
   render() {
     const {
-      listTableList: { data },
+      familyList: { data },
       loading,
+      location,
     } = this.props;
+    const { query } = location;
+    const { familyMemberCode } = query;
 
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues, rowKey } = this.state;
     // const menu = (
@@ -524,6 +481,7 @@ class TableList extends Component<TableListProps, TableListState> {
     // );
 
     const parentMethods = {
+      memberCode: familyMemberCode,
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
     };
