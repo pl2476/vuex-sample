@@ -37,6 +37,7 @@ interface TableListProps extends FormComponentProps {
     Action<
       | 'listTableList/add'
       | 'listTableList/fetch'
+      | 'listTableList/export'
       | 'listTableList/remove'
       | 'listTableList/get'
       | 'listTableList/update'
@@ -408,6 +409,28 @@ class TableList extends Component<TableListProps, TableListState> {
     });
   };
 
+  handleExportList = () => {
+    const { dispatch, form } = this.props;
+
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+
+      const values = {
+        ...fieldsValue,
+        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
+      };
+
+      this.setState({
+        formValues: values,
+      });
+
+      dispatch({
+        type: 'listTableList/export',
+        payload: values,
+      });
+    });
+  };
+
   renderSimpleForm() {
     const { form } = this.props;
     const { getFieldDecorator } = form;
@@ -550,7 +573,7 @@ class TableList extends Component<TableListProps, TableListState> {
                   </Dropdown> */}
                 </span>
               )}
-              <Button>Export</Button>
+              <Button onClick={() => this.handleExportList()}>Export</Button>
             </div>
             <StandardTable
               selectedRows={selectedRows}

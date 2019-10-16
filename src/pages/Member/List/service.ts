@@ -37,3 +37,12 @@ export async function updateMember(params: TableListParams) {
     },
   });
 }
+
+export async function exportList(params: TableListParams) {
+  return request('/system/member/export', {
+    method: 'get',
+    data: {
+      ...params,
+    },
+  });
+}
