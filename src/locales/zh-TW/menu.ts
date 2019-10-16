@@ -50,4 +50,5 @@ export default {
   'menu.editor.koni': '拓撲編輯器',
   'menu.member': '人員',
   'menu.member.list': '人員列表',
+  'menu.member.family': '人員家庭',
 };

@@ -52,4 +52,5 @@ export default {
   'menu.module1.similarTable': '类列表',
   'menu.member': '人员',
   'menu.member.list': '人员列表',
+  'menu.member.family': '人员家庭',
 };

@@ -52,4 +52,5 @@ export default {
   'menu.module1.similarTable': 'similarTable',
   'menu.member': 'Member',
   'menu.member.list': 'Member List',
+  'menu.member.family': 'Member Family',
 };
