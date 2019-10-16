@@ -1,4 +1,4 @@
-import { Button, Card, Col, Divider, Form, Icon, Input, Menu, Row, Select, message } from 'antd';
+import { Button, Card, Col, Form, Icon, Input, Row, Select, message, Modal } from 'antd';
 import React, { Component, Fragment } from 'react';
 
 import { Dispatch, Action } from 'redux';
@@ -6,7 +6,7 @@ import { FormComponentProps } from 'antd/es/form';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { SorterResult } from 'antd/es/table';
 import { connect } from 'dva';
-// import moment from 'moment';
+import { router } from 'umi';
 import { StateType } from './model';
 import CreateForm from '@/pages/Member/List/CreateForm';
 import StandardTable, { StandardTableColumnProps } from '@/components/Table/StandardTable';
@@ -14,10 +14,10 @@ import UpdateForm, { FormValueType } from '@/pages/Member/List/UpdateForm';
 import { TableListItem, TableListParams, TableListPagination } from '@/pages/Member/List/data';
 
 import styles from './style.less';
-import { router } from 'umi';
 
 const FormItem = Form.Item;
 const { Option } = Select;
+const { confirm } = Modal;
 
 const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_1457118_wdvoop3z6g.js',
@@ -122,7 +122,20 @@ class TableList extends Component<TableListProps, TableListState> {
             theme="filled"
             style={{ color: '#52c41a' }}
           />
-          {/* <Divider type="vertical" /> */}
+          &nbsp;
+          <Icon
+            // onClick={() => this.handleUpdateModalVisible(true, record)}
+            type="lock"
+            theme="filled"
+            style={{ color: '#52c41a' }}
+          />
+          &nbsp;
+          <Icon
+            // onClick={() => this.handleUpdateModalVisible(true, record)}
+            type="eye"
+            theme="filled"
+            style={{ color: '#52c41a' }}
+          />
           &nbsp;
           <IconFont
             onClick={() => router.push(`/member/family?familyMemberCode=${record.memberCode}`)}
@@ -132,7 +145,7 @@ class TableList extends Component<TableListProps, TableListState> {
           />
           &nbsp;
           <Icon
-            onClick={() => this.handleDelete(record)}
+            onClick={() => this.handleDelete('single', record)}
             type="delete"
             theme="filled"
             style={{ color: '#52c41a' }}
@@ -344,39 +357,54 @@ class TableList extends Component<TableListProps, TableListState> {
     });
   };
 
-  handleDelete = (record: FormValueType) => {
+  handleDelete = (type: string, record?: FormValueType) => {
     const { selectedRows } = this.state;
     const { dispatch, form } = this.props;
-
+    const that = this;
     if (!selectedRows) return;
-    dispatch({
-      type: 'listTableList/remove',
-      payload: {
-        // memberCode: selectedRows.map(row => row.memberCode),
-        memberCode: record.memberCode,
+    let memberCodes: never[] | (string | undefined)[] = [];
+    if (type === 'single' && record) {
+      memberCodes = [record.memberCode];
+    } else {
+      memberCodes = selectedRows.map(row => row.memberCode);
+    }
+    confirm({
+      title: 'Are you sure you want to delete this information?',
+      content: '',
+      onOk() {
+        dispatch({
+          type: 'listTableList/remove',
+          payload: {
+            memberCodes,
+          },
+          callback: (e: { code: string; message: string }) => {
+            if (e.code === '301') {
+              message.success(e.message);
+              that.handleUpdateModalVisible(false);
+              that.setState({
+                selectedRows: [],
+              });
+              form.validateFields((err, fieldsValue) => {
+                if (err) return;
+                const values = {
+                  ...fieldsValue,
+                  updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
+                };
+                that.setState({
+                  formValues: values,
+                });
+                dispatch({
+                  type: 'listTableList/fetch',
+                  payload: values,
+                });
+              });
+            } else {
+              message.error(e.message);
+            }
+          },
+        });
       },
-      callback: (e: { code: string; message: string }) => {
-        if (e.code === '301') {
-          message.success(e.message);
-          this.handleUpdateModalVisible(false);
-          form.validateFields((err, fieldsValue) => {
-            if (err) return;
-            const values = {
-              ...fieldsValue,
-              updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
-            };
-            this.setState({
-              formValues: values,
-            });
-            dispatch({
-              type: 'listTableList/fetch',
-              payload: values,
-            });
-          });
-        } else {
-          message.error(e.message);
-        }
-      },
+      onCancel() {},
     });
   };
 
@@ -514,7 +542,7 @@ class TableList extends Component<TableListProps, TableListState> {
               </Button>
               {selectedRows.length > 0 && (
                 <span>
-                  {/* <Button onClick={() => this.handleDelete()}>Delete</Button> */}
+                  <Button onClick={() => this.handleDelete('multiple')}>Delete</Button>
                   {/* <Dropdown overlay={menu}>
                     <Button>
                       更多操作 <Icon type="down" />
@@ -522,6 +550,7 @@ class TableList extends Component<TableListProps, TableListState> {
                   </Dropdown> */}
                 </span>
               )}
+              <Button>Export</Button>
             </div>
             <StandardTable
               selectedRows={selectedRows}

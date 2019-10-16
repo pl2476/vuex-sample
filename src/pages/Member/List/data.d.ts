@@ -2,10 +2,10 @@ export interface TableListItem {
   userId: string;
   firstName: string;
   lastName: string;
-  email: string;
+  email?: string;
   mobilePhone: number;
   homeShop: string;
-  memberCode: string;
+  memberCode?: string;
   gender?: string;
   dateOfBirth?: string;
   marketingGroup?: string;
@@ -24,6 +24,12 @@ export interface TableListItem {
   remarks?: string;
   notification?: string;
   enabled?: string;
+
+  id?: string;
+  name?: string;
+  contactTel: number;
+  familyMemberCode: string;
+  isMember?: boolean;
 }
 
 export interface TableListPagination {
@@ -43,4 +49,5 @@ export interface TableListParams {
   name: string;
   pageSize: number;
   pageIndex: number;
+  familyMemberCode: string;
 }

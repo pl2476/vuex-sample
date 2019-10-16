@@ -9,6 +9,7 @@ import CustomizeSelect, { Item as SelectItem } from '@/components/CustomizeSelec
 import style from './index.less';
 import DndBox from '@/components/DndBox';
 import DndItem, { Item as DndItemData, DndItemProps } from '@/components/DndItem';
+import SearchSelect from '@/components/SearchSelect';
 
 // interface Item {
 //   id: number;
@@ -412,6 +413,17 @@ class SimilarTable extends PureComponent<{}, MyState> {
                     />
                   </div>
                 </DndProvider>
+                <div>
+                  <SearchSelect
+                    value={selectValue}
+                    style={{ minWidth: 120 }}
+                    option={[{ value: 'default', text: 'default' }, { value: '1', text: 'first' }]}
+                    // openTrigger="default"
+                    getPopupContainer={node => node.parentElement as HTMLElement}
+                    dropdownMatchSelectWidth={false}
+                    onCustomSelect={this.onCustomSelect}
+                  />
+                </div>
               </div>
             </div>
           </div>

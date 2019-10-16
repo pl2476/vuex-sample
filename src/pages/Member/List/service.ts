@@ -7,11 +7,11 @@ export async function queryMember(params: TableListParams) {
   });
 }
 
-export async function removeMember(memberCode: string) {
+export async function removeMember(memberCodes: string[]) {
   return request('/system/member/delete', {
     method: 'put',
     data: {
-      memberCode,
+      memberCodes,
     },
   });
 }
@@ -21,7 +21,6 @@ export async function addMember(params: TableListParams) {
     method: 'POST',
     data: {
       ...params,
-      method: 'post',
     },
   });
 }

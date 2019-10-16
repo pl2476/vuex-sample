@@ -55,8 +55,8 @@ const Model: ModelType = {
       if (callback) callback(response);
     },
     *remove({ payload, callback }, { call }) {
-      const { memberCode } = payload;
-      const response = yield call(removeMember, memberCode);
+      const { memberCodes } = payload;
+      const response = yield call(removeMember, memberCodes);
       if (callback) callback(response);
     },
     *get({ payload, callback }, { call }) {
