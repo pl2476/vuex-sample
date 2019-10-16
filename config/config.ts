@@ -36,7 +36,8 @@ const plugins: IPlugin[] = [
               importWorkboxFrom: 'local',
             },
           }
-        : false, // default close dll, because issue https://github.com/ant-design/ant-design-pro/issues/4665
+        : false,
+      // default close dll, because issue https://github.com/ant-design/ant-design-pro/issues/4665
       // dll features https://webpack.js.org/plugins/dll-plugin/
       // dll: {
       //   include: ['dva', 'dva/router', 'dva/saga', 'dva/fetch'],
@@ -209,14 +210,16 @@ export default {
     basePath: '/',
   },
   chainWebpack: webpackPlugin,
-  // proxy: {
-  //   '/proxy': {
-  //     target: '',
-  //     // target: 'http://192.168.31.74:8889',
-  //     changeOrigin: true,
-  //     pathRewrite: {
-  //       '^/proxy': '',
-  //     },
-  //   },
-  // },
+  /**
+  proxy: {
+    '/proxy': {
+      target: '',
+      // target: 'http://192.168.31.74:8889',
+      changeOrigin: true,
+      pathRewrite: {
+        '^/proxy': '',
+      },
+    },
+  },
+  */
 } as IConfig;
