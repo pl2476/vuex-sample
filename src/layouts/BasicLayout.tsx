@@ -102,7 +102,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   return (
     <div className={styles.prolayout}>
       <ProLayout
-        logo="https://lanhu.oss-cn-beijing.aliyuncs.com/xdecdd118f-9b63-4101-9cb1-1ef68d295576"
+        logo="http://52.193.131.42:8885/group1/M00/00/00/rB8WI12jPIWAFLQaAAA1IQPnxCc484.png"
         onCollapse={handleMenuCollapse}
         menuItemRender={(menuItemProps, defaultDom) => {
           if (menuItemProps.isUrl) {

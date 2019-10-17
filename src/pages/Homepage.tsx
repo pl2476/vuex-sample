@@ -1,8 +1,10 @@
 import React from 'react';
 import { Upload, Icon, Modal } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
+// import config from 'config/index';
 import request from '@/utils/request';
 
+// console.log(config);
 const getBase64 = (file: Blob) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -20,11 +22,17 @@ class PicturesWall extends React.PureComponent {
         uid: '-1',
         name: 'image.png',
         status: 'done',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+        url: 'http://52.193.131.42:8885/group1/M00/00/00/rB8WI12jPIWAFLQaAAA1IQPnxCc484.png',
       },
     ],
     loading: false,
   };
+
+  componentDidMount() {
+    request('/system/user/list', {
+      method: 'GET',
+    });
+  }
 
   handleCancel = () => this.setState({ previewVisible: false });
 
@@ -49,7 +57,7 @@ class PicturesWall extends React.PureComponent {
   };
 
   test = () => {
-    request('/proxy/system/user/list', {
+    request('/system/user/list', {
       method: 'GET',
       params: {
         pageIndex: 1,
@@ -68,14 +76,14 @@ class PicturesWall extends React.PureComponent {
       this.setState({
         loading: true,
       });
-      request('/proxy/system/user/uploadPicture', {
+      request('/system/user/uploadPicture', {
         method: 'POST',
         data: formData,
         headers: {
           'Content-Type': ' application/x-www-form-urlencoded',
           // Accept: 'application/json',
         },
-      }).then(data => {
+      }).then(() => {
         const { fileList } = this.state;
         fileList.map(item => {
           if (item.status !== 'done') {
@@ -102,7 +110,7 @@ class PicturesWall extends React.PureComponent {
     return (
       <div className="clearfix">
         <Upload
-          action="/proxy/system/user/uploadPicture"
+          action="/system/user/uploadPicture"
           listType="picture-card"
           headers={{ Authorization: localStorage.getItem('auth') || '' }}
           fileList={fileList as UploadFile[]}
