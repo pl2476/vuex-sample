@@ -422,19 +422,19 @@ class TableList extends Component<TableListProps, TableListState> {
   renderAdvancedForm() {
     const {
       form: { getFieldDecorator },
-      location,
+      // location,
     } = this.props;
-    const { query } = location;
+    // const { query } = location;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={6} sm={24}>
+          {/* <Col md={6} sm={24}>
             <FormItem label="Family Member Code">
               {getFieldDecorator('familyMemberCode', {
                 initialValue: query.familyMemberCode,
               })(<Input placeholder="" />)}
             </FormItem>
-          </Col>
+          </Col> */}
           <Col md={6} sm={24}>
             <FormItem label="Member Code">
               {getFieldDecorator('memberCode')(<Input placeholder="" />)}
