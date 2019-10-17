@@ -37,3 +37,9 @@ export async function update(params: TableListParams) {
     },
   });
 }
+
+export async function exportList(params: TableListParams) {
+  return request('/system/familyDetail/export', {
+    params,
+  });
+}

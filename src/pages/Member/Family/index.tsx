@@ -27,6 +27,7 @@ interface TableListProps extends FormComponentProps {
     Action<
       | 'familyList/add'
       | 'familyList/fetch'
+      | 'familyList/export'
       | 'familyList/remove'
       | 'familyList/get'
       | 'familyList/update'
@@ -389,6 +390,35 @@ class TableList extends Component<TableListProps, TableListState> {
     });
   };
 
+  handleExportList = () => {
+    const { dispatch, form } = this.props;
+
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+
+      const values = {
+        ...fieldsValue,
+        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
+      };
+
+      this.setState({
+        formValues: values,
+      });
+
+      dispatch({
+        type: 'familyList/export',
+        payload: values,
+        callback: (res: string) => {
+          if (res) {
+            window.location.href = res;
+          } else {
+            message.error('error');
+          }
+        },
+      });
+    });
+  };
+
   renderAdvancedForm() {
     const {
       form: { getFieldDecorator },
@@ -491,7 +521,7 @@ class TableList extends Component<TableListProps, TableListState> {
                   </Dropdown> */}
                 </span>
               )}
-              <Button>Export</Button>
+              <Button onClick={() => this.handleExportList()}>Export</Button>
             </div>
             <StandardTable
               selectedRows={selectedRows}

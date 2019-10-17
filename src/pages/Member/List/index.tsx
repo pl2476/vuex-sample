@@ -427,6 +427,13 @@ class TableList extends Component<TableListProps, TableListState> {
       dispatch({
         type: 'listTableList/export',
         payload: values,
+        callback: (res: string) => {
+          if (res) {
+            window.location.href = res;
+          } else {
+            message.error('error');
+          }
+        },
       });
     });
   };
