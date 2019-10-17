@@ -109,7 +109,7 @@ class Login extends Component<LoginProps, LoginState> {
             <img
               width="184"
               height="43"
-              src="https://lanhu.oss-cn-beijing.aliyuncs.com/xdecdd118f-9b63-4101-9cb1-1ef68d295576"
+              src="http://52.193.131.42:8885/group1/M00/00/00/rB8WI12jPIWAFLQaAAA1IQPnxCc484.png"
               alt=""
             />
           </div>
@@ -147,7 +147,7 @@ class Login extends Component<LoginProps, LoginState> {
           <Submit loading={submitting}>
             <FormattedMessage id="user-login.login.login" />
           </Submit>
-          <a style={{ position: 'absolute', bottom: 0, left: 0 }} href="">
+          <a style={{ position: 'absolute', bottom: 0, left: 0 }} href="#">
             <FormattedMessage id="user-login.login.forgot-password" />
           </a>
         </LoginComponents>
@@ -155,7 +155,7 @@ class Login extends Component<LoginProps, LoginState> {
           <img
             width="513"
             height="471"
-            src="https://lanhu.oss-cn-beijing.aliyuncs.com/xdde4d91d3-2952-4693-ac7f-aad74a5650e8"
+            src="http://52.193.131.42:8885/group1/M00/00/00/rB8WI12jPXCAIzZsAAO9F-Q1izA941.png"
             alt=""
           />
         </div>

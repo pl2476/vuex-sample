@@ -44,7 +44,7 @@ const UserModel: UserModelType = {
     *fetchCurrent(_, { put }) {
       // const response = yield call(queryCurrent);
       const response = {
-        avatar: 'https://www.easyicon.net/api/resizeApi.php?id=1190206&size=16',
+        avatar: 'http://52.193.131.42:8885/group1/M00/00/00/rB8WI12jxIWAbfJSAAAM2kgXcHc075.png',
         name: 'D P',
         userid: 'dp',
       };
