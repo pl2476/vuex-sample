@@ -35,16 +35,16 @@ const getValue = (obj: { [x: string]: string[] }) =>
 interface TableListProps extends FormComponentProps {
   dispatch: Dispatch<
     Action<
-      | 'listTableList/add'
-      | 'listTableList/fetch'
-      | 'listTableList/export'
-      | 'listTableList/remove'
-      | 'listTableList/get'
-      | 'listTableList/update'
+      | 'memberList/add'
+      | 'memberList/fetch'
+      | 'memberList/export'
+      | 'memberList/remove'
+      | 'memberList/get'
+      | 'memberList/update'
     >
   >;
   loading: boolean;
-  listTableList: StateType;
+  memberList: StateType;
 }
 
 interface TableListState {
@@ -60,18 +60,18 @@ interface TableListState {
 /* eslint react/no-multi-comp:0 */
 @connect(
   ({
-    listTableList,
+    memberList,
     loading,
   }: {
-    listTableList: StateType;
+    memberList: StateType;
     loading: {
       models: {
         [key: string]: boolean;
       };
     };
   }) => ({
-    listTableList,
-    loading: loading.models.listTableList,
+    memberList,
+    loading: loading.models.memberList,
   }),
 )
 class TableList extends Component<TableListProps, TableListState> {
@@ -159,7 +159,7 @@ class TableList extends Component<TableListProps, TableListState> {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'listTableList/fetch',
+      type: 'memberList/fetch',
     });
   }
 
@@ -188,7 +188,7 @@ class TableList extends Component<TableListProps, TableListState> {
     }
 
     dispatch({
-      type: 'listTableList/fetch',
+      type: 'memberList/fetch',
       payload: params,
     });
   };
@@ -200,7 +200,7 @@ class TableList extends Component<TableListProps, TableListState> {
       formValues: {},
     });
     dispatch({
-      type: 'listTableList/fetch',
+      type: 'memberList/fetch',
       payload: {},
     });
   };
@@ -220,7 +220,7 @@ class TableList extends Component<TableListProps, TableListState> {
     switch (e.key) {
       case 'remove':
         dispatch({
-          type: 'listTableList/remove',
+          type: 'memberList/remove',
           payload: {
             key: selectedRows.map(row => row.userId),
           },
@@ -260,7 +260,7 @@ class TableList extends Component<TableListProps, TableListState> {
       });
 
       dispatch({
-        type: 'listTableList/fetch',
+        type: 'memberList/fetch',
         payload: values,
       });
     });
@@ -282,7 +282,7 @@ class TableList extends Component<TableListProps, TableListState> {
     }
     if (record) {
       dispatch({
-        type: 'listTableList/get',
+        type: 'memberList/get',
         payload: {
           memberCode: record.memberCode,
         },
@@ -301,7 +301,7 @@ class TableList extends Component<TableListProps, TableListState> {
   handleAdd = (fields: FormValueType) => {
     const { dispatch, form } = this.props;
     dispatch({
-      type: 'listTableList/add',
+      type: 'memberList/add',
       payload: fields,
       callback: (e: { code: string; message: string }) => {
         if (e.code === '304') {
@@ -317,7 +317,7 @@ class TableList extends Component<TableListProps, TableListState> {
               formValues: values,
             });
             dispatch({
-              type: 'listTableList/fetch',
+              type: 'memberList/fetch',
               payload: values,
             });
           });
@@ -331,7 +331,7 @@ class TableList extends Component<TableListProps, TableListState> {
   handleUpdate = (fields: FormValueType) => {
     const { dispatch, form } = this.props;
     dispatch({
-      type: 'listTableList/update',
+      type: 'memberList/update',
       payload: fields,
       callback: (e: { code: string; message: string }) => {
         if (e.code === '300') {
@@ -347,7 +347,7 @@ class TableList extends Component<TableListProps, TableListState> {
               formValues: values,
             });
             dispatch({
-              type: 'listTableList/fetch',
+              type: 'memberList/fetch',
               payload: values,
             });
           });
@@ -374,7 +374,7 @@ class TableList extends Component<TableListProps, TableListState> {
       content: '',
       onOk() {
         dispatch({
-          type: 'listTableList/remove',
+          type: 'memberList/remove',
           payload: {
             memberCodes,
           },
@@ -395,7 +395,7 @@ class TableList extends Component<TableListProps, TableListState> {
                   formValues: values,
                 });
                 dispatch({
-                  type: 'listTableList/fetch',
+                  type: 'memberList/fetch',
                   payload: values,
                 });
               });
@@ -425,7 +425,7 @@ class TableList extends Component<TableListProps, TableListState> {
       });
 
       dispatch({
-        type: 'listTableList/export',
+        type: 'memberList/export',
         payload: values,
         callback: (res: string) => {
           if (res) {
@@ -541,7 +541,7 @@ class TableList extends Component<TableListProps, TableListState> {
 
   render() {
     const {
-      listTableList: { data },
+      memberList: { data },
       loading,
     } = this.props;
 

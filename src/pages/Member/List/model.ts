@@ -37,7 +37,7 @@ export interface ModelType {
 }
 
 const Model: ModelType = {
-  namespace: 'listTableList',
+  namespace: 'memberList',
 
   state: {
     data: {
