@@ -55,7 +55,7 @@ const plugins: IPlugin[] = [
       autoAddMenu: true,
     },
   ],
-]; // 针对 preview.pro.ant.design 的 GA 统计代码
+];
 
 if (isAntDesignProPreview) {
   // plugins.push([
@@ -112,13 +112,11 @@ export default {
             {
               path: '/homepage',
               name: 'homepage',
-              icon: 'home',
               component: './Homepage',
             },
             {
               path: '/welcome',
               name: 'welcome',
-              icon: 'smile',
               component: './Welcome',
             },
             {
@@ -136,6 +134,11 @@ export default {
               name: 'family',
               path: '/member/family/',
               component: './Member/Family',
+            },
+            {
+              name: 'brand',
+              path: '/product/brand/',
+              component: './Product/Brand',
             },
             {
               component: './Exception/404',
