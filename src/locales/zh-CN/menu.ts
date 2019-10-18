@@ -53,4 +53,6 @@ export default {
   'menu.member': '人员',
   'menu.member.list': '人员列表',
   'menu.member.family': '人员家庭',
+  'menu.product': '产品',
+  'menu.product.brand': '品牌列表',
 };

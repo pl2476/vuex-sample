@@ -53,4 +53,6 @@ export default {
   'menu.member': 'Member',
   'menu.member.list': 'Member List',
   'menu.member.family': 'Member Family',
+  'menu.product': 'Product',
+  'menu.product.brand': 'Brand List',
 };

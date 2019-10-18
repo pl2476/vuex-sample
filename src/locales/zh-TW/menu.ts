@@ -51,4 +51,6 @@ export default {
   'menu.member': '人員',
   'menu.member.list': '人員列表',
   'menu.member.family': '人員家庭',
+  'menu.product': '產品',
+  'menu.product.brand': '品牌列表',
 };
