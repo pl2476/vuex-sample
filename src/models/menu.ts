@@ -50,6 +50,18 @@ const MenuModel: MenuModelType = {
             },
           ],
         },
+        {
+          path: '/product',
+          icon: 'table',
+          name: 'product',
+          children: [
+            {
+              path: '/product/brand',
+              name: 'brand',
+              hideInMenu: false,
+            },
+          ],
+        },
       ];
       // const response = yield call(getMenuData);
       yield put({
