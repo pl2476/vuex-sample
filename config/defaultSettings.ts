@@ -54,7 +54,7 @@ export default {
   menu: {
     locale: true,
   },
-  title: '',
+  title: 'IMSPA',
   pwa: false,
   iconfontUrl: '',
 } as DefaultSettings;
