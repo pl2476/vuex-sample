@@ -1,4 +1,17 @@
-import { Button, Card, Col, Form, Icon, Input, Row, Select, message, Modal } from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  Form,
+  Icon,
+  Input,
+  Row,
+  Select,
+  message,
+  Modal,
+  Tabs,
+  Descriptions,
+} from 'antd';
 import React, { Component, Fragment } from 'react';
 
 import { Dispatch, Action } from 'redux';
@@ -9,6 +22,7 @@ import { connect } from 'dva';
 import { router } from 'umi';
 import { StateType } from './model';
 import CreateForm from '@/pages/Member/List/CreateForm';
+import ChangePasswordForm from '@/pages/Member/List/ChangePasswordForm';
 import StandardTable, { StandardTableColumnProps } from '@/components/Table/StandardTable';
 import UpdateForm, { FormValueType } from '@/pages/Member/List/UpdateForm';
 import { TableListItem, TableListParams, TableListPagination } from '@/pages/Member/List/data';
@@ -18,6 +32,7 @@ import styles from './style.less';
 const FormItem = Form.Item;
 const { Option } = Select;
 const { confirm } = Modal;
+const { TabPane } = Tabs;
 
 const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_1457118_wdvoop3z6g.js',
@@ -41,6 +56,7 @@ interface TableListProps extends FormComponentProps {
       | 'memberList/remove'
       | 'memberList/get'
       | 'memberList/update'
+      | 'memberList/changePassword'
     >
   >;
   loading: boolean;
@@ -48,8 +64,11 @@ interface TableListProps extends FormComponentProps {
 }
 
 interface TableListState {
+  userId: string | undefined;
   modalVisible: boolean;
   updateModalVisible: boolean;
+  changePasswordModalVisible: boolean;
+  isMemberView: boolean;
   expandForm: boolean;
   selectedRows: TableListItem[];
   formValues: { [key: string]: string };
@@ -76,8 +95,11 @@ interface TableListState {
 )
 class TableList extends Component<TableListProps, TableListState> {
   state: TableListState = {
+    userId: '',
     modalVisible: false,
     updateModalVisible: false,
+    changePasswordModalVisible: false,
+    isMemberView: true,
     expandForm: false,
     selectedRows: [],
     formValues: {},
@@ -125,14 +147,14 @@ class TableList extends Component<TableListProps, TableListState> {
           />
           &nbsp;
           <Icon
-            // onClick={() => this.handleUpdateModalVisible(true, record)}
+            onClick={() => this.handleChangePasswordModalVisible(true, record.userId)}
             type="lock"
             theme="filled"
             style={{ color: '#52c41a' }}
           />
           &nbsp;
           <Icon
-            // onClick={() => this.handleUpdateModalVisible(true, record)}
+            onClick={() => this.handleMemberViewVisible(true, record.userId)}
             type="eye"
             theme="filled"
             style={{ color: '#52c41a' }}
@@ -272,6 +294,13 @@ class TableList extends Component<TableListProps, TableListState> {
     });
   };
 
+  handleChangePasswordModalVisible = (flag?: boolean, userId?: string) => {
+    this.setState({
+      changePasswordModalVisible: !!flag,
+      userId,
+    });
+  };
+
   handleUpdateModalVisible = (flag?: boolean, record?: FormValueType) => {
     const { dispatch } = this.props;
     if (!flag) {
@@ -355,6 +384,43 @@ class TableList extends Component<TableListProps, TableListState> {
           message.error(e.message);
         }
       },
+    });
+  };
+
+  handleChangePassword = (fields: FormValueType) => {
+    const { dispatch, form } = this.props;
+    dispatch({
+      type: 'memberList/changePassword',
+      payload: fields,
+      callback: (e: { code: string; message: string }) => {
+        if (e.code === '202') {
+          message.success(e.message);
+          this.handleUpdateModalVisible(false);
+          form.validateFields((err, fieldsValue) => {
+            if (err) return;
+            const values = {
+              ...fieldsValue,
+              updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
+            };
+            this.setState({
+              formValues: values,
+            });
+            dispatch({
+              type: 'memberList/fetch',
+              payload: values,
+            });
+          });
+        } else if (e.message) {
+          message.error(e.message);
+        }
+      },
+    });
+  };
+
+  handleMemberViewVisible = (flag?: boolean, userId?: string) => {
+    this.setState({
+      isMemberView: !!flag,
+      userId,
     });
   };
 
@@ -545,7 +611,16 @@ class TableList extends Component<TableListProps, TableListState> {
       loading,
     } = this.props;
 
-    const { selectedRows, modalVisible, updateModalVisible, stepFormValues, rowKey } = this.state;
+    const {
+      selectedRows,
+      modalVisible,
+      changePasswordModalVisible,
+      userId,
+      isMemberView,
+      updateModalVisible,
+      stepFormValues,
+      rowKey,
+    } = this.state;
     // const menu = (
     //   <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
     //     <Menu.Item key="remove">删除</Menu.Item>
@@ -561,47 +636,89 @@ class TableList extends Component<TableListProps, TableListState> {
       handleUpdateModalVisible: this.handleUpdateModalVisible,
       handleUpdate: this.handleUpdate,
     };
+    const changePasswordMethods = {
+      handleChangePasswordModalVisible: this.handleChangePasswordModalVisible,
+      handleChangePassword: this.handleChangePassword,
+    };
     return (
-      <PageHeaderWrapper>
-        <Card bordered={false}>
-          <div className={styles.tableList}>
-            <div className={styles.tableListForm}>{this.renderForm()}</div>
-            <div className={styles.tableListOperator}>
-              <Button type="primary" onClick={() => this.handleModalVisible(true)}>
-                Add
-              </Button>
-              {selectedRows.length > 0 && (
-                <span>
-                  <Button onClick={() => this.handleDelete('multiple')}>Delete</Button>
-                  {/* <Dropdown overlay={menu}>
-                    <Button>
-                      更多操作 <Icon type="down" />
-                    </Button>
-                  </Dropdown> */}
-                </span>
-              )}
-              <Button onClick={() => this.handleExportList()}>Export</Button>
-            </div>
-            <StandardTable
-              selectedRows={selectedRows}
-              loading={loading}
-              data={data}
-              rowKey={rowKey}
-              columns={this.columns}
-              onSelectRow={this.handleSelectRows}
-              onChange={this.handleStandardTableChange}
+      <div>
+        <div style={!isMemberView ? { display: 'block' } : { display: 'none' }}>
+          <PageHeaderWrapper>
+            <Card bordered={false}>
+              <div className={styles.tableList}>
+                <div className={styles.tableListForm}>{this.renderForm()}</div>
+                <div className={styles.tableListOperator}>
+                  <Button type="primary" onClick={() => this.handleModalVisible(true)}>
+                    Add
+                  </Button>
+                  {selectedRows.length > 0 && (
+                    <span>
+                      <Button onClick={() => this.handleDelete('multiple')}>Delete</Button>
+                      {/* <Dropdown overlay={menu}>
+                        <Button>
+                          更多操作 <Icon type="down" />
+                        </Button>
+                      </Dropdown> */}
+                    </span>
+                  )}
+                  <Button onClick={() => this.handleExportList()}>Export</Button>
+                </div>
+                <StandardTable
+                  selectedRows={selectedRows}
+                  loading={loading}
+                  data={data}
+                  rowKey={rowKey}
+                  columns={this.columns}
+                  onSelectRow={this.handleSelectRows}
+                  onChange={this.handleStandardTableChange}
+                />
+              </div>
+            </Card>
+            <CreateForm {...parentMethods} modalVisible={modalVisible} />
+            {stepFormValues && Object.keys(stepFormValues).length ? (
+              <UpdateForm
+                {...updateMethods}
+                updateModalVisible={updateModalVisible}
+                values={stepFormValues}
+              />
+            ) : null}
+            <ChangePasswordForm
+              {...changePasswordMethods}
+              userId={userId}
+              changePasswordModalVisible={changePasswordModalVisible}
             />
-          </div>
-        </Card>
-        <CreateForm {...parentMethods} modalVisible={modalVisible} />
-        {stepFormValues && Object.keys(stepFormValues).length ? (
-          <UpdateForm
-            {...updateMethods}
-            updateModalVisible={updateModalVisible}
-            values={stepFormValues}
-          />
-        ) : null}
-      </PageHeaderWrapper>
+          </PageHeaderWrapper>
+        </div>
+        <div style={isMemberView ? { display: 'block' } : { display: 'none' }}>
+          <PageHeaderWrapper>
+            <div className={styles['member-view-top']}>
+              <Button size="small" icon="rollback"></Button>
+              <div>Member View</div>
+            </div>
+            <div className={styles['member-view-bottom']}>
+              <Tabs defaultActiveKey="1" tabPosition="left">
+                <TabPane tab="Profile" key="1">
+                  <Descriptions title="User Info">
+                    <Descriptions.Item label="UserName">Zhou Maomao</Descriptions.Item>
+                    <Descriptions.Item label="Telephone">1810000000</Descriptions.Item>
+                    <Descriptions.Item label="Live">Hangzhou, Zhejiang</Descriptions.Item>
+                    <Descriptions.Item label="Remark">empty</Descriptions.Item>
+                    <Descriptions.Item label="Address">
+                      No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China
+                    </Descriptions.Item>
+                  </Descriptions>
+                </TabPane>
+                <TabPane tab="Tab 2" key="2">
+                  Content of Tab Pane 2
+                </TabPane>
+                <TabPane tab="Tab 3" key="3">
+                  Content of Tab Pane 3
+                </TabPane>
+              </Tabs>
+            </div>
+          </PageHeaderWrapper>
+        </div>
+      </div>
     );
   }
 }

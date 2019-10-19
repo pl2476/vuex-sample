@@ -7,6 +7,7 @@ import {
   getMember,
   updateMember,
   exportList,
+  changePassword,
 } from './service';
 
 import { TableListData } from '@/pages/Member/List/data';
@@ -30,6 +31,7 @@ export interface ModelType {
     remove: Effect;
     get: Effect;
     update: Effect;
+    changePassword: Effect;
   };
   reducers: {
     save: Reducer<StateType>;
@@ -87,6 +89,10 @@ const Model: ModelType = {
       //   type: 'save',
       //   payload: response,
       // });
+      if (callback) callback(response);
+    },
+    *changePassword({ payload, callback }, { call }) {
+      const response = yield call(changePassword, payload);
       if (callback) callback(response);
     },
   },

@@ -46,3 +46,16 @@ export async function exportList(params: TableListParams) {
     },
   });
 }
+
+export async function changePassword(params: {
+  userId: string;
+  newPassword: string;
+  oldPassword: string;
+}) {
+  return request('/system/user/updatePassword', {
+    method: 'put',
+    data: {
+      ...params,
+    },
+  });
+}
