@@ -60,6 +60,11 @@ const MenuModel: MenuModelType = {
               name: 'brand',
               hideInMenu: false,
             },
+            {
+              path: '/product/category',
+              name: 'category',
+              hideInMenu: false,
+            },
           ],
         },
       ];

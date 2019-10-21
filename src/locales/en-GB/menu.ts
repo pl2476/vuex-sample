@@ -55,4 +55,5 @@ export default {
   'menu.member.family': 'Member Family',
   'menu.product': 'Product',
   'menu.product.brand': 'Brand List',
+  'menu.product.category': 'Category List',
 };

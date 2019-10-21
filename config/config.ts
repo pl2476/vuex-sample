@@ -141,6 +141,11 @@ export default {
               component: './Product/Brand',
             },
             {
+              name: 'category',
+              path: '/product/category/',
+              component: './Product/Category',
+            },
+            {
               component: './Exception/404',
             },
           ],
