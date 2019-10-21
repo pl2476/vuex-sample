@@ -698,21 +698,46 @@ class TableList extends Component<TableListProps, TableListState> {
             <div className={styles['member-view-bottom']}>
               <Tabs defaultActiveKey="1" tabPosition="left">
                 <TabPane tab="Profile" key="1">
-                  <Descriptions title="User Info">
-                    <Descriptions.Item label="UserName">Zhou Maomao</Descriptions.Item>
-                    <Descriptions.Item label="Telephone">1810000000</Descriptions.Item>
-                    <Descriptions.Item label="Live">Hangzhou, Zhejiang</Descriptions.Item>
-                    <Descriptions.Item label="Remark">empty</Descriptions.Item>
-                    <Descriptions.Item label="Address">
-                      No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China
-                    </Descriptions.Item>
+                  <Descriptions title="" column={1}>
+                    <Descriptions.Item label="Member Code">xxx</Descriptions.Item>
+                    <Descriptions.Item label="Full Name">xxxxx</Descriptions.Item>
+                    <Descriptions.Item label="Gender">xxx</Descriptions.Item>
+                    <Descriptions.Item label="DOB">xx</Descriptions.Item>
+                    <Descriptions.Item label="Remaining Deposit">xxxx</Descriptions.Item>
                   </Descriptions>
                 </TabPane>
-                <TabPane tab="Tab 2" key="2">
-                  Content of Tab Pane 2
+                <TabPane tab="Sales History" key="2">
+                  Sales History
                 </TabPane>
-                <TabPane tab="Tab 3" key="3">
-                  Content of Tab Pane 3
+                <TabPane tab="Treatment Purchased" key="3">
+                  Treatment Purchased
+                </TabPane>
+                <TabPane tab="Visit Note" key="4">
+                  Visit Note
+                </TabPane>
+                <TabPane tab="Pre-paid Transaction" key="5">
+                  Pre-paid Transaction
+                </TabPane>
+                <TabPane tab="Not Show Sales" key="6">
+                  Not Show Sales
+                </TabPane>
+                <TabPane tab="Treatment Transaction" key="7">
+                  Treatment Transaction
+                </TabPane>
+                <TabPane tab="Invoice Sales Journal" key="8">
+                  Invoice Sales Journal
+                </TabPane>
+                <TabPane tab="Consent Form" key="9">
+                  Consent Form
+                </TabPane>
+                <TabPane tab="Spending Summary" key="10">
+                  Spending Summary
+                </TabPane>
+                <TabPane tab="Family Details" key="11">
+                  Family Details
+                </TabPane>
+                <TabPane tab="Loyalty Points Transactions" key="12">
+                  Loyalty Points Transactions
                 </TabPane>
               </Tabs>
             </div>
