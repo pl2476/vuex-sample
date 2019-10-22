@@ -24,6 +24,12 @@ const CreateForm: React.FC<CreateFormProps> = props => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       // form.resetFields();
+      const temp = fieldsValue;
+      if (fieldsValue.parentCategoryId && typeof fieldsValue.parentCategoryId === 'object') {
+        temp.parentCategoryId = fieldsValue.parentCategoryId.pop();
+      } else {
+        temp.parentCategoryId = '';
+      }
       handleAdd(fieldsValue);
     });
   };

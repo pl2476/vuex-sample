@@ -1,11 +1,12 @@
 export interface TableListItem {
   id?: string;
-  categoryName: string;
-  categoryId: string;
-  parentCategoryId: string;
-  displayOrder: string;
-  remarks: string;
-  status: boolean;
+  categoryName?: string;
+  categoryId?: string;
+  parentCategoryId?: string;
+  parentCategoryNames?: string;
+  displayOrder?: string;
+  remarks?: string;
+  status?: string;
 }
 
 export interface TableListPagination {

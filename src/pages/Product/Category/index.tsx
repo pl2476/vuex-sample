@@ -227,6 +227,9 @@ class TableList extends Component<TableListProps, TableListState> {
 
       const values = {
         ...fieldsValue,
+        parentCategoryId: fieldsValue.parentCategoryId
+          ? fieldsValue.parentCategoryId[fieldsValue.parentCategoryId.length - 1]
+          : '',
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
       };
 
@@ -279,13 +282,16 @@ class TableList extends Component<TableListProps, TableListState> {
       type: 'category/add',
       payload: fields,
       callback: (e: { code: string; message: string }) => {
-        if (e.code === '406') {
+        if (e.code === '414') {
           message.success(e.message);
           this.handleModalVisible();
           form.validateFields((err, fieldsValue) => {
             if (err) return;
             const values = {
               ...fieldsValue,
+              parentCategoryId: fieldsValue.parentCategoryId
+                ? fieldsValue.parentCategoryId[fieldsValue.parentCategoryId.length - 1]
+                : '',
               updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
             };
             this.setState({
@@ -309,13 +315,16 @@ class TableList extends Component<TableListProps, TableListState> {
       type: 'category/update',
       payload: fields,
       callback: (e: { code: string; message: string }) => {
-        if (e.code === '300') {
+        if (e.code === '415') {
           message.success(e.message);
           this.handleUpdateModalVisible(false);
           form.validateFields((err, fieldsValue) => {
             if (err) return;
             const values = {
               ...fieldsValue,
+              parentCategoryId: fieldsValue.parentCategoryId
+                ? fieldsValue.parentCategoryId[fieldsValue.parentCategoryId.length - 1]
+                : '',
               updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
             };
             this.setState({
@@ -354,7 +363,7 @@ class TableList extends Component<TableListProps, TableListState> {
             ids,
           },
           callback: (e: { code: string; message: string }) => {
-            if (e.code === '407') {
+            if (e.code === '402') {
               message.success(e.message);
               that.handleUpdateModalVisible(false);
               that.setState({
@@ -364,6 +373,9 @@ class TableList extends Component<TableListProps, TableListState> {
                 if (err) return;
                 const values = {
                   ...fieldsValue,
+                  parentCategoryId: fieldsValue.parentCategoryId
+                    ? fieldsValue.parentCategoryId[fieldsValue.parentCategoryId.length - 1]
+                    : '',
                   updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
                 };
                 that.setState({
@@ -392,6 +404,9 @@ class TableList extends Component<TableListProps, TableListState> {
 
       const values = {
         ...fieldsValue,
+        parentCategoryId: fieldsValue.parentCategoryId
+          ? fieldsValue.parentCategoryId[fieldsValue.parentCategoryId.length - 1]
+          : '',
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
       };
 

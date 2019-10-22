@@ -1,10 +1,11 @@
 import { Form, Input, Modal, Select, Row, Col, Cascader } from 'antd';
 import React, { PureComponent } from 'react';
 import { FormComponentProps } from 'antd/es/form';
-import { connect } from 'dva';
+// import { connect } from 'dva';
 import { TableListItem } from '@/pages/Product/Category/data';
 import style from './style.less';
-import { StateType } from './model';
+// import { StateType } from './model';
+import { getTreeNodeParent } from '@/utils/utils';
 
 export interface FormValueType extends Partial<TableListItem> {
   target?: string;
@@ -42,7 +43,12 @@ class UpdateForm extends PureComponent<UpdateFormProps, {}> {
       if (err) return;
       // form.resetFields();
       const temp = fieldsValue;
-      temp.id = values.id;
+      if (fieldsValue.parentCategoryId && typeof fieldsValue.parentCategoryId === 'object') {
+        temp.parentCategoryId = fieldsValue.parentCategoryId.pop();
+      } else {
+        temp.parentCategoryId = '';
+      }
+      temp.categoryId = values.categoryId;
       handleUpdate(temp);
     });
   };
@@ -65,7 +71,7 @@ class UpdateForm extends PureComponent<UpdateFormProps, {}> {
           <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
             <Col md={12} sm={24}>
               <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Name">
-                {form.getFieldDecorator('brandName', {
+                {form.getFieldDecorator('categoryName', {
                   initialValue: values.categoryName,
                   rules: [{ required: true, message: 'required' }],
                 })(<Input placeholder="Please enter" />)}
@@ -73,8 +79,8 @@ class UpdateForm extends PureComponent<UpdateFormProps, {}> {
             </Col>
             <Col md={12} sm={24}>
               <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Category">
-                {form.getFieldDecorator('categoryId', {
-                  initialValue: ['2'],
+                {form.getFieldDecorator('parentCategoryId', {
+                  initialValue: getTreeNodeParent(treeOptions, values.parentCategoryId),
                   rules: [{ required: true, message: 'required' }],
                 })(
                   <Cascader
