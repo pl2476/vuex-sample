@@ -3,11 +3,8 @@ import defaultSettings from './defaultSettings'; // https://umijs.org/config/
 
 import slash from 'slash2';
 import webpackPlugin from './plugin.config';
-const { pwa, primaryColor } = defaultSettings; // preview.pro.ant.design only do not use in your production ;
-// preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
+const { pwa, primaryColor } = defaultSettings;
 
-const { ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION } = process.env;
-const isAntDesignProPreview = ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site';
 const plugins: IPlugin[] = [
   [
     'umi-plugin-react',
@@ -57,21 +54,6 @@ const plugins: IPlugin[] = [
   ],
 ];
 
-if (isAntDesignProPreview) {
-  // plugins.push([
-  // 'umi-plugin-ga',
-  // {
-  //   code: 'UA-72788897-6',
-  // },
-  // ]);
-  plugins.push([
-    'umi-plugin-pro',
-    {
-      serverUrl: 'https://ant-design-pro.netlify.com',
-    },
-  ]);
-}
-
 export default {
   plugins,
   block: {
@@ -83,7 +65,7 @@ export default {
   targets: {
     ie: 11,
   },
-  devtool: isAntDesignProPreview ? 'source-map' : false,
+  devtool: false,
   // umi routes: https://umijs.org/zh/guide/router.html
   routes: [
     {
