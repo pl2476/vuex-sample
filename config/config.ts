@@ -128,6 +128,11 @@ export default {
               component: './Product/Category',
             },
             {
+              name: 'supplier',
+              path: '/product/supplier/',
+              component: './Product/Supplier',
+            },
+            {
               component: './Exception/404',
             },
           ],

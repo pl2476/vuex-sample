@@ -1,7 +1,7 @@
 import { Effect } from 'dva';
 import { Reducer } from 'redux';
 
-import { getMenuData } from '@/services/menu';
+// import { getMenuData } from '@/services/menu';
 
 export interface MenuModelState {
   menuData: object[];
@@ -63,6 +63,11 @@ const MenuModel: MenuModelType = {
             {
               path: '/product/category',
               name: 'category',
+              hideInMenu: false,
+            },
+            {
+              path: '/product/supplier',
+              name: 'supplier',
               hideInMenu: false,
             },
           ],

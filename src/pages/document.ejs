@@ -15,29 +15,29 @@
     <div id="root">
       <style>
         .page-loading-warp {
-          padding: 120px;
           display: flex;
-          justify-content: center;
           align-items: center;
+          justify-content: center;
+          padding: 120px;
         }
         .ant-spin {
+          position: absolute;
+          display: none;
+          color: #1890ff;
+          color: rgba(0, 0, 0, 0.65);
           -webkit-box-sizing: border-box;
           box-sizing: border-box;
           margin: 0;
           padding: 0;
-          color: rgba(0, 0, 0, 0.65);
           font-size: 14px;
           font-variant: tabular-nums;
           line-height: 1.5;
+          text-align: center;
           list-style: none;
           -webkit-font-feature-settings: 'tnum';
           font-feature-settings: 'tnum';
-          position: absolute;
-          display: none;
-          color: #1890ff;
-          text-align: center;
-          vertical-align: middle;
           opacity: 0;
+          vertical-align: middle;
           -webkit-transition: -webkit-transform 0.3s cubic-bezier(0.78, 0.14, 0.15, 0.86);
           transition: -webkit-transform 0.3s cubic-bezier(0.78, 0.14, 0.15, 0.86);
           transition: transform 0.3s cubic-bezier(0.78, 0.14, 0.15, 0.86);
@@ -112,9 +112,9 @@
         }
 
         .ant-spin-lg .ant-spin-dot {
-          font-size: 32px;
           width: 32px;
           height: 32px;
+          font-size: 32px;
         }
 
         .ant-spin-lg .ant-spin-dot i {
