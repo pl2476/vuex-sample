@@ -5,8 +5,8 @@ import { add, query, remove, get, update, exportList, treeOptions } from './serv
 import { TableListData } from '@/pages/Product/Brand/data';
 
 export interface StateType {
-  treeOptions: any;
-  data: TableListData;
+  treeOptions?: object[];
+  data?: TableListData;
 }
 
 export type Effect = (
@@ -28,6 +28,7 @@ export interface ModelType {
   };
   reducers: {
     save: Reducer<StateType>;
+    saveTreeOptions: Reducer<StateType>;
   };
 }
 
@@ -39,6 +40,7 @@ const Model: ModelType = {
       list: [],
       pagination: {},
     },
+    treeOptions: [],
   },
 
   effects: {
@@ -84,8 +86,12 @@ const Model: ModelType = {
       // });
       if (callback) callback(response);
     },
-    *treeOptions({ payload, callback }, { call }) {
+    *treeOptions({ payload, callback }, { call, put }) {
       const response = yield call(treeOptions, payload);
+      yield put({
+        type: 'saveTreeOptions',
+        payload: response,
+      });
       if (callback) callback(response);
     },
   },
@@ -103,6 +109,12 @@ const Model: ModelType = {
             currentPage: pagination.pageIndex || 1,
           },
         },
+      };
+    },
+    saveTreeOptions(state, action) {
+      return {
+        ...state,
+        treeOptions: action.payload,
       };
     },
   },

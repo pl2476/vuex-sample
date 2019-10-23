@@ -4,7 +4,7 @@ import { FormComponentProps } from 'antd/es/form';
 // import { connect } from 'dva';
 import { TableListItem } from '@/pages/Product/Category/data';
 import style from './style.less';
-// import { StateType } from './model';
+import { StateType } from './model';
 import { getTreeNodeParent } from '@/utils/utils';
 
 export interface FormValueType extends Partial<TableListItem> {
@@ -16,7 +16,7 @@ export interface UpdateFormProps extends FormComponentProps {
   handleUpdate: (values: FormValueType) => void;
   updateModalVisible: boolean;
   values: Partial<TableListItem>;
-  treeOptions: object[];
+  treeOptions: StateType;
 }
 const FormItem = Form.Item;
 const { Option } = Select;

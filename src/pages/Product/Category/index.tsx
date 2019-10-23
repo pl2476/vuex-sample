@@ -47,7 +47,7 @@ interface TableListState {
   formValues: { [key: string]: string };
   stepFormValues: Partial<TableListItem>;
   rowKey: string;
-  treeOptions: object[];
+  treeOptions: StateType;
 }
 
 /* eslint react/no-multi-comp:0 */

@@ -2,7 +2,7 @@ export interface TableListItem {
   id?: string;
   categoryName?: string;
   categoryId?: string;
-  parentCategoryId?: string;
+  parentCategoryId?: string | undefined;
   parentCategoryNames?: string;
   displayOrder?: string;
   remarks?: string;
