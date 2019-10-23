@@ -54,4 +54,5 @@ export default {
   'menu.product': '產品',
   'menu.product.brand': '品牌列表',
   'menu.product.category': '類型列表',
+  'menu.product.supplier': '供應商列表',
 };

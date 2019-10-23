@@ -56,4 +56,5 @@ export default {
   'menu.product': 'Product',
   'menu.product.brand': 'Brand List',
   'menu.product.category': 'Category List',
+  'menu.product.supplier': 'Supplier List',
 };
