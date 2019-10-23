@@ -99,7 +99,7 @@ class TableList extends Component<TableListProps, TableListState> {
     modalVisible: false,
     updateModalVisible: false,
     changePasswordModalVisible: false,
-    isMemberView: true,
+    isMemberView: false,
     expandForm: false,
     selectedRows: [],
     formValues: {},
@@ -424,6 +424,12 @@ class TableList extends Component<TableListProps, TableListState> {
     });
   };
 
+  rollback = () => {
+    this.setState({
+      isMemberView: false,
+    });
+  };
+
   handleDelete = (type: string, record?: FormValueType) => {
     const { selectedRows } = this.state;
     const { dispatch, form } = this.props;
@@ -692,7 +698,7 @@ class TableList extends Component<TableListProps, TableListState> {
         <div style={isMemberView ? { display: 'block' } : { display: 'none' }}>
           <PageHeaderWrapper>
             <div className={styles['member-view-top']}>
-              <Button size="small" icon="rollback"></Button>
+              <Button size="small" icon="rollback" onClick={this.rollback}></Button>
               <div>Member View</div>
             </div>
             <div className={styles['member-view-bottom']}>
