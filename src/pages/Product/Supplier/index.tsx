@@ -10,7 +10,12 @@ import { StateType } from './model';
 import CreateForm from '@/pages/Product/Supplier/CreateForm';
 import StandardTable, { StandardTableColumnProps } from '../StandardTable';
 import UpdateForm, { FormValueType } from '@/pages/Product/Supplier/UpdateForm';
-import { TableListItem, TableListParams, TableListPagination } from '@/pages/Product/Supplier/data';
+import {
+  TableListItem,
+  TableListParams,
+  TableListPagination,
+  ProductList,
+} from '@/pages/Product/Supplier/data';
 
 import styles from './style.less';
 
@@ -33,10 +38,11 @@ interface TableListProps extends FormComponentProps {
       | 'supplier/get'
       | 'supplier/update'
       | 'supplier/treeOptions'
+      | 'supplier/getProduct'
     >
   >;
   loading: boolean;
-  category: StateType;
+  supplier: StateType;
 }
 
 interface TableListState {
@@ -47,23 +53,26 @@ interface TableListState {
   formValues: { [key: string]: string };
   stepFormValues: Partial<TableListItem>;
   rowKey: string;
+  product: ProductList;
+  selectedKeys: string[];
+  targetKeys: string[];
 }
 
 /* eslint react/no-multi-comp:0 */
 @connect(
   ({
-    category,
+    supplier,
     loading,
   }: {
-    category: StateType;
+    supplier: StateType;
     loading: {
       models: {
         [key: string]: boolean;
       };
     };
   }) => ({
-    category,
-    loading: loading.models.category,
+    supplier,
+    loading: loading.models.supplier,
   }),
 )
 class TableList extends Component<TableListProps, TableListState> {
@@ -75,25 +84,27 @@ class TableList extends Component<TableListProps, TableListState> {
     formValues: {},
     stepFormValues: {},
     rowKey: 'id',
+    product: [],
+    selectedKeys: [],
+    targetKeys: [],
   };
 
   columns: StandardTableColumnProps[] = [
     {
       title: 'Name',
-      dataIndex: 'categoryName',
+      dataIndex: 'supplierName',
     },
     {
-      title: 'Parent Supplier',
-      dataIndex: 'parentSupplierNames',
-      sorter: true,
+      title: 'Contact Name',
+      dataIndex: 'contactName',
     },
     {
-      title: 'Display Order',
-      dataIndex: 'displayOrder',
+      title: 'Contact Email',
+      dataIndex: 'contactEmail',
     },
     {
-      title: 'Remarks',
-      dataIndex: 'remarks',
+      title: 'Contact Tel.',
+      dataIndex: 'contactTel',
     },
     {
       title: 'Status',
@@ -217,8 +228,8 @@ class TableList extends Component<TableListProps, TableListState> {
 
       const values = {
         ...fieldsValue,
-        parentCategoryId: fieldsValue.parentCategoryId
-          ? fieldsValue.parentCategoryId[fieldsValue.parentCategoryId.length - 1]
+        parentsupplierId: fieldsValue.parentsupplierId
+          ? fieldsValue.parentsupplierId[fieldsValue.parentsupplierId.length - 1]
           : '',
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
       };
@@ -235,8 +246,51 @@ class TableList extends Component<TableListProps, TableListState> {
   };
 
   handleModalVisible = (flag?: boolean) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'supplier/getProduct',
+      payload: {
+        code: '',
+      },
+      callback: (res: object) => {
+        if (res) {
+          this.setState({
+            modalVisible: !!flag,
+            product: res.products,
+          });
+        }
+      },
+    });
+  };
+
+  handleProductSearch = (direction: 'left' | 'right', value: string) => {
+    const { dispatch } = this.props;
+    if (direction === 'left') {
+      dispatch({
+        type: 'supplier/getProduct',
+        payload: {
+          code: value,
+        },
+        callback: (res: object) => {
+          if (res) {
+            this.setState({
+              product: res.products,
+            });
+          }
+        },
+      });
+    }
+  };
+
+  handleProductChange = (targetKeys: string[]) => {
     this.setState({
-      modalVisible: !!flag,
+      targetKeys,
+    });
+  };
+
+  handleProductSelectChange = (sourceSelectedKeys: string[], targetSelectedKeys: string[]) => {
+    this.setState({
+      selectedKeys: [...sourceSelectedKeys, ...targetSelectedKeys],
     });
   };
 
@@ -250,15 +304,30 @@ class TableList extends Component<TableListProps, TableListState> {
     }
     if (record) {
       dispatch({
-        type: 'supplier/get',
+        type: 'supplier/getProduct',
         payload: {
-          id: record.id,
+          code: '',
         },
-        callback: (e: { code: string; data: object }) => {
-          if (e.code === '200') {
+        callback: (res: object) => {
+          if (res) {
             this.setState({
-              updateModalVisible: !!flag,
-              stepFormValues: e.data || {},
+              product: res.products,
+            });
+            dispatch({
+              type: 'supplier/get',
+              payload: {
+                id: record.id,
+              },
+              callback: (e: { code: string; data: object }) => {
+                if (e.code === '200') {
+                  const { data } = e;
+                  this.setState({
+                    updateModalVisible: !!flag,
+                    stepFormValues: data || {},
+                    targetKeys: data.supplierProduct,
+                  });
+                }
+              },
             });
           }
         },
@@ -272,15 +341,15 @@ class TableList extends Component<TableListProps, TableListState> {
       type: 'supplier/add',
       payload: fields,
       callback: (e: { code: string; message: string }) => {
-        if (e.code === '414') {
+        if (e.code === '412') {
           message.success(e.message);
           this.handleModalVisible();
           form.validateFields((err, fieldsValue) => {
             if (err) return;
             const values = {
               ...fieldsValue,
-              parentCategoryId: fieldsValue.parentCategoryId
-                ? fieldsValue.parentCategoryId[fieldsValue.parentCategoryId.length - 1]
+              parentsupplierId: fieldsValue.parentsupplierId
+                ? fieldsValue.parentsupplierId[fieldsValue.parentsupplierId.length - 1]
                 : '',
               updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
             };
@@ -305,15 +374,15 @@ class TableList extends Component<TableListProps, TableListState> {
       type: 'supplier/update',
       payload: fields,
       callback: (e: { code: string; message: string }) => {
-        if (e.code === '415') {
+        if (e.code === '413') {
           message.success(e.message);
           this.handleUpdateModalVisible(false);
           form.validateFields((err, fieldsValue) => {
             if (err) return;
             const values = {
               ...fieldsValue,
-              parentCategoryId: fieldsValue.parentCategoryId
-                ? fieldsValue.parentCategoryId[fieldsValue.parentCategoryId.length - 1]
+              parentsupplierId: fieldsValue.parentsupplierId
+                ? fieldsValue.parentsupplierId[fieldsValue.parentsupplierId.length - 1]
                 : '',
               updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
             };
@@ -353,7 +422,7 @@ class TableList extends Component<TableListProps, TableListState> {
             ids,
           },
           callback: (e: { code: string; message: string }) => {
-            if (e.code === '402') {
+            if (e.code === '401') {
               message.success(e.message);
               that.handleUpdateModalVisible(false);
               that.setState({
@@ -363,8 +432,8 @@ class TableList extends Component<TableListProps, TableListState> {
                 if (err) return;
                 const values = {
                   ...fieldsValue,
-                  parentCategoryId: fieldsValue.parentCategoryId
-                    ? fieldsValue.parentCategoryId[fieldsValue.parentCategoryId.length - 1]
+                  parentsupplierId: fieldsValue.parentsupplierId
+                    ? fieldsValue.parentsupplierId[fieldsValue.parentsupplierId.length - 1]
                     : '',
                   updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
                 };
@@ -394,8 +463,8 @@ class TableList extends Component<TableListProps, TableListState> {
 
       const values = {
         ...fieldsValue,
-        parentCategoryId: fieldsValue.parentCategoryId
-          ? fieldsValue.parentCategoryId[fieldsValue.parentCategoryId.length - 1]
+        parentsupplierId: fieldsValue.parentsupplierId
+          ? fieldsValue.parentsupplierId[fieldsValue.parentsupplierId.length - 1]
           : '',
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
       };
@@ -465,11 +534,20 @@ class TableList extends Component<TableListProps, TableListState> {
 
   render() {
     const {
-      category: { data },
+      supplier: { data },
       loading,
     } = this.props;
 
-    const { selectedRows, modalVisible, updateModalVisible, stepFormValues, rowKey } = this.state;
+    const {
+      selectedRows,
+      modalVisible,
+      updateModalVisible,
+      stepFormValues,
+      rowKey,
+      product,
+      selectedKeys,
+      targetKeys,
+    } = this.state;
     // const menu = (
     //   <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
     //     <Menu.Item key="remove">删除</Menu.Item>
@@ -480,10 +558,16 @@ class TableList extends Component<TableListProps, TableListState> {
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
+      handleProductSearch: this.handleProductSearch,
+      handleProductChange: this.handleProductChange,
+      handleProductSelectChange: this.handleProductSelectChange,
     };
     const updateMethods = {
       handleUpdateModalVisible: this.handleUpdateModalVisible,
       handleUpdate: this.handleUpdate,
+      handleProductSearch: this.handleProductSearch,
+      handleProductChange: this.handleProductChange,
+      handleProductSelectChange: this.handleProductSelectChange,
     };
     return (
       <PageHeaderWrapper>
@@ -517,11 +601,20 @@ class TableList extends Component<TableListProps, TableListState> {
             />
           </div>
         </Card>
-        <CreateForm {...parentMethods} modalVisible={modalVisible} />
+        <CreateForm
+          {...parentMethods}
+          modalVisible={modalVisible}
+          product={product}
+          selectedKeys={selectedKeys}
+          targetKeys={targetKeys}
+        />
         {stepFormValues && Object.keys(stepFormValues).length ? (
           <UpdateForm
             {...updateMethods}
             updateModalVisible={updateModalVisible}
+            product={product}
+            selectedKeys={selectedKeys}
+            targetKeys={targetKeys}
             values={stepFormValues}
           />
         ) : null}

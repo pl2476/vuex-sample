@@ -18,7 +18,7 @@ export async function remove(ids: string[]) {
 
 export async function add(params: TableListParams) {
   return request('/system/supplier/create', {
-    method: 'POST',
+    method: 'post',
     data: {
       ...params,
     },
@@ -41,5 +41,14 @@ export async function update(params: TableListParams) {
 export async function exportList(params: TableListParams) {
   return request('/system/supplier/export', {
     params,
+  });
+}
+
+export async function getProduct(data: { code: string }) {
+  return request('/system/supplier/getProduct', {
+    method: 'put',
+    data: {
+      ...data,
+    },
   });
 }

@@ -1,8 +1,7 @@
-import { Form, Input, Modal, Select, Row, Col } from 'antd';
+import { Form, Input, Modal, Select, Row, Col, Transfer } from 'antd';
 import React, { PureComponent } from 'react';
 import { FormComponentProps } from 'antd/es/form';
-// import { connect } from 'dva';
-import { TableListItem } from '@/pages/Product/Category/data';
+import { TableListItem, ProductList } from '@/pages/Product/Supplier/data';
 import style from './style.less';
 
 export interface FormValueType extends Partial<TableListItem> {
@@ -14,13 +13,16 @@ export interface UpdateFormProps extends FormComponentProps {
   handleUpdate: (values: FormValueType) => void;
   updateModalVisible: boolean;
   values: Partial<TableListItem>;
+  product: ProductList;
+  selectedKeys: string[];
+  targetKeys: string[];
+  handleProductChange: () => void;
+  handleProductSelectChange: () => void;
+  handleProductSearch: (direction: 'left' | 'right', value: string) => void;
 }
 const FormItem = Form.Item;
 const { Option } = Select;
 
-// export interface UpdateFormState {}
-
-// @connect((category: StateType) => category.treeOptions)
 class UpdateForm extends PureComponent<UpdateFormProps, {}> {
   static defaultProps = {
     handleUpdate: () => {},
@@ -30,7 +32,6 @@ class UpdateForm extends PureComponent<UpdateFormProps, {}> {
 
   constructor(props: UpdateFormProps) {
     super(props);
-
     this.state = {};
   }
 
@@ -40,18 +41,24 @@ class UpdateForm extends PureComponent<UpdateFormProps, {}> {
       if (err) return;
       // form.resetFields();
       const temp = fieldsValue;
-      if (fieldsValue.parentCategoryId && typeof fieldsValue.parentCategoryId === 'object') {
-        temp.parentCategoryId = fieldsValue.parentCategoryId.pop();
-      } else {
-        temp.parentCategoryId = '';
-      }
-      temp.categoryId = values.categoryId;
+      temp.id = values.id;
       handleUpdate(temp);
     });
   };
 
   render() {
-    const { updateModalVisible, handleUpdateModalVisible, values, form } = this.props;
+    const {
+      updateModalVisible,
+      handleUpdateModalVisible,
+      values,
+      form,
+      product,
+      selectedKeys,
+      targetKeys,
+      handleProductChange,
+      handleProductSelectChange,
+      handleProductSearch,
+    } = this.props;
 
     return (
       <Modal
@@ -68,8 +75,16 @@ class UpdateForm extends PureComponent<UpdateFormProps, {}> {
           <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
             <Col md={12} sm={24}>
               <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Name">
-                {form.getFieldDecorator('categoryName', {
-                  initialValue: values.categoryName,
+                {form.getFieldDecorator('name', {
+                  initialValue: values.name,
+                  rules: [{ required: true, message: 'required' }],
+                })(<Input placeholder="Please enter" />)}
+              </FormItem>
+            </Col>
+            <Col md={12} sm={24}>
+              <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Contact Name">
+                {form.getFieldDecorator('contactName', {
+                  initialValue: values.contactName,
                   rules: [{ required: true, message: 'required' }],
                 })(<Input placeholder="Please enter" />)}
               </FormItem>
@@ -77,17 +92,17 @@ class UpdateForm extends PureComponent<UpdateFormProps, {}> {
           </Row>
           <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Display Order">
-                {form.getFieldDecorator('displayOrder', {
-                  initialValue: String(values.displayOrder),
+              <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Contact Email">
+                {form.getFieldDecorator('contactEmail', {
+                  initialValue: String(values.contactEmail),
                   rules: [{ required: true, message: 'required' }],
                 })(<Input placeholder="Please enter" />)}
               </FormItem>
             </Col>
             <Col md={12} sm={24}>
-              <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Remarks">
-                {form.getFieldDecorator('remarks', {
-                  initialValue: String(values.remarks),
+              <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Contact Tel.">
+                {form.getFieldDecorator('contactTel', {
+                  initialValue: String(values.contactTel),
                   rules: [{ required: true, message: 'required' }],
                 })(<Input placeholder="Please enter" />)}
               </FormItem>
@@ -104,6 +119,28 @@ class UpdateForm extends PureComponent<UpdateFormProps, {}> {
                     <Option value="true">Active</Option>
                     <Option value="false">Inactive</Option>
                   </Select>,
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={24} sm={24}>
+              <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Product">
+                {form.getFieldDecorator('supplierProduct', {
+                  rules: [{ required: true, message: 'required' }],
+                })(
+                  <Transfer
+                    className={style['create-form-transfer']}
+                    rowKey={record => record.id}
+                    dataSource={product}
+                    selectedKeys={selectedKeys}
+                    targetKeys={targetKeys}
+                    showSearch
+                    onChange={handleProductChange}
+                    onSelectChange={handleProductSelectChange}
+                    onSearch={handleProductSearch}
+                    render={item => item.treatmentName}
+                  />,
                 )}
               </FormItem>
             </Col>

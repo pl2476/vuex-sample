@@ -5,6 +5,7 @@ export interface TableListItem {
   contactEmail?: string;
   contactTel?: string;
   status?: string;
+  name?: string;
 }
 
 export interface TableListPagination {
@@ -22,4 +23,11 @@ export interface TableListParams {
   sorter: string;
   pageSize: number;
   pageIndex: number;
+}
+
+export interface ProductList {
+  products: {
+    id: string;
+    name: string;
+  }[];
 }

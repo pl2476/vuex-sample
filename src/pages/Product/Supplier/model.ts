@@ -1,6 +1,6 @@
 import { AnyAction, Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
-import { add, query, remove, get, update, exportList } from './service';
+import { add, query, remove, get, update, exportList, getProduct } from './service';
 
 import { TableListData } from '@/pages/Product/Supplier/data';
 
@@ -23,6 +23,7 @@ export interface ModelType {
     remove: Effect;
     get: Effect;
     update: Effect;
+    getProduct: Effect;
   };
   reducers: {
     save: Reducer<StateType>;
@@ -30,7 +31,7 @@ export interface ModelType {
 }
 
 const Model: ModelType = {
-  namespace: 'category',
+  namespace: 'supplier',
 
   state: {
     data: {
@@ -76,6 +77,14 @@ const Model: ModelType = {
     },
     *update({ payload, callback }, { call }) {
       const response = yield call(update, payload);
+      // yield put({
+      //   type: 'save',
+      //   payload: response,
+      // });
+      if (callback) callback(response);
+    },
+    *getProduct({ payload, callback }, { call }) {
+      const response = yield call(getProduct, payload);
       // yield put({
       //   type: 'save',
       //   payload: response,
