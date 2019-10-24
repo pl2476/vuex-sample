@@ -70,6 +70,11 @@ const MenuModel: MenuModelType = {
               name: 'supplier',
               hideInMenu: false,
             },
+            {
+              path: '/product/treatment',
+              name: 'treatment',
+              hideInMenu: false,
+            },
           ],
         },
       ];

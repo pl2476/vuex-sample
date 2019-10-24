@@ -55,4 +55,5 @@ export default {
   'menu.product.brand': '品牌列表',
   'menu.product.category': '類型列表',
   'menu.product.supplier': '供應商列表',
+  'menu.product.treatment': '商品理療列表',
 };

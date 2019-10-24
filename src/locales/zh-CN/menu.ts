@@ -57,4 +57,5 @@ export default {
   'menu.product.brand': '品牌列表',
   'menu.product.category': '类型列表',
   'menu.product.supplier': '供应商列表',
+  'menu.product.treatment': '商品理疗列表',
 };

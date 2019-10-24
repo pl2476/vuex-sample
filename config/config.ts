@@ -133,6 +133,11 @@ export default {
               component: './Product/Supplier',
             },
             {
+              name: 'treatment',
+              path: '/product/treatment/',
+              component: './Product/Treatment',
+            },
+            {
               component: './Exception/404',
             },
           ],
