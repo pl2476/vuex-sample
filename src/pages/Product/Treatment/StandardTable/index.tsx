@@ -17,7 +17,7 @@ export interface StandardTableProps<T> extends Omit<TableProps<T>, 'columns'> {
   };
   selectedRows: TableListItem[];
   onSelectRow: (rows: TableListItem[]) => void;
-  handleExpandItemDelete: (data: object) => void;
+  handleExpandItemDelete: (id: string, data: object) => void;
 }
 
 export interface StandardTableColumnProps extends ColumnProps<TableListItem> {
@@ -111,10 +111,7 @@ class StandardTable extends Component<StandardTableProps<TableListItem>, Standar
       title: 'Are you sure you want to delete this information?',
       content: '',
       onOk() {
-        handleExpandItemDelete({
-          id,
-          option,
-        });
+        handleExpandItemDelete(id, option);
       },
       onCancel() {},
     });

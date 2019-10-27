@@ -286,8 +286,10 @@ class TableList extends Component<TableListProps, TableListState> {
     }
   };
 
-  handleExpandItemDelete = (data: object) => {
+  handleExpandItemDelete = (id: string, data: object) => {
     const { dispatch } = this.props;
+    console.log(id, data, dispatch);
+    // to do delete
   };
 
   handleAdd = (fields: FormValueType) => {
@@ -329,7 +331,7 @@ class TableList extends Component<TableListProps, TableListState> {
       type: 'treatment/update',
       payload: fields,
       callback: (e: { code: string; message: string }) => {
-        if (e.code === '413') {
+        if (e.code === '435') {
           message.success(e.message);
           this.handleUpdateModalVisible(false);
           form.validateFields((err, fieldsValue) => {
@@ -377,7 +379,7 @@ class TableList extends Component<TableListProps, TableListState> {
             ids,
           },
           callback: (e: { code: string; message: string }) => {
-            if (e.code === '401') {
+            if (e.code === '433') {
               message.success(e.message);
               that.handleUpdateModalVisible(false);
               that.setState({

@@ -38,6 +38,7 @@ export interface UpdateFormState {
   optionData: object[];
   options: number[];
   fieldRows: OptionFields[][];
+  optionsForm: object[];
 }
 
 const FormItem = Form.Item;
@@ -88,15 +89,28 @@ class UpdateForm extends PureComponent<UpdateFormProps, UpdateFormState> {
       optionData: [],
       options: [1],
       fieldRows: [],
+      optionsForm: [],
     };
   }
 
   componentDidMount() {
     const { values, fields } = this.props;
+    const { optionsForm } = this.state;
     const count = [];
     if (values.options) {
       for (let i = 0; i < values.options.length; i += 1) {
+        const tempObj = {};
         count.push(i + 1);
+        const item = values.options[i];
+        Object.keys(item).forEach(key => {
+          tempObj[`${key}${i + 1}`] = item[key];
+        });
+        // for (const key in item) {
+        //   if (item.hasOwnProperty(key)) {
+        //     tempObj[`${key}${i}`] = object[key];
+        //   }
+        // }
+        optionsForm.push(tempObj);
       }
       this.setState({
         options: count,
@@ -116,14 +130,18 @@ class UpdateForm extends PureComponent<UpdateFormProps, UpdateFormState> {
   }
 
   submit = () => {
-    const { form } = this.props;
+    const { form, handleUpdate, values } = this.props;
+    const { optionData } = this.state;
     form.validateFields((err, fieldsValue) => {
-      console.log(fieldsValue, err);
-      // if (err) return;
-      // form.resetFields();
-      // const temp = fieldsValue;
-      // temp.id = values.id;
-      // handleUpdate(temp);
+      if (err) return;
+      handleUpdate({
+        id: values.id,
+        treatmentName: fieldsValue.treatmentName,
+        categoryId: fieldsValue.categoryId[fieldsValue.categoryId.length - 1],
+        description: fieldsValue.description,
+        showOnline: fieldsValue.showOnline,
+        options: optionData,
+      });
     });
   };
 
@@ -136,15 +154,22 @@ class UpdateForm extends PureComponent<UpdateFormProps, UpdateFormState> {
       fields,
       categoryOptions,
     } = this.props;
-    const { current, columns, optionData, options, fieldRows } = this.state;
+    const { current, columns, optionData, options, fieldRows, optionsForm } = this.state;
 
     const onEdit = (targetKey: ReactNode | string, action: string) => {
       if (action === 'add') {
         const temp = options.slice();
         const target = options.slice();
+        const optionsFormTarget = optionsForm.slice();
         target.push(temp[temp.length - 1] + 1);
+        const tempObj = {};
+        for (let j = 0; j < fields.length; j += 1) {
+          tempObj[`${fields[j].key}${temp[temp.length - 1] + 1}`] = undefined;
+        }
+        optionsFormTarget.push(tempObj);
         this.setState({
           options: target,
+          optionsForm: optionsFormTarget,
         });
       } else if (action === 'remove') {
         const temp = Number(targetKey) - 1;
@@ -158,8 +183,8 @@ class UpdateForm extends PureComponent<UpdateFormProps, UpdateFormState> {
 
     const next = () => {
       form.validateFields((err, fieldsValue) => {
-        console.log(fieldsValue);
         if (err) return;
+        // const formOptions = values.options || [];
         const temp = current + 1;
         const tempOptionData = [];
         if (current === 2) {
@@ -167,6 +192,7 @@ class UpdateForm extends PureComponent<UpdateFormProps, UpdateFormState> {
             const obj = {};
             for (let j = 0; j < fields.length; j += 1) {
               obj[fields[j].key] = form.getFieldValue(`${fields[j].key}${options[index]}`);
+              // obj[fields[j].key] = formOptions[index][`${fields[j].key}`];
             }
             tempOptionData.push(obj);
           }
@@ -262,9 +288,9 @@ class UpdateForm extends PureComponent<UpdateFormProps, UpdateFormState> {
                   wrapperCol={{ span: 24 }}
                   label={`${item.label} ${item.unit ? item.unit : ''}`}
                 >
-                  {form.getFieldDecorator(`${item.key}${key}`)(
-                    <Input placeholder="Please enter" />,
-                  )}
+                  {form.getFieldDecorator(`${item.key}${key}`, {
+                    initialValue: optionsForm[key - 1][`${item.key}${key}`],
+                  })(<Input placeholder="Please enter" />)}
                 </FormItem>
               </Col>
             ))}
