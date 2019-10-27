@@ -35,10 +35,10 @@ const errorHandler = (error: { response: Response }): Response => {
     const errorText = codeMessage[response.status] || response.statusText;
     const { status } = response;
 
-    notification.error({
-      message: `请求错误 ${status}`,
-      description: errorText,
-    });
+    // notification.error({
+    //   message: `请求错误 ${status}`,
+    //   description: errorText,
+    // });
     if (status === 401) {
       router.push('/user/login');
     }
