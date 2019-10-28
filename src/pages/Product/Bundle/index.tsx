@@ -9,7 +9,6 @@ import {
   Select,
   message,
   Modal,
-  Cascader,
   DatePicker,
 } from 'antd';
 import React, { Component, Fragment } from 'react';
@@ -23,7 +22,12 @@ import { StateType } from './model';
 import CreateForm from '@/pages/Product/Bundle/CreateForm';
 import StandardTable, { StandardTableColumnProps } from './StandardTable';
 import UpdateForm, { FormValueType } from '@/pages/Product/Bundle/UpdateForm';
-import { TableListItem, TableListParams, TableListPagination } from '@/pages/Product/Bundle/data';
+import {
+  TableListItem,
+  TableListParams,
+  TableListPagination,
+  ProductList,
+} from '@/pages/Product/Bundle/data';
 
 import styles from './style.less';
 
@@ -62,6 +66,7 @@ interface TableListState {
   stepFormValues: Partial<TableListItem>;
   rowKey: string;
   categoryOption: object[];
+  product: ProductList;
 }
 
 @connect(
@@ -90,6 +95,7 @@ class TableList extends Component<TableListProps, TableListState> {
     stepFormValues: {},
     rowKey: 'id',
     categoryOption: [],
+    product: [],
   };
 
   columns: StandardTableColumnProps[] = [
@@ -261,20 +267,43 @@ class TableList extends Component<TableListProps, TableListState> {
   };
 
   handleModalVisible = (flag?: boolean) => {
-    // const { dispatch } = this.props;
-    // dispatch({
-    //   type: 'bundle/getProduct',
-    //   payload: {
-    //     code: '',
-    //   },
-    //   callback: (res: object) => {
-    //     if (res) {
-    //     }
-    //   },
-    // });
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'bundle/getProduct',
+      payload: {
+        code: '',
+      },
+      callback: (res: object) => {
+        if (res) {
+          this.setState({
+            modalVisible: !!flag,
+            product: res.products,
+          });
+        }
+      },
+    });
     this.setState({
       modalVisible: !!flag,
     });
+  };
+
+  handleProductSearch = (direction: 'left' | 'right', value: string) => {
+    const { dispatch } = this.props;
+    if (direction === 'left') {
+      dispatch({
+        type: 'bundle/getProduct',
+        payload: {
+          code: value,
+        },
+        callback: (res: object) => {
+          if (res) {
+            this.setState({
+              product: res.products,
+            });
+          }
+        },
+      });
+    }
   };
 
   handleUpdateModalVisible = (flag?: boolean, record?: FormValueType) => {
@@ -342,7 +371,7 @@ class TableList extends Component<TableListProps, TableListState> {
       type: 'bundle/add',
       payload: fields,
       callback: (e: { code: string; message: string }) => {
-        if (e.code === '429') {
+        if (e.code === '437') {
           message.success(e.message);
           this.handleModalVisible();
           form.validateFields((err, fieldsValue) => {
@@ -555,11 +584,13 @@ class TableList extends Component<TableListProps, TableListState> {
       stepFormValues,
       rowKey,
       categoryOption,
+      product,
     } = this.state;
 
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
+      handleProductSearch: this.handleProductSearch,
     };
     const updateMethods = {
       handleUpdateModalVisible: this.handleUpdateModalVisible,
@@ -600,6 +631,7 @@ class TableList extends Component<TableListProps, TableListState> {
         </Card>
         <CreateForm
           {...parentMethods}
+          product={product}
           categoryOptions={categoryOption}
           modalVisible={modalVisible}
         />

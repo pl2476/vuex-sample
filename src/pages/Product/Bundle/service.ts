@@ -44,8 +44,11 @@ export async function exportList(params: TableListParams) {
   });
 }
 
-export async function getProduct() {
+export async function getProduct(data: { code: string }) {
   return request('/system/bundle/getProduct', {
-    method: 'get',
+    method: 'put',
+    data: {
+      ...data,
+    },
   });
 }
