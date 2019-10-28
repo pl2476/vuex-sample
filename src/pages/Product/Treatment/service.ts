@@ -16,6 +16,13 @@ export async function remove(ids: string[]) {
   });
 }
 
+export async function deleteOption(payload: object) {
+  return request('/system/treatment/deleteOption', {
+    method: 'delete',
+    data: payload,
+  });
+}
+
 export async function add(params: TableListParams) {
   return request('/system/treatment/create', {
     method: 'post',

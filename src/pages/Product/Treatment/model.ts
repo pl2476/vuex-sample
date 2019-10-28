@@ -1,6 +1,15 @@
 import { AnyAction, Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
-import { add, query, remove, get, update, exportList, categoryOption } from './service';
+import {
+  add,
+  query,
+  remove,
+  get,
+  update,
+  exportList,
+  categoryOption,
+  deleteOption,
+} from './service';
 
 import { TableListData } from '@/pages/Product/Treatment/data';
 
@@ -24,6 +33,7 @@ export interface ModelType {
     get: Effect;
     update: Effect;
     categoryOption: Effect;
+    deleteOption: Effect;
   };
   reducers: {
     save: Reducer<StateType>;
@@ -64,6 +74,10 @@ const Model: ModelType = {
     *remove({ payload, callback }, { call }) {
       const { ids } = payload;
       const response = yield call(remove, ids);
+      if (callback) callback(response);
+    },
+    *deleteOption({ payload, callback }, { call }) {
+      const response = yield call(deleteOption, payload);
       if (callback) callback(response);
     },
     *get({ payload, callback }, { call }) {

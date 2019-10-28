@@ -37,6 +37,7 @@ interface TableListProps extends FormComponentProps {
       | 'treatment/get'
       | 'treatment/update'
       | 'treatment/categoryOption'
+      | 'treatment/deleteOption'
     >
   >;
   loading: boolean;
@@ -89,7 +90,7 @@ class TableList extends Component<TableListProps, TableListState> {
     },
     {
       title: 'Category',
-      dataIndex: 'categoryId',
+      dataIndex: 'categoryName',
     },
     {
       title: 'Description',
@@ -287,9 +288,35 @@ class TableList extends Component<TableListProps, TableListState> {
   };
 
   handleExpandItemDelete = (id: string, data: object) => {
-    const { dispatch } = this.props;
-    console.log(id, data, dispatch);
-    // to do delete
+    const { dispatch, form } = this.props;
+    dispatch({
+      type: 'treatment/deleteOption',
+      payload: {
+        treatmentId: id,
+        option: data,
+      },
+      callback: (e: { code: string; message: string }) => {
+        if (e.code === '430') {
+          message.success(e.message);
+          form.validateFields((err, fieldsValue) => {
+            if (err) return;
+            const values = {
+              ...fieldsValue,
+              categoryId: fieldsValue.categoryId
+                ? fieldsValue.categoryId[fieldsValue.categoryId.length - 1]
+                : '',
+              updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
+            };
+            dispatch({
+              type: 'treatment/fetch',
+              payload: values,
+            });
+          });
+        } else if (e.message) {
+          message.error(e.message);
+        }
+      },
+    });
   };
 
   handleAdd = (fields: FormValueType) => {
