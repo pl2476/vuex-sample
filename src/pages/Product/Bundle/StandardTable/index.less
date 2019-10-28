@@ -1,0 +1,39 @@
+@import '~antd/es/style/themes/default.less';
+
+.standardTable {
+  :global {
+    .ant-table-pagination {
+      margin-top: 24px;
+    }
+  }
+
+  .tableAlert {
+    margin-bottom: 16px;
+  }
+  .expanded-row {
+    margin-left: 71%;
+    ol {
+      list-style: none;
+      counter-reset: li;
+    }
+    li {
+      counter-increment: li;
+      div {
+        display: inline-block;
+        margin-left: 8px;
+      }
+    }
+    li::before {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      margin-left: -1em;
+      color: white;
+      line-height: 16px;
+      text-align: center;
+      background: #9fcc43;
+      border-radius: 50%;
+      content: counter(li);
+    }
+  }
+}
