@@ -8,7 +8,7 @@ import { SorterResult } from 'antd/es/table';
 import { connect } from 'dva';
 import { StateType } from './model';
 import CreateForm from '@/pages/Product/Category/CreateForm';
-import StandardTable, { StandardTableColumnProps } from '../StandardTable';
+import StandardTable, { StandardTableColumnProps } from './StandardTable';
 import UpdateForm, { FormValueType } from '@/pages/Product/Category/UpdateForm';
 import { TableListItem, TableListParams, TableListPagination } from '@/pages/Product/Category/data';
 
