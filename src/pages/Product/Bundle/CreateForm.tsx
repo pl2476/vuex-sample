@@ -87,9 +87,13 @@ const CreateForm: React.FC<CreateFormProps> = props => {
     setOptionData(temp);
   };
 
-  const handleProductSelectChange = (selectedKeys: string[], index: number) => {
+  const handleProductSelectChange = (
+    selectedKeys: string[],
+    targetKeys: string[],
+    index: number,
+  ) => {
     const temp = optionData;
-    temp[`selectedKeys${index}`] = selectedKeys;
+    temp[`selectedKeys${index}`] = [...selectedKeys, ...targetKeys];
     setOptionData({ ...temp });
   };
 
@@ -104,17 +108,19 @@ const CreateForm: React.FC<CreateFormProps> = props => {
               closable={index !== 0 && index === options.length - 1}
               key={item.toString()}
             >
-              <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-                <Col md={24} sm={24}>
+              <Row gutter={{ md: 8, lg: 24, xl: 48 }} key={item.toString()}>
+                <Col md={24} sm={24} key={item.toString()}>
                   <FormItem
                     labelCol={{ span: 24 }}
                     wrapperCol={{ span: 24 }}
-                    label={`Group ${index}`}
+                    label={`Group ${index + 1}`}
+                    key={item.toString()}
                   >
                     {form.getFieldDecorator(`group${index}`, {
                       rules: [{ required: true, message: 'required' }],
                     })(
                       <Transfer
+                        key={item.toString()}
                         className={style['create-form-transfer']}
                         rowKey={record => record.id}
                         dataSource={product}
@@ -122,7 +128,7 @@ const CreateForm: React.FC<CreateFormProps> = props => {
                         targetKeys={optionData[`targetKeys${index}`]}
                         showSearch
                         onChange={e => handleProductChange(e, index)}
-                        onSelectChange={e => handleProductSelectChange(e, index)}
+                        onSelectChange={(s, t) => handleProductSelectChange(s, t, index)}
                         onSearch={handleProductSearch}
                         render={i => i.treatmentName}
                       />,
@@ -137,6 +143,11 @@ const CreateForm: React.FC<CreateFormProps> = props => {
     </div>
   );
 
+  const afterClose = () => {
+    setOptions([1]);
+    setOptionData({});
+  };
+
   return (
     <Modal
       destroyOnClose
@@ -145,6 +156,7 @@ const CreateForm: React.FC<CreateFormProps> = props => {
       okText="Submit"
       onOk={submit}
       visible={modalVisible}
+      afterClose={afterClose}
       onCancel={() => handleModalVisible()}
     >
       <div className={style['create-form']}>
