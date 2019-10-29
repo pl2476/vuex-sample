@@ -329,7 +329,7 @@ const CreateForm: React.FC<CreateFormProps> = props => {
           >
             Treatment Options
           </div>
-          <Table dataSource={optionData} columns={columns} />
+          <Table dataSource={optionData} columns={columns} pagination={false} />
         </div>
       </div>
     </Modal>
