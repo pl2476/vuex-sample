@@ -65,7 +65,6 @@ interface TableListState {
   formValues: { [key: string]: string };
   stepFormValues: Partial<TableListItem>;
   rowKey: string;
-  categoryOption: object[];
   product: ProductList;
 }
 
@@ -94,7 +93,6 @@ class TableList extends Component<TableListProps, TableListState> {
     formValues: {},
     stepFormValues: {},
     rowKey: 'id',
-    categoryOption: [],
     product: [],
   };
 
@@ -157,6 +155,19 @@ class TableList extends Component<TableListProps, TableListState> {
     const { dispatch } = this.props;
     dispatch({
       type: 'bundle/fetch',
+    });
+    dispatch({
+      type: 'bundle/getProduct',
+      payload: {
+        code: '',
+      },
+      callback: (res: object) => {
+        if (res) {
+          this.setState({
+            product: res.products,
+          });
+        }
+      },
     });
   }
 
@@ -265,20 +276,20 @@ class TableList extends Component<TableListProps, TableListState> {
 
   handleModalVisible = (flag?: boolean) => {
     const { dispatch } = this.props;
-    dispatch({
-      type: 'bundle/getProduct',
-      payload: {
-        code: '',
-      },
-      callback: (res: object) => {
-        if (res) {
-          this.setState({
-            modalVisible: !!flag,
-            product: res.products,
-          });
-        }
-      },
-    });
+    // dispatch({
+    //   type: 'bundle/getProduct',
+    //   payload: {
+    //     code: '',
+    //   },
+    //   callback: (res: object) => {
+    //     if (res) {
+    //       this.setState({
+    //         modalVisible: !!flag,
+    //         product: res.products,
+    //       });
+    //     }
+    //   },
+    // });
     this.setState({
       modalVisible: !!flag,
     });
@@ -395,7 +406,7 @@ class TableList extends Component<TableListProps, TableListState> {
       type: 'bundle/update',
       payload: fields,
       callback: (e: { code: string; message: string }) => {
-        if (e.code === '435') {
+        if (e.code === '443') {
           message.success(e.message);
           this.handleUpdateModalVisible(false);
           form.validateFields((err, fieldsValue) => {
@@ -565,7 +576,6 @@ class TableList extends Component<TableListProps, TableListState> {
       updateModalVisible,
       stepFormValues,
       rowKey,
-      categoryOption,
       product,
     } = this.state;
 
@@ -577,6 +587,7 @@ class TableList extends Component<TableListProps, TableListState> {
     const updateMethods = {
       handleUpdateModalVisible: this.handleUpdateModalVisible,
       handleUpdate: this.handleUpdate,
+      handleProductSearch: this.handleProductSearch,
     };
     return (
       <PageHeaderWrapper>
@@ -611,17 +622,12 @@ class TableList extends Component<TableListProps, TableListState> {
             />
           </div>
         </Card>
-        <CreateForm
-          {...parentMethods}
-          product={product}
-          categoryOptions={categoryOption}
-          modalVisible={modalVisible}
-        />
+        <CreateForm {...parentMethods} product={product} modalVisible={modalVisible} />
         {stepFormValues && Object.keys(stepFormValues).length ? (
           <UpdateForm
             {...updateMethods}
+            product={product}
             updateModalVisible={updateModalVisible}
-            categoryOptions={categoryOption}
             values={stepFormValues}
           />
         ) : null}

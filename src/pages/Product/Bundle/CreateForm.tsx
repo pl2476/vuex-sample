@@ -25,7 +25,6 @@ const { TabPane } = Tabs;
 const { Option } = Select;
 
 interface CreateFormProps extends FormComponentProps {
-  categoryOptions: object[];
   product: ProductList;
   modalVisible: boolean;
   handleAdd: (fieldsValue: FormValueType) => void;

@@ -129,20 +129,18 @@ class StandardTable extends Component<StandardTableProps<TableListItem>, Standar
       const productOptionGroup = record.productOptionGroup || {};
       return (
         <div className={styles['expanded-row']}>
-          {Object.keys(productOptionGroup).map((item: string) => (
-            <div>
-              <ol start={1} type="1">
-                <li style={{ listStyle: 'none', counterReset: 'li' }}>
-                  {productOptionGroup[item].map((i: string) => (
-                    <div>
-                      {i}
-                      <br />
-                    </div>
-                  ))}
-                </li>
-              </ol>
-            </div>
-          ))}
+          <ol start={1} type="1">
+            {Object.keys(productOptionGroup).map((item: string) => (
+              <li style={{ listStyle: 'none', counterReset: 'li' }}>
+                {productOptionGroup[item].map((i: string) => (
+                  <div>
+                    {i}
+                    <br />
+                  </div>
+                ))}
+              </li>
+            ))}
+          </ol>
         </div>
       );
     };

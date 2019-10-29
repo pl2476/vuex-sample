@@ -9,6 +9,7 @@ export interface TableListItem {
   shop?: string;
   totalBundlePrice?: string;
   productOptionGroup?: object;
+  bundleGroup?: object;
 }
 
 export interface OptionFields {
