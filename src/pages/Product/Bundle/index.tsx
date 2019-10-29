@@ -440,7 +440,7 @@ class TableList extends Component<TableListProps, TableListState> {
             ids,
           },
           callback: (e: { code: string; message: string }) => {
-            if (e.code === '433') {
+            if (e.code === '411') {
               message.success(e.message);
               that.handleUpdateModalVisible(false);
               that.setState({
