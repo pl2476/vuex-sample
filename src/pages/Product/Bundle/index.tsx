@@ -249,9 +249,6 @@ class TableList extends Component<TableListProps, TableListState> {
 
       const values = {
         ...fieldsValue,
-        categoryId: fieldsValue.categoryId
-          ? fieldsValue.categoryId[fieldsValue.categoryId.length - 1]
-          : '',
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
       };
 
@@ -348,9 +345,6 @@ class TableList extends Component<TableListProps, TableListState> {
             if (err) return;
             const values = {
               ...fieldsValue,
-              categoryId: fieldsValue.categoryId
-                ? fieldsValue.categoryId[fieldsValue.categoryId.length - 1]
-                : '',
               updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
             };
             dispatch({
@@ -378,9 +372,6 @@ class TableList extends Component<TableListProps, TableListState> {
             if (err) return;
             const values = {
               ...fieldsValue,
-              categoryId: fieldsValue.categoryId
-                ? fieldsValue.categoryId[fieldsValue.categoryId.length - 1]
-                : '',
               updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
             };
             this.setState({
@@ -411,9 +402,6 @@ class TableList extends Component<TableListProps, TableListState> {
             if (err) return;
             const values = {
               ...fieldsValue,
-              categoryId: fieldsValue.categoryId
-                ? fieldsValue.categoryId[fieldsValue.categoryId.length - 1]
-                : '',
               updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
             };
             this.setState({
@@ -462,9 +450,6 @@ class TableList extends Component<TableListProps, TableListState> {
                 if (err) return;
                 const values = {
                   ...fieldsValue,
-                  categoryId: fieldsValue.categoryId
-                    ? fieldsValue.categoryId[fieldsValue.categoryId.length - 1]
-                    : '',
                   updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
                 };
                 that.setState({
@@ -493,9 +478,6 @@ class TableList extends Component<TableListProps, TableListState> {
 
       const values = {
         ...fieldsValue,
-        categoryId: fieldsValue.categoryId
-          ? fieldsValue.categoryId[fieldsValue.categoryId.length - 1]
-          : '',
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
       };
 
