@@ -58,4 +58,6 @@ export default {
   'menu.product.category': '类型列表',
   'menu.product.supplier': '供应商列表',
   'menu.product.treatment': '商品理疗列表',
+  'menu.product.bundle': '捆绑产品列表',
+  'menu.product.goods': '产品商品列表',
 };

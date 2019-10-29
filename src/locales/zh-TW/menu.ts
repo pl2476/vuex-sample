@@ -56,4 +56,6 @@ export default {
   'menu.product.category': '類型列表',
   'menu.product.supplier': '供應商列表',
   'menu.product.treatment': '商品理療列表',
+  'menu.product.bundle': '捆綁產品列表',
+  'menu.product.goods': '產品商品列表',
 };

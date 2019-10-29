@@ -58,4 +58,6 @@ export default {
   'menu.product.category': 'Category List',
   'menu.product.supplier': 'Supplier List',
   'menu.product.treatment': 'Treatment List',
+  'menu.product.bundle': 'Bundle List',
+  'menu.product.goods': 'Goods List',
 };
