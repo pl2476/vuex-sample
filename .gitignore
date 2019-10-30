@@ -38,4 +38,4 @@ screenshot
 .eslintcache
 
 build
-config/index.ts
+# config/index.ts
