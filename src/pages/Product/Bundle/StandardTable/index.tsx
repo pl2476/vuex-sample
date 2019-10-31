@@ -131,9 +131,9 @@ class StandardTable extends Component<StandardTableProps<TableListItem>, Standar
         <div className={styles['expanded-row']}>
           <ol start={1} type="1">
             {Object.keys(productOptionGroup).map((item: string) => (
-              <li style={{ listStyle: 'none', counterReset: 'li' }}>
+              <li key={item}>
                 {productOptionGroup[item].map((i: string) => (
-                  <div>
+                  <div key={i}>
                     {i}
                     <br />
                   </div>
