@@ -206,7 +206,7 @@ const CreateForm: React.FC<CreateFormProps> = props => {
           <Col md={12} sm={24}>
             <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Description">
               {form.getFieldDecorator('description')(
-                <Input.TextArea autosize={{ minRows: 1, maxRows: 2 }} />,
+                <Input.TextArea autoSize={{ minRows: 1, maxRows: 2 }} />,
               )}
             </FormItem>
           </Col>

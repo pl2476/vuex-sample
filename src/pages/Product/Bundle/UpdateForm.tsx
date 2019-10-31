@@ -283,7 +283,7 @@ class UpdateForm extends PureComponent<UpdateFormProps, UpdateFormState> {
               <FormItem labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} label="Description">
                 {form.getFieldDecorator('description', {
                   initialValue: values.description,
-                })(<Input.TextArea autosize={{ minRows: 1, maxRows: 2 }} />)}
+                })(<Input.TextArea autoSize={{ minRows: 1, maxRows: 2 }} />)}
               </FormItem>
             </Col>
           </Row>

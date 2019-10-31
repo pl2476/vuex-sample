@@ -1,5 +1,6 @@
 export interface TableListItem {
   id?: string;
+  disabled?: boolean;
   bundleCode?: string;
   bundleName?: string;
   description?: string;
