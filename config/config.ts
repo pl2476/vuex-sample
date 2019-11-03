@@ -138,12 +138,12 @@ export default {
               component: './Product/Treatment',
             },
             {
-              name: 'treatment',
+              name: 'goods',
               path: '/product/goods/',
               component: './Product/Goods',
             },
             {
-              name: 'treatment',
+              name: 'bundle',
               path: '/product/bundle/',
               component: './Product/Bundle',
             },
