@@ -33,60 +33,6 @@ const MenuModel: MenuModelType = {
           name: 'homepage',
           icon: 'home',
         },
-        {
-          path: '/member',
-          icon: 'table',
-          name: 'member',
-          children: [
-            {
-              path: '/member/list',
-              name: 'list',
-              hideInMenu: false,
-            },
-            {
-              path: '/member/family',
-              name: 'family',
-              hideInMenu: false,
-            },
-          ],
-        },
-        {
-          path: '/product',
-          icon: 'table',
-          name: 'product',
-          children: [
-            {
-              path: '/product/brand',
-              name: 'brand',
-              hideInMenu: false,
-            },
-            {
-              path: '/product/category',
-              name: 'category',
-              hideInMenu: false,
-            },
-            {
-              path: '/product/supplier',
-              name: 'supplier',
-              hideInMenu: false,
-            },
-            {
-              path: '/product/treatment',
-              name: 'treatment',
-              hideInMenu: false,
-            },
-            {
-              path: '/product/goods',
-              name: 'goods',
-              hideInMenu: false,
-            },
-            {
-              path: '/product/bundle',
-              name: 'bundle',
-              hideInMenu: false,
-            },
-          ],
-        },
       ];
       // const response = yield call(getMenuData);
       yield put({
