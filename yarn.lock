@@ -1744,10 +1744,15 @@
   resolved "https://registry.npm.taobao.org/@types/json-schema/download/@types/json-schema-7.0.3.tgz#bdfd69d61e464dcc81b25159c270d75a73c1a636"
   integrity sha1-vf1p1h5GTcyBslFZwnDXWnPBpjY=
 
-"@types/lodash@^4.14.133", "@types/lodash@^4.14.136":
+"@types/lodash@^4.14.136":
   version "4.14.136"
   resolved "https://registry.npm.taobao.org/@types/lodash/download/@types/lodash-4.14.136.tgz#413e85089046b865d960c9ff1d400e04c31ab60f"
   integrity sha1-QT6FCJBGuGXZYMn/HUAOBMMatg8=
+
+"@types/lodash@^4.14.144":
+  version "4.14.144"
+  resolved "https://registry.npm.taobao.org/@types/lodash/download/@types/lodash-4.14.144.tgz#12e57fc99064bce45e5ab3c8bc4783feb75eab8e"
+  integrity sha1-EuV/yZBkvOReWrPIvEeD/rdeq44=
 
 "@types/mime@*":
   version "2.0.1"
