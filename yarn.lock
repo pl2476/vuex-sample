@@ -16365,10 +16365,10 @@ umi-plugin-ui@1.2.13:
     styled-components "^4.4.0"
     umi-ui-tasks "1.1.13"
 
-umi-request@^1.2.6:
-  version "1.2.6"
-  resolved "https://registry.npm.taobao.org/umi-request/download/umi-request-1.2.6.tgz#bf92faeaf127f7bb10b44f639d61a016cf2e8d9d"
-  integrity sha1-v5L66vEn97sQtE9jnWGgFs8ujZ0=
+umi-request@^1.2.7:
+  version "1.2.8"
+  resolved "https://registry.npm.taobao.org/umi-request/download/umi-request-1.2.8.tgz#9e5636cee0945cc17fe15201a35670b240568d25"
+  integrity sha1-nlY2zuCUXMF/4VIBo1ZwskBWjSU=
   dependencies:
     isomorphic-fetch "^2.2.1"
     query-string "^6.0.0"
