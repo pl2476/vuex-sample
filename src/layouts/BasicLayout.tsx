@@ -8,6 +8,7 @@ import ProLayout, {
   MenuDataItem,
   BasicLayoutProps as ProLayoutProps,
   Settings,
+  DefaultFooter,
 } from '@ant-design/pro-layout';
 import React, { useEffect, useState, SetStateAction } from 'react';
 import Link from 'umi/link';
@@ -62,7 +63,9 @@ const formatter = (
     return result;
   });
 
-// const footerRender: BasicLayoutProps['footerRender'] = () => <></>;
+const defaultFooterDom = <DefaultFooter />;
+
+const footerRender: BasicLayoutProps['footerRender'] = () => <>{defaultFooterDom}</>;
 
 const BasicLayout: React.FC<BasicLayoutProps> = props => {
   const { dispatch, children, settings } = props;
@@ -128,7 +131,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
             <span>{route.breadcrumbName}</span>
           );
         }}
-        footerRender={false}
+        footerRender={footerRender}
         menuDataRender={() => menuData}
         formatMessage={formatMessage}
         rightContentRender={() => <RightContent />}
