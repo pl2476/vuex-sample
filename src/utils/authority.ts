@@ -20,7 +20,7 @@ export function getAuth(str?: string): string {
 }
 
 export function setAuth(auth: string): void {
+  localStorage.setItem('auth', auth);
   // auto reload
   reloadAuthorized();
-  return localStorage.setItem('auth', auth);
 }
