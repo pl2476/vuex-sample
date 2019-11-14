@@ -1,3 +1,5 @@
+import { reloadAuthorized } from './Authorized';
+
 // use localStorage to store the authority info, which might be sent from server in actual project.
 export function getAuth(str?: string): string {
   // return localStorage.getItem('auth');
@@ -18,5 +20,7 @@ export function getAuth(str?: string): string {
 }
 
 export function setAuth(auth: string): void {
+  // auto reload
+  reloadAuthorized();
   return localStorage.setItem('auth', auth);
 }
