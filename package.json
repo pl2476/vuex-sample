@@ -6,7 +6,6 @@
   "scripts": {
     "analyze": "cross-env ANALYZE=1 umi build",
     "build": "umi build",
-    "ui": "umi ui",
     "deploy": "npm run site && npm run gh-pages",
     "docker-hub:build": "docker build  -f Dockerfile.hub -t  ant-design-pro ./",
     "docker-prod:build": "docker-compose -f ./docker/docker-compose.yml build",
@@ -35,7 +34,8 @@
     "start:no-ui": "cross-env UMI_UI=none umi dev",
     "test": "umi test",
     "test:all": "node ./tests/run-tests.js",
-    "test:component": "umi test ./src/components"
+    "test:component": "umi test ./src/components",
+    "ui": "umi ui"
   },
   "husky": {
     "hooks": {
@@ -60,7 +60,6 @@
     "@ant-design/colors": "^3.1.0",
     "@ant-design/pro-layout": "^4.5.16",
     "@antv/data-set": "^0.10.2",
-    "@types/react-helmet": "^5.0.13",
     "antd": "^3.24.3",
     "classnames": "^2.2.6",
     "dva": "^2.4.1",
@@ -93,8 +92,8 @@
     "@types/lodash": "^4.14.144",
     "@types/qs": "^6.5.3",
     "@types/react": "^16.8.19",
-    "@types/react-document-title": "^2.0.3",
     "@types/react-dom": "^16.8.4",
+    "@types/react-helmet": "^5.0.13",
     "@umijs/fabric": "^1.2.0",
     "chalk": "^2.4.2",
     "check-prettier": "^1.0.3",
